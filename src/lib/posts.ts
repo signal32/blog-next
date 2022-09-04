@@ -1,0 +1,76 @@
+import fs from 'fs'
+import matter from 'gray-matter';
+import { join } from 'path';
+
+const POST_DIR = join(process.cwd(), 'posts');
+
+export type Post = {
+    slug: string
+    title?: string
+    date?: string
+    coverImage?: string
+    author?: string
+    excerpt?: string
+    ogImage?: {
+      url: string
+    }
+    content?: string
+}
+
+export function getPostSlugs() {
+    return fs.readdirSync(POST_DIR);
+}
+
+/**
+ *
+ * @param slug Unique slug which identifies target post
+ * @param fields YAML Fields to extract from post markdown. Use `content` for post main content.
+ * @returns
+ */
+ export function getPostBySlug(slug: string, fields: string[] = []) {
+    const realSlug = slug.replace(/\.md$/, '')
+    const fullPath = join(POST_DIR, `${realSlug}.md`)
+    const fileContents = fs.readFileSync(fullPath, 'utf8')
+    const { data, content } = matter(fileContents)
+
+    type Items = {
+      [key: string]: string
+    }
+
+    const items: Items = {}
+
+    // Ensure only the minimal needed data is exposed
+    fields.forEach((field) => {
+      if (field === 'slug') {
+        items[field] = realSlug
+      }
+      if (field === 'content') {
+        items[field] = content
+      }
+
+      if (typeof data[field] !== 'undefined') {
+        items[field] = data[field]
+      }
+    })
+
+    return items as unknown as Post;
+  }
+
+const DEFAULT_POST_FIELDS = [
+    'title',
+    'date',
+    'slug',
+    'author',
+    'content',
+    'ogImage',
+    'coverImage',
+    'excerpt',
+]
+
+export function getAllPosts(fields: string[] = DEFAULT_POST_FIELDS) {
+    const slugs = getPostSlugs();
+    const posts  = slugs
+        .map((slug) => getPostBySlug(slug, fields))
+        .sort((post1, post2) => (post1?.date || 0) > (post2?.date || 1) ? -1 : 1);
+    return posts;
+}
