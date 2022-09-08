@@ -30,6 +30,7 @@ const AppBaseLayout = ({children, defaultHeaderImage, defaultHeaderTitle}: MainL
     const router = useRouter();
     const [title, setTitle] = useState(defaultHeaderTitle);
     const [headerImage, setHeaderImage] = useState(defaultHeaderImage);
+    const [showHeaderImage, setShowHeaderImage] = useState(headerImage? true : false);
 
     // Changes made to layout should not persist between different pages
     const resetState = () => {
@@ -38,7 +39,13 @@ const AppBaseLayout = ({children, defaultHeaderImage, defaultHeaderTitle}: MainL
     }
     useEffect(resetState, [router.asPath]);
 
-    return(
+    const dipHeaderImage = () => {
+        if (!headerImage) return;
+        setShowHeaderImage(false);
+        setTimeout(() => setShowHeaderImage(true), 400);
+    }
+
+    return (
         <div className="dark:bg-gray-900 bg-gray-300 bg-repeat flex flex-col min-h-screen h-full">
 
             <header className="mb-5 top-0 sticky bg-gradient-to-t from-transparent dark:to-gray-900 to-gray-300 z-20">
@@ -57,7 +64,7 @@ const AppBaseLayout = ({children, defaultHeaderImage, defaultHeaderTitle}: MainL
                                     config.mainMenu.map((item, i) => (
                                         <div className="flex" key={i}>
                                             <Link href={item.href}>
-                                                <a className={`p-1 mx-1 rounded border-2 border-transparent hover:border-air transition-all text-slate-300 ${router.asPath == item.href? 'bg-air': ''}`}>
+                                                <a  onClick={dipHeaderImage} className={`p-1 mx-1 rounded border-2 border-transparent hover:border-air transition-all text-slate-300 ${router.asPath == item.href? 'bg-air': ''}`}>
                                                     {item.name}
                                                 </a>
                                             </Link>
@@ -86,7 +93,7 @@ const AppBaseLayout = ({children, defaultHeaderImage, defaultHeaderTitle}: MainL
             </header>
 
             <div className="-mt-10">
-                    <div className={`p-2 max-w-4xl mx-auto relative bg-gray-900 transition-all ease-in-out ${headerImage? 'h-60 opacity-100' : 'h-0 opacity-0'}`}>
+                    <div className={`p-2 max-w-4xl mx-auto relative bg-gray-900 transition-all ease-in-out ${headerImage && showHeaderImage? 'h-60 opacity-100' : 'h-0 opacity-0'}`}>
                         {/* <img src={headerImage} className={`w-full max-h-64 rounded-lg object-cover border-0 transition-all duration-200 ease-in-out -z-20 ${headerImage? 'h-60 opacity-100' : 'h-0 opacity-0'}`} /> */}
                         {headerImage &&
                             <Image 
