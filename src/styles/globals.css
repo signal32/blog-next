@@ -8,6 +8,10 @@
   src: url("/fonts/BalooTammudu2-Regular.ttf");
 }
 
+body {
+    @apply dark:text-slate-200 text-slate-700
+}
+
 .hame-markdown {
     @apply dark:text-slate-200 text-slate-700
 }

@@ -1,10 +1,13 @@
+import { debounce } from "lodash";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import React, { cloneElement, ReactElement, useContext, useEffect, useState } from "react";
-import { config, PageContext } from "../../pages/_app";
+import { useDebounce } from "react-use";
+import { config, PageContext, useAppStore } from "../../pages/_app";
 import MyLogo from "../../resources/images/logo.svg";
 import Breadcrumbs from "../common/Breadcrumbs";
+import ModalContext from "../common/Modal";
 
 const DEMO_IMAGE = "https://images.pexels.com/photos/4215110/pexels-photo-4215110.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
 
@@ -30,32 +33,43 @@ const AppBaseLayout = ({children, defaultHeaderImage, defaultHeaderTitle}: MainL
     const router = useRouter();
     const [title, setTitle] = useState(defaultHeaderTitle);
     const [headerImage, setHeaderImage] = useState(defaultHeaderImage);
-    const [showHeaderImage, setShowHeaderImage] = useState(headerImage? true : false);
+    const [showHeaderImage, setShowHeaderImage] = useState(true);
+    const [showContent, setShowContent] = useState(true);
 
-    // Changes made to layout should not persist between different pages
+
+    //HACK Changes made to layout should not persist between different pages
     const resetState = () => {
         setTitle(defaultHeaderTitle);
         setHeaderImage(defaultHeaderImage);
     }
     useEffect(resetState, [router.asPath]);
 
-    const dipHeaderImage = () => {
-        if (!headerImage) return;
+
+    const showAnimatedContent = debounce(() => {
+        setShowHeaderImage(true);
+        setShowContent(true);
+    }, 300);
+
+    const hideAnimatedContent = debounce(() => {
         setShowHeaderImage(false);
-        setTimeout(() => setShowHeaderImage(true), 400);
-    }
+        setShowContent(false);
+    }, 300);
+
+    Router.events.on('routeChangeComplete', showAnimatedContent);
+    Router.events.on('routeChangeStart', hideAnimatedContent);
 
     return (
         <div className="dark:bg-gray-900 bg-gray-300 bg-repeat flex flex-col min-h-screen h-full">
-
             <header className="mb-5 top-0 sticky bg-gradient-to-t from-transparent dark:to-gray-900 to-gray-300 z-20">
                 <div className="max-w-4xl mx-auto px-2 sm:px-6 mt-2 rounded-lg shadow-lg bg-ocean">
                     <div className="flex flex-wrap gap-2 justify-center items-center">
 
                         {/* Main logo */}
-                        <div className="flex-auto basis-full sm:basis-1/8 max-w-xs p-2 dark:invert">
-                            <MyLogo className="dark:block h-12"/>
-                        </div>
+                        <Link href={'/'}>
+                            <a className="flex-auto basis-full sm:basis-1/8 max-w-xs p-2 dark:invert">
+                                <MyLogo className="dark:block h-12"/>
+                            </a>
+                        </Link>
 
                         {/* Main navigation */}
                         <div className="flex-auto basis-3/4 sm:basis-auto">
@@ -64,7 +78,7 @@ const AppBaseLayout = ({children, defaultHeaderImage, defaultHeaderTitle}: MainL
                                     config.mainMenu.map((item, i) => (
                                         <div className="flex" key={i}>
                                             <Link href={item.href}>
-                                                <a  onClick={dipHeaderImage} className={`p-1 mx-1 rounded border-2 border-transparent hover:border-air transition-all text-slate-300 ${router.asPath == item.href? 'bg-air': ''}`}>
+                                                <a className={`p-1 mx-1 rounded border-2 border-transparent hover:border-air transition-all text-slate-300 ${router.asPath == item.href? 'bg-air': ''}`}>
                                                     {item.name}
                                                 </a>
                                             </Link>
@@ -95,14 +109,14 @@ const AppBaseLayout = ({children, defaultHeaderImage, defaultHeaderTitle}: MainL
             <div className="-mt-10">
                     <div className={`p-2 max-w-4xl mx-auto relative bg-gray-900 transition-all ease-in-out ${headerImage && showHeaderImage? 'h-60 opacity-100' : 'h-0 opacity-0'}`}>
                         {/* <img src={headerImage} className={`w-full max-h-64 rounded-lg object-cover border-0 transition-all duration-200 ease-in-out -z-20 ${headerImage? 'h-60 opacity-100' : 'h-0 opacity-0'}`} /> */}
-                        {headerImage &&
+                        {/* {headerImage && */}
                             <Image 
                                 src={headerImage || DEMO_IMAGE} 
                                 layout="fill" 
                                 objectFit="cover" 
-                                className={`w-full max-h-64 rounded-b-lg transition-opacity delay-150 ease-in duration-200 ${headerImage ? 'opacity-100' : 'opacity-0'}`}
+                                className={`w-full max-h-64 rounded-b-lg transition-opacity ease-in-out duration-500 ${headerImage ? 'opacity-100' : 'opacity-0'}`}
                             />
-                        }
+                        {/*  */}
                         <div className="w-full h-10 bottom-0 left-0">
                         <p className="text-white text-lg bottom-0 z-30">{title}</p>
 
@@ -112,19 +126,10 @@ const AppBaseLayout = ({children, defaultHeaderImage, defaultHeaderTitle}: MainL
 
             <main className="p-2 max-w-4xl mx-auto w-full flex-grow">
 
-                {/* <div className="rounded-xl p-2 mb-5 bg-slate-800 border border-air flex justify-between items-center w-full">
-                    <div className="w-4/5 border-l border-air pl-4 ">
-                        <div className="text-lg text-slate-200">Hello, world!</div>
-                        <div className="text-slate-200">
-                            Thanks for visiting. I'm in the process of setting this site up so expect that some features won't work correctly at the moment.
-                        </div>
-                    </div>
-                </div> */}
-
-
                 <Breadcrumbs/>
-                <div className="text-white">
-                    {
+
+                <div className={`transition-all duration-500 ${showContent? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
+                    { showContent &&
                         cloneElement(
                             children, 
                             {
@@ -176,13 +181,15 @@ const AppBaseLayout = ({children, defaultHeaderImage, defaultHeaderTitle}: MainL
                 </div>
             </footer>
 
+            <ModalContext/>
+
         </div>
     )
 }
 
 export default AppBaseLayout;
 
-export const useAppBaseLayout = (page: ReactElement) => {
+export const defineAppBaseLayout = (page: ReactElement) => {
     return(
       <AppBaseLayout>
         {page}
@@ -190,12 +197,11 @@ export const useAppBaseLayout = (page: ReactElement) => {
     )
 }
 
-export const useAppBaseLayoutParams = (headerImage?: string) => {
-    return (page: ReactElement) => {
-        return(
-          <AppBaseLayout defaultHeaderImage={headerImage}>
-            {page}
-          </AppBaseLayout>
-        )
-    }
+export const defineAppBaseLayoutParams = (headerImage?: string) => {
+    // eslint-disable-next-line react/display-name
+    return (page: ReactElement) => (
+        <AppBaseLayout defaultHeaderImage={headerImage}>
+        {page}
+        </AppBaseLayout>
+    )
 }

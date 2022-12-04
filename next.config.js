@@ -11,7 +11,7 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ['images.pexels.com'],
+    domains: ['images.pexels.com', 'rails.hamishweir.uk'],
   },
 
 }

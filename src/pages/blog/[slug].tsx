@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import DateDisplay from "../../components/common/DateDisplay";
-import { LayoutRequestProps, useAppBaseLayoutParams } from "../../components/layouts/AppBaseLayout";
+import { LayoutRequestProps, defineAppBaseLayoutParams } from "../../components/layouts/AppBaseLayout";
 import markdownToHtml from "../../lib/markdown";
 import { getAllPosts, getPostBySlug, Post } from "../../lib/posts";
 import { NextPageWithLayout } from "../_app";
@@ -27,7 +27,7 @@ const BlogPost: NextPageWithLayout<PostProps> = ({post, requestLayout: update}) 
     )
 }
 
-BlogPost.getLayout = useAppBaseLayoutParams();
+BlogPost.getLayout = defineAppBaseLayoutParams();
 export default BlogPost;
 
 type Params = {

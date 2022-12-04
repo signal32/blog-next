@@ -1,0 +1,27 @@
+{
+    "$schema": "../../../schema.json",
+    "id": "speyside_line",
+    "name": "The Speyside Line",
+    "requirements": [
+        {"id": "UKTS Clutter", "site": "UkTrainSim", "href": ["http://uktrainsim.com/"], "type": "external"},
+        {"type": "external", "id": "London to Brighton", "site": "Steam", "href": ["http://uktrainsim.com/"]},
+        {"type": "internal", "id": "test_product"}
+    ],
+    "media": {
+        "banner": "http://rails.hamishweir.uk/wp-content/uploads/2020/06/ProductBanner_SpeysideLine.jpg",
+        "gallery": [
+            "http://rails.hamishweir.uk/wp-content/uploads/2020/07/Screenshot_SB-The-Speyside-Line_57.43277-3.36209_14-00-35-1920x1080-1.jpg",
+            "http://rails.hamishweir.uk/wp-content/uploads/2020/07/Screenshot_SB-The-Speyside-Line_57.41212-3.39198_14-01-07-1920x1080-1.jpg",
+            "http://rails.hamishweir.uk/wp-content/uploads/2020/07/Screenshot_SB-The-Speyside-Line_57.32491-3.53364_18-02-20-1920x1080-1.jpg",
+            "http://rails.hamishweir.uk/wp-content/uploads/2020/07/Screenshot_SB-The-Speyside-Line_57.24829-3.75247_14-01-56-1920x1080-1.jpg",
+            "http://rails.hamishweir.uk/wp-content/uploads/2020/07/Screenshot_SB-The-Speyside-Line_57.45819-3.35020_12-00-36-1920x1080-1.jpg",
+            "http://rails.hamishweir.uk/wp-content/uploads/2020/07/Screenshot_SB-The-Speyside-Line_57.45140-3.27367_14-09-58-1920x1080-1.jpg"    
+        ]
+    },
+    "files": {
+        "primary": "test_file.json",
+        "other": [
+            {"name": "Test Product Manual", "file": "test_product", "tag": "manual"}
+        ]
+    }
+}

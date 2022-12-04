@@ -1,0 +1,44 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "firefox",
+            "request": "launch",
+            "name": "Debug Firefox",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}",
+            "reAttach": true,
+            "profile": "development",
+            "keepProfileChanges": true,
+        },
+        {
+            "name": "Next.js: debug server-side",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "npm run dev",
+            "sourceMaps": true,
+            "skipFiles": ["<node_internals>/**", "*.js"],
+            "env": {
+              "NODE_OPTIONS": "--inspect"
+            }
+          },
+          {
+            "name": "Next.js: debug client-side",
+            "type": "pwa-chrome",
+            "request": "launch",
+            "url": "http://localhost:3000"
+          },
+          {
+            "name": "Next.js: debug full stack",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "npm run dev",
+            "console": "integratedTerminal",
+            "serverReadyAction": {
+              "pattern": "started server on .+, url: (https?://.+)",
+              "uriFormat": "%s",
+              "action": "debugWithEdge"
+            }
+          }
+    ]
+}

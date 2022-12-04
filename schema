@@ -1,0 +1,106 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "ExternalRequirement": {
+            "properties": {
+                "href": {
+                    "items": [
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "maxItems": 1,
+                    "minItems": 1,
+                    "type": "array"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "site": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "ProductMedia": {
+            "properties": {
+                "banner": {
+                    "type": "string"
+                },
+                "gallery": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "videos": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "properties": {
+        "children": {
+            "items": [
+                {
+                    "type": "string"
+                }
+            ],
+            "maxItems": 1,
+            "minItems": 1,
+            "type": "array"
+        },
+        "description": {
+            "type": "string"
+        },
+        "id": {
+            "type": "string"
+        },
+        "media": {
+            "$ref": "#/definitions/ProductMedia"
+        },
+        "name": {
+            "type": "string"
+        },
+        "parent": {
+            "type": "string"
+        },
+        "published": {
+            "format": "date-time",
+            "type": "string"
+        },
+        "requirements": {
+            "items": [
+                {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/ExternalRequirement"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ]
+                }
+            ],
+            "maxItems": 1,
+            "minItems": 1,
+            "type": "array"
+        },
+        "similar": {
+            "items": [
+                {
+                    "type": "string"
+                }
+            ],
+            "maxItems": 1,
+            "minItems": 1,
+            "type": "array"
+        }
+    },
+    "type": "object"
+}
+

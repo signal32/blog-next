@@ -1,5 +1,5 @@
 import Button from "../../components/common/Button";
-import { useAppBaseLayout } from "../../components/layouts/AppBaseLayout";
+import { defineAppBaseLayout } from "../../components/layouts/AppBaseLayout";
 import PostList from "../../components/posts/PostList";
 import { getAllPosts, Post } from "../../lib/posts";
 import { NextPageWithLayout } from "../_app";
@@ -19,7 +19,7 @@ const Blog: NextPageWithLayout<BlogProps> = (props) => {
     )
 }
 
-Blog.getLayout = useAppBaseLayout;
+Blog.getLayout = defineAppBaseLayout;
 
 export async function getStaticProps() {
     const posts = await getAllPosts();

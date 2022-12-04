@@ -1,9 +1,13 @@
 import Head from 'next/head'
 import { NextPageWithLayout } from './_app'
-import { useAppBaseLayout } from '../components/layouts/AppBaseLayout'
+import { defineAppBaseLayout } from '../components/layouts/AppBaseLayout'
+import { useModalStore } from '../components/common/Modal'
+import Button from '../components/common/Button'
+import { getAllPosts } from '../lib/posts'
+import { InferGetStaticPropsType } from 'next'
 
-const Home: NextPageWithLayout = () => {
-
+const Home: NextPageWithLayout = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const modalStore = useModalStore();
   return (
     <div className='h-full w-full'>
 
@@ -14,12 +18,17 @@ const Home: NextPageWithLayout = () => {
       </Head>
 
       <div>
-        <h1 className='text-white'>Content placeholder</h1>
+        <h1 className='text-white' onClick={() => modalStore.pushModal(<Button text='hello world'/>)}>Content placeholder</h1>
       </div>
     </div>
   )
 }
 
-Home.getLayout = useAppBaseLayout;
-
+Home.getLayout = defineAppBaseLayout
 export default Home
+
+export const getStaticProps = async () => ({
+  props: {
+    posts: getAllPosts()
+  }
+})
