@@ -3,10 +3,23 @@ import { NextPageWithLayout } from './_app'
 import { defineAppBaseLayout } from '../components/layouts/AppBaseLayout'
 import { useModalStore } from '../components/common/Modal'
 import Button from '../components/common/Button'
-import { getAllPosts } from '../lib/posts'
+import { getAllPosts, Post } from '../lib/posts'
+import { files } from '../lib/file'
+import { Product, products } from '../lib/products'
 import { InferGetStaticPropsType } from 'next'
+import PostList from '../components/posts/PostList'
 
-const Home: NextPageWithLayout = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
+// interface DatedItem {
+//   date: Date,
+//   item: React.ReactNode,
+// }
+
+interface BlogProps {
+  posts: Post[],
+  products: Product[],
+}
+
+const Home: NextPageWithLayout<BlogProps> = (props) => {
   const modalStore = useModalStore();
   return (
     <div className='h-full w-full'>
@@ -19,6 +32,8 @@ const Home: NextPageWithLayout = (props: InferGetStaticPropsType<typeof getStati
 
       <div>
         <h1 className='text-white' onClick={() => modalStore.pushModal(<Button text='hello world'/>)}>Content placeholder</h1>
+        <PostList posts={props.posts}/>
+        <p>{JSON.stringify([...props.posts, ...props.products])}</p>
       </div>
     </div>
   )
@@ -27,8 +42,19 @@ const Home: NextPageWithLayout = (props: InferGetStaticPropsType<typeof getStati
 Home.getLayout = defineAppBaseLayout
 export default Home
 
-export const getStaticProps = async () => ({
-  props: {
-    posts: getAllPosts()
-  }
-})
+export const getStaticProps = async () => {
+
+  const allPosts = getAllPosts()
+
+  const allProducts = products.getAll()
+    .slice(0,20)
+    .map(descriptor => products.getById(descriptor.id))
+    .filter(product => product === undefined)
+
+  return ({
+    props: {
+      posts: allPosts,
+      products: allProducts,
+    }
+  })
+}

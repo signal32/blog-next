@@ -22,6 +22,7 @@ export const files = defineContent<FileDetails>('files', (desc, path) => {
     const metadataPath = getMetadataPath(path);
     const details = getDetails(desc, path, metadataPath);
 
+    console.log(path, desc, details)
     details.href = METHODS[details.method].href(details);
     
     return details;
@@ -36,7 +37,7 @@ export const getFileDir = (file: FileDetails) => METHODS[file.method].dir;
  *  - Be described by a metadata.json file (that points to remote data source)
  */
 const getMetadataPath = (path: string) => {
-    if (fs.lstatSync(path).isDirectory()) return join(path, 'meta.json');
+    if (fs.lstatSync(path).isDirectory()) return join(path, 'metadata.json');
     if (path.substring(path.indexOf('.')) == '.json') return path;
     else return undefined;
 }
