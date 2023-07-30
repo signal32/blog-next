@@ -44,7 +44,6 @@ const AppBaseLayout = ({children, defaultHeaderImage, defaultHeaderTitle}: MainL
     }
     useEffect(resetState, [router.asPath]);
 
-
     const showAnimatedContent = debounce(() => {
         setShowHeaderImage(true);
         setShowContent(true);
@@ -53,9 +52,9 @@ const AppBaseLayout = ({children, defaultHeaderImage, defaultHeaderTitle}: MainL
     const hideAnimatedContent = debounce(() => {
         setShowHeaderImage(false);
         setShowContent(false);
-    }, 300);
+    }, 0);
 
-    Router.events.on('routeChangeComplete', showAnimatedContent);
+    Router.events.on('routeChangeComplete', () => setTimeout(showAnimatedContent, 200));
     Router.events.on('routeChangeStart', hideAnimatedContent);
 
     return (
@@ -115,6 +114,7 @@ const AppBaseLayout = ({children, defaultHeaderImage, defaultHeaderTitle}: MainL
                                 layout="fill" 
                                 objectFit="cover" 
                                 className={`w-full max-h-64 rounded-b-lg transition-opacity ease-in-out duration-500 ${headerImage ? 'opacity-100' : 'opacity-0'}`}
+                                alt=''
                             />
                         {/*  */}
                         <div className="w-full h-10 bottom-0 left-0">
