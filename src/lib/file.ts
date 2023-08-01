@@ -18,7 +18,7 @@ export interface FileDetails extends ContentDescriptor {
     href: string
 }
 
-export const files = defineContent<FileDetails>('files', (desc, path) => {
+export const files = defineContent<FileDetails>('files', async (desc, path) => {
     const metadataPath = getMetadataPath(path);
     const details = getDetails(desc, path, metadataPath);
 

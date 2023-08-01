@@ -83,21 +83,21 @@ type Params = {
 }
 
 export async function getStaticProps({params}: Params) {
-    const product = products.getBySlug(params.slug);
+    const product = await products.getBySlug(params.slug);
     const productDescriptionHtml = await markdownToHtml(product?.description || '');
 
     // Fetch internal products for dependencies
     // TODO do this for children, parent & related products
-    const dependencyProducts = product?.requirements?.filter(item => item.type == 'internal')
-        .map((item) => {
+    const dependencyProducts = await Promise.all(product?.requirements?.filter(item => item.type == 'internal')
+        .map( async (item) => {
             if (item.type == 'internal') {
-                const product = products.getBySlug(item.id) || null;
-                const file = product?.files?.primary ? files.getBySlug(product?.files?.primary) : null;
+                const product = await products.getBySlug(item.id) || null;
+                const file = product?.files?.primary ? await files.getBySlug(product?.files?.primary) : null;
                 return {product, file} 
             }
-        }) || [];
+        }) || []);
 
-    const mainFile = (product?.files?.primary && files.getBySlug(product.files.primary)) || null;
+    const mainFile = (product?.files?.primary && await files.getBySlug(product.files.primary)) || null;
     const otherFiles = product?.files?.other.map(item => ({
         file: files.getBySlug(item.slug),
         ...item,

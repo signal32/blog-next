@@ -42,7 +42,7 @@ export interface ProductMedia {
 
 export type ProductId = string;
 
-export const products = defineContent<Product>('products', (descriptor, path) => {
+export const products = defineContent<Product>('products', async(descriptor, path) => {
     const metaPath = join(path, 'metadata.json');
     const metaData = fs.readFileSync(metaPath, 'utf8');
 

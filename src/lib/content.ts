@@ -70,7 +70,7 @@ const getByName = (name: string) => getById(CACHE.name.get(name) || '');
 //     }
 // }
 
-export type Loader<T> = (descriptor: ContentDescriptor, path: string) => T;
+export type Loader<T> = (descriptor: ContentDescriptor, path: string) => Promise<T>;
 
 /**
  * Defines methods for loading content of type T.
@@ -79,27 +79,42 @@ export type Loader<T> = (descriptor: ContentDescriptor, path: string) => T;
  * @returns 
  */
 export function defineContent<T>(dir: string, loader: Loader<T>): {
-    getAll: () => ContentDescriptor[],
-    getById: (id: string) => T | undefined,
-    getBySlug: (slug: string) => T | undefined,
-    getByName: (name: string) => T | undefined,
+    getAll: () => ContentDescriptor[]
+    getById: (id: string) => Promise<T | undefined>
+    getBySlug: (slug: string) => Promise<T | undefined>
+    getByName: (name: string) => Promise<T | undefined>
 } {
     console.log(`Reading content from ${dir}`);
     loadContent(dir);
-    
+
     return {
         getAll: () => loadContent(dir),
-        getById: (id) => {
+        
+        getById: async (id) => {
             const content = getById(id);
-            return content ? loader(content.descriptor, join(content.dir, content.descriptor.fileName)) : undefined;
+
+            if (content) return loader(
+                content.descriptor,
+                join(content?.dir, content?.descriptor.fileName),
+            )
         },
-        getBySlug: (slug) => {
-            const content = getBySlug(slug);
-            return content ? loader(content.descriptor, join(content.dir, content.descriptor.fileName)) : undefined;
+        getBySlug: async (slug) => {
+            const content = getBySlug(slug)
+
+            if (content) return loader(
+                content.descriptor,
+                join(content?.dir, content?.descriptor.fileName),
+
+            )
         },
-        getByName: (name) => {
-            const content = getByName(name);
-            return content ? loader(content.descriptor, join(content.dir, content.descriptor.fileName)) : undefined;
+        getByName: async (name) => {
+            const content = getByName(name)
+
+            if (content) return loader(
+                content.descriptor,
+                join(content?.dir, content?.descriptor.fileName),
+
+            )
         }
     }
 }
