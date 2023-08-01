@@ -1,10 +1,12 @@
 import fs from 'fs'
 import matter from 'gray-matter';
 import { join } from 'path';
+import { ContentDescriptor, defineContent } from './content';
+import { readFile } from 'fs/promises';
 
 const POST_DIR = join(process.cwd(), 'posts');
 
-export type Post = {
+export interface Post extends ContentDescriptor {
     slug: string
     title?: string
     date?: string
@@ -16,6 +18,30 @@ export type Post = {
     }
     content?: string
 }
+
+function isPost(obj: any): obj is Post {
+  return (
+    typeof obj === 'object' && obj !== null 
+    && 'slug' in obj && typeof obj.slug === 'string'
+    && 'title' in obj && typeof obj.title === 'string'
+    //&& 'date' in obj && typeof obj.date === 'string'
+    // && ...
+  );
+}
+
+export const posts = defineContent<Post>('posts', async(descriptor, path) => {
+  const fileContents = await readFile(path)
+  const { data, content } = matter(fileContents)
+
+  const post = {
+    ...descriptor,
+    ...data,
+    content,
+  }
+
+  if (isPost(post)) return post
+  else throw Error('Invalid post data')
+})
 
 export function getPostSlugs() {
     return fs.readdirSync(POST_DIR);

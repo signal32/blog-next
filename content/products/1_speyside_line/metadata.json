@@ -19,7 +19,7 @@
         ]
     },
     "files": {
-        "primary": "test_file.json",
+        "primary": "test_file",
         "other": [
             {"name": "Test Product Manual", "file": "test_product", "tag": "manual"}
         ]

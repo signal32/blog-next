@@ -22,7 +22,6 @@ export const files = defineContent<FileDetails>('files', async (desc, path) => {
     const metadataPath = getMetadataPath(path);
     const details = getDetails(desc, path, metadataPath);
 
-    console.log(path, desc, details)
     details.href = METHODS[details.method].href(details);
     
     return details;

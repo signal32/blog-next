@@ -62,6 +62,7 @@ const ProductPage: NextPageWithLayout<ProductPageProps> = (props) => {
                     {/* TODO download links */}
                     <Button text="Download" icon={<FaInfoCircle/>} href={props.mainFile?.href}/>
                     <p className="italic text-sm text-right">{props.mainFile?.fileName}</p>
+                    <p className="italic text-sm text-right">Details: {JSON.stringify(props.mainFile)}</p>
                 </div>
             </div>
         </div>
@@ -97,7 +98,7 @@ export async function getStaticProps({params}: Params) {
             }
         }) || []);
 
-    const mainFile = (product?.files?.primary && await files.getBySlug(product.files.primary)) || null;
+    const mainFile = product?.files?.primary ?  await files.getBySlug(product.files.primary) ?? null : null
     const otherFiles = product?.files?.other.map(item => ({
         file: files.getBySlug(item.slug),
         ...item,

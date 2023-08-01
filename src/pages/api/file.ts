@@ -3,15 +3,15 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { join } from 'path';
 import { files, getFileDir } from '../../lib/file';
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
     const id = req.query['slug'];
     if (id && typeof id == 'string') {
-        const file = files.getBySlug(id);
+        const file = await files.getBySlug(id);
         if (file) {
-            const path = join(getFileDir(file), file.fileName);
+            const path = join(getFileDir(file) ?? '', file.fileName);
             const stats = fs.statSync(path);
             res.writeHead(200, {
                 'Content-Type': 'audio.mpeg',

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import DateDisplay from "../../components/common/DateDisplay";
 import { LayoutRequestProps, defineAppBaseLayoutParams } from "../../components/layouts/AppBaseLayout";
 import markdownToHtml from "../../lib/markdown";
-import { getAllPosts, getPostBySlug, Post } from "../../lib/posts";
+import { getAllPosts, getPostBySlug, Post, posts } from "../../lib/posts";
 import { NextPageWithLayout } from "../_app";
 
 interface PostProps extends LayoutRequestProps {
@@ -37,17 +37,9 @@ type Params = {
 }
 
 export async function getStaticProps({ params }: Params) {
-    const post = getPostBySlug(params.slug, [
-        'title',
-        'date',
-        'slug',
-        'author',
-        'content',
-        'ogImage',
-        'coverImage',
-    ]);
+    const post = await posts.getBySlug(params.slug)
+    const content = await markdownToHtml(post?.content || '')
 
-    const content  = await markdownToHtml(post?.content || '');
     return {
         props: {
             post: {
@@ -61,9 +53,10 @@ export async function getStaticProps({ params }: Params) {
 }
 
 export async function getStaticPaths() {
-    const posts = getAllPosts(['slug']);
+    const allPosts = posts.getAll()
+
     return {
-        paths: posts.map((post) => {
+        paths: allPosts.map((post) => {
           return {
             params: {
               slug: post.slug,

@@ -9,11 +9,6 @@ import { Product, products } from '../lib/products'
 import { InferGetStaticPropsType } from 'next'
 import PostList from '../components/posts/PostList'
 
-// interface DatedItem {
-//   date: Date,
-//   item: React.ReactNode,
-// }
-
 interface BlogProps {
   posts: Post[],
   products: Product[],

@@ -2,7 +2,7 @@ import { join } from "path";
 import fs from 'fs';
 
 const CONTENT_DIR = join(process.cwd(), 'content');
-const DELIMINATOR = '--';
+const DELIMINATOR = '_';
 
 export interface ContentDescriptor {
     id: string,
@@ -23,13 +23,26 @@ export const CACHE = {
     dir: new Map<string, string[]>(), // dir -> child content ids
 }
 
+/**
+ * Extracts id, slug and nme from file name of the form:
+ * `<id>_<slug/name>.<extension>`
+ *  
+ * Extensions are ignored and have no effect on parsed details
+ * Id is optional, and will be replaced with slug ig not found
+ */
 const parseFileName = (fileName: string): ContentDescriptor => {
-    const split = fileName.indexOf(DELIMINATOR);
-    // const extension = fileName.lastIndexOf('.');
-    const id = fileName.substring(0, split);
-    const slug = fileName.substring(split + DELIMINATOR.length /*, extension */);
-    const name = slug; // TODO format this for display
-    return {id, slug, name, fileName}
+    const idEndIdx = Math.max(fileName.indexOf(DELIMINATOR), 0)
+    const nameStartIdx = idEndIdx > 0 ? idEndIdx + DELIMINATOR.length : 0
+    const extensionIdx = fileName.lastIndexOf('.')
+
+    return {
+        fileName,
+        id: idEndIdx > 0 
+            ? fileName.substring(0, idEndIdx) 
+            : fileName,
+        slug: fileName.substring(nameStartIdx, extensionIdx > 0 ? extensionIdx : undefined),
+        name: fileName.substring(nameStartIdx, extensionIdx > 0 ? extensionIdx : undefined),
+    }
 }
 
 const getAllFiles = (dir: string) => fs.readdirSync(dir).map(parseFileName);
@@ -84,7 +97,6 @@ export function defineContent<T>(dir: string, loader: Loader<T>): {
     getBySlug: (slug: string) => Promise<T | undefined>
     getByName: (name: string) => Promise<T | undefined>
 } {
-    console.log(`Reading content from ${dir}`);
     loadContent(dir);
 
     return {
