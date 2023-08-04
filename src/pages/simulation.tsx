@@ -32,9 +32,12 @@ const Simulation: PageWithLayout<Props> = (props) => {
             {/* Product items grid */}
             <div className="flex flex-auto gap-3 flex-row my-5">
                 {PRODUCTS.map((product, i) => (
-                    <Link key={i} href="/product/speyside_line" 
-                        className="basis-1/2 h-48 bg-slate-700 rounded-lg shadow-md overflow-hidden" 
-                        style={{backgroundImage: `url(${simulationHeader.src})`}}>
+                    <Link
+                        key={i}
+                        href="/product/speyside_line"
+                        className="basis-1/2 h-48 bg-slate-700 rounded-lg shadow-md overflow-hidden"
+                        style={{backgroundImage: `url(${simulationHeader.src})`}}
+                        legacyBehavior>
                         
                         <div className="w-full h-full p-2 opacity-0 hover:opacity-100 transition backdrop-blur-sm" style={{background: 'rgba(0,0,0,0.3)'}}>
                             {product}
@@ -51,7 +54,7 @@ const Simulation: PageWithLayout<Props> = (props) => {
                 {TEXT.map((line, i) => <p key={i}>{line}</p>)}
             </div>
         </div>
-    )
+    );
 }
 
 Simulation.layout = (page) => (

@@ -60,10 +60,12 @@ const AppBaseLayout = ({children, headerImage: defaultHeaderImage, headerTitle: 
                     <div className="flex flex-wrap gap-2 justify-center items-center">
 
                         {/* Main logo */}
-                        <Link href={'/'}>
-                            <a className="flex-auto basis-full sm:basis-1/8 max-w-xs p-2 invert">
-                                <MyLogo className="dark:block h-12"/>
-                            </a>
+                        <Link
+                            href={'/'}
+                            className="flex-auto basis-full sm:basis-1/8 max-w-xs p-2 invert">
+
+                            <MyLogo className="dark:block h-12"/>
+
                         </Link>
 
                         {/* Main navigation */}
@@ -72,10 +74,12 @@ const AppBaseLayout = ({children, headerImage: defaultHeaderImage, headerTitle: 
                                 {
                                     config.mainMenu.map((item, i) => (
                                         <div className="flex" key={i}>
-                                            <Link href={item.href}>
-                                                <a className={`p-1 mx-1 rounded border-2 border-transparent hover:border-air transition-all text-slate-300 ${router.asPath == item.href? 'bg-air': ''}`}>
-                                                    {item.name}
-                                                </a>
+                                            <Link
+                                                href={item.href}
+                                                className={`p-1 mx-1 rounded border-2 border-transparent hover:border-air transition-all text-slate-300 ${router.asPath == item.href? 'bg-air': ''}`}>
+
+                                                {item.name}
+
                                             </Link>
                                         </div>
                                     ))
@@ -180,7 +184,7 @@ const AppBaseLayout = ({children, headerImage: defaultHeaderImage, headerTitle: 
             <ModalContext/>
 
         </div>
-    )
+    );
 }
 
 export default AppBaseLayout;

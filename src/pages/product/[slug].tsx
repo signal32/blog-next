@@ -88,13 +88,13 @@ export async function getStaticProps({params}: Params) {
     const dependencyProducts = await Promise.all(product?.requirements?.filter(item => item.type == 'internal')
         .map( async (item) => {
             if (item.type == 'internal') {
-                const product = await products.getBySlug(item.id) || null;
+                const product = (await products.getBySlug(item.id)) || null;
                 const file = product?.files?.primary ? await files.getBySlug(product?.files?.primary) : null;
                 return {product, file} 
             }
         }) || []);
 
-    const mainFile = product?.files?.primary ?  await files.getBySlug(product.files.primary) ?? null : null
+    const mainFile = product?.files?.primary ?  (await files.getBySlug(product.files.primary)) ?? null : null
     const otherFiles = product?.files?.other.map(item => ({
         file: files.getBySlug(item.slug),
         ...item,

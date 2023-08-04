@@ -51,7 +51,7 @@ const Button = (props: ButtonProps) => {
     )
 
     // Wrap with Next.js Link for SPA functionality on local links
-    return props.href? <Link href={props.href} target={props.target} rel={props.rel}>{baseButton}</Link> : <button className="w-full">{baseButton}</button>;
+    return props.href? <Link href={props.href} target={props.target} rel={props.rel} legacyBehavior>{baseButton}</Link> : <button className="w-full">{baseButton}</button>;
 }
 
 export default Button;
