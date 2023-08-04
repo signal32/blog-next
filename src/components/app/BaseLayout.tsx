@@ -1,5 +1,5 @@
 import { debounce } from "lodash";
-import Image from "next/legacy/image";
+import Image from "next/image";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
 import React, { cloneElement, ReactElement, useContext, useEffect, useState } from "react";
@@ -109,13 +109,15 @@ const AppBaseLayout = ({children, headerImage: defaultHeaderImage, headerTitle: 
                     <div className={`p-2 max-w-4xl mx-auto relative bg-gray-900 transition-all ease-in-out ${headerImage && showHeaderImage? 'h-60 opacity-100' : 'h-0 opacity-0'}`}>
                         {/* <img src={headerImage} className={`w-full max-h-64 rounded-lg object-cover border-0 transition-all duration-200 ease-in-out -z-20 ${headerImage? 'h-60 opacity-100' : 'h-0 opacity-0'}`} /> */}
                         {/* {headerImage && */}
-                            <Image 
-                                src={headerImage || DEMO_IMAGE} 
-                                layout="fill" 
-                                objectFit="cover" 
+                            <Image
+                                src={headerImage || DEMO_IMAGE}
                                 className={`w-full max-h-64 rounded-b-lg transition-opacity ease-in-out duration-500 ${headerImage ? 'opacity-100' : 'opacity-0'}`}
                                 alt=''
-                            />
+                                fill
+                                sizes="100vw"
+                                style={{
+                                    objectFit: "cover"
+                                }} />
                         {/*  */}
                         <div className="w-full h-10 bottom-0 left-0">
                         <p className="text-white text-lg bottom-0 z-30">{title}</p>

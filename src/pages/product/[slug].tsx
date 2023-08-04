@@ -8,7 +8,7 @@ import Button from "../../components/common/Button";
 import Link from "next/link";
 import { FileDetails, files } from "../../lib/file";
 import { useModalStore } from "../../components/common/Modal";
-import Image from "next/legacy/image";
+import Image from "next/image";
 
 
 interface ProductPageProps extends LayoutRequestProps {
@@ -25,7 +25,14 @@ const ProductPage: PageWithLayout<ProductPageProps> = (props) => {
     const openGallery = (img: string) => {
         modals.pushModal(
         <div className=" h-full">
-            <Image src={img} layout="fill" objectFit="contain" onLoadingComplete={(e) => console.log(e)}/>
+            <Image
+                src={img}
+                onLoadingComplete={(e) => console.log(e)}
+                fill
+                sizes="100vw"
+                style={{
+                    objectFit: "contain"
+                }} />
         </div>
         )
     }
