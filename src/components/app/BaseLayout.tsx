@@ -1,5 +1,5 @@
 import { debounce } from "lodash";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
 import React, { cloneElement, ReactElement, useContext, useEffect, useState } from "react";

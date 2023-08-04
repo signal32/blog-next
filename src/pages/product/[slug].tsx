@@ -8,7 +8,7 @@ import Button from "../../components/common/Button";
 import Link from "next/link";
 import { FileDetails, files } from "../../lib/file";
 import { useModalStore } from "../../components/common/Modal";
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 
 interface ProductPageProps extends LayoutRequestProps {
