@@ -1,5 +1,5 @@
 import Drawer from "../../components/common/Drawer";
-import AppBaseLayout, { LayoutRequestProps, defineAppBaseLayoutParams } from "../../components/layouts/AppBaseLayout";
+import AppBaseLayout, { LayoutRequestProps, defineAppBaseLayoutParams, defineLayout } from "../../components/layouts/AppBaseLayout";
 import markdownToHtml from "../../lib/markdown";
 import { Product, products, Requirement } from "../../lib/products";
 import { NextPageWithLayout, useAppStore } from "../_app";
@@ -69,14 +69,12 @@ const ProductPage: NextPageWithLayout<ProductPageProps> = (props) => {
     )
 }
 
-//ProductPage.getLayout = useAppBaseLayoutParams();
-ProductPage.getLayout =  (page, props) => (
-    <AppBaseLayout 
-        defaultHeaderTitle={props.product.name}
-        defaultHeaderImage={props.product.media?.banner}
-        >
-        {page}
-    </AppBaseLayout>)
+ProductPage.getLayout = defineLayout((props) => ({
+    defaultHeaderTitle: props.product.name,
+    defaultHeaderImage: props.product.media?.banner,
+    breadcrumbs: true,
+}))
+
 export default ProductPage;
 
 type Params = {
@@ -146,7 +144,7 @@ const ProductDetails = (props: {product: Product}) => {
 }
 
 const RequirementItem = (props: {requirement: Requirement, products: {product:Product, file: FileDetails}[]}) => (
-    <div className="flex justify-between gap-2 p-2 my-2 rounded shadow bg-slate-600 hover:bg-slate-500 transition-colors">
+    <div className="flex justify-between gap-2 p-2 my-2 rounded shadow bg-slate-200 hover:bg-slate-300 dark:bg-slate-600 dark:hover:bg-slate-500 transition-colors">
         { props.requirement.type == 'internal' && [
             <div key={1}>{props.products.find((p) => p.product.id = props.requirement.id)?.product.name}</div>,
             <div key={2} className="flex items-center gap-2"> <Link href={'/product/' + props.requirement.id}>Details</Link></div>,
@@ -157,7 +155,7 @@ const RequirementItem = (props: {requirement: Requirement, products: {product:Pr
         { props.requirement.type == 'external' && [
             <div key={1} className="">{props.requirement.id}</div>,
             <div key={2} className="flex items-center gap-2">
-                <p className="text-xs px-2 rounded-full bg-amber-600">third party</p>
+                <p className="text-xs px-2 rounded-full bg-amber-200 dark:bg-amber-600">third party</p>
                 <Button text={props.requirement.site} size="small" style="text" icon={<FaExternalLinkAlt />} href={props.requirement.href[0]} target="_blank" rel="noreferrer"/>
             </div>
         ]}

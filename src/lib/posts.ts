@@ -1,12 +1,12 @@
 import fs from 'fs'
 import matter from 'gray-matter';
 import { join } from 'path';
-import { ContentDescriptor, defineContent } from './content';
+import { Content, ContentDescriptor, defineContent } from './content';
 import { readFile } from 'fs/promises';
 
 const POST_DIR = join(process.cwd(), 'posts');
 
-export interface Post extends ContentDescriptor {
+export interface Post extends Content {
     slug: string
     title?: string
     date?: string

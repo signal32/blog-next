@@ -15,6 +15,7 @@ export interface MainLayoutProps {
     children: ReactElement<LayoutRequestProps>,
     defaultHeaderImage?: string,
     defaultHeaderTitle?: string,
+    breadcrumbs?: boolean,
 }
 
 interface LayoutConfigRequest {
@@ -28,7 +29,7 @@ export interface LayoutRequestProps {
     requestLayout(request: LayoutConfigRequest): void,
 }
 
-const AppBaseLayout = ({children, defaultHeaderImage, defaultHeaderTitle}: MainLayoutProps) => {
+const AppBaseLayout = ({children, defaultHeaderImage, defaultHeaderTitle, breadcrumbs}: MainLayoutProps) => {
 
     const router = useRouter();
     const [title, setTitle] = useState(defaultHeaderTitle);
@@ -65,7 +66,7 @@ const AppBaseLayout = ({children, defaultHeaderImage, defaultHeaderTitle}: MainL
 
                         {/* Main logo */}
                         <Link href={'/'}>
-                            <a className="flex-auto basis-full sm:basis-1/8 max-w-xs p-2 dark:invert">
+                            <a className="flex-auto basis-full sm:basis-1/8 max-w-xs p-2 invert">
                                 <MyLogo className="dark:block h-12"/>
                             </a>
                         </Link>
@@ -126,7 +127,7 @@ const AppBaseLayout = ({children, defaultHeaderImage, defaultHeaderTitle}: MainL
 
             <main className="p-2 max-w-4xl mx-auto w-full flex-grow">
 
-                <Breadcrumbs/>
+                { (breadcrumbs ?? true) && <Breadcrumbs/> }
 
                 <div className={`transition-all duration-500 ${showContent? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
                     { showContent &&
@@ -205,3 +206,14 @@ export const defineAppBaseLayoutParams = (headerImage?: string) => {
         </AppBaseLayout>
     )
 }
+
+export function defineLayout<P = {}>(
+    config: Omit<MainLayoutProps, 'children'> | ((props: P) => Omit<MainLayoutProps, 'children'>)
+) {
+    // eslint-disable-next-line react/display-name
+    return (page: ReactElement, props: P) => (
+        <AppBaseLayout { ...(typeof config === 'function' ? config(props) : config) }>
+        {page}
+        </AppBaseLayout>
+    )
+} 

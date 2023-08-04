@@ -11,6 +11,13 @@ export interface ContentDescriptor {
     fileName: string,
 }
 
+export interface Content extends ContentDescriptor {
+    created?: Date,
+    modified?: Date,
+    title?: string,
+    abstract?: string,
+}
+
 export interface ContentLocation {
     fileName: string,
     path: string,

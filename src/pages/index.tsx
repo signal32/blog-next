@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { NextPageWithLayout } from './_app'
-import { defineAppBaseLayout } from '../components/layouts/AppBaseLayout'
+import { defineAppBaseLayout, defineLayout } from '../components/layouts/AppBaseLayout'
 import { useModalStore } from '../components/common/Modal'
 import Button from '../components/common/Button'
 import { getAllPosts, Post } from '../lib/posts'
@@ -16,6 +16,17 @@ interface BlogProps {
 
 const Home: NextPageWithLayout<BlogProps> = (props) => {
   const modalStore = useModalStore();
+
+  const allContent = [
+    ...props.posts,
+    ...props.products,
+  ].sort((a, b) => {
+    if (!a.created && !b.created) return 0
+    if (!a.created) return 1
+    if (!b.created) return -1
+    else return a.created?.getTime() - b.created?.getDate()
+  })
+
   return (
     <div className='h-full w-full'>
 
@@ -28,13 +39,18 @@ const Home: NextPageWithLayout<BlogProps> = (props) => {
       <div>
         <h1 className='text-white' onClick={() => modalStore.pushModal(<Button text='hello world'/>)}>Content placeholder</h1>
         <PostList posts={props.posts}/>
-        <p>{JSON.stringify([...props.posts, ...props.products])}</p>
+        <div>{ allContent.map(item => (
+          <div key={item.slug}>hello{item.slug}{item.fileName}</div>
+        ))}</div>
       </div>
     </div>
   )
 }
 
-Home.getLayout = defineAppBaseLayout
+Home.getLayout = defineLayout({
+  breadcrumbs: false,
+})
+
 export default Home
 
 export const getStaticProps = async () => {

@@ -1,9 +1,9 @@
 import { join } from "path";
 import fs from 'fs';
 import { FileDetails } from "./file";
-import { ContentDescriptor, defineContent } from "./content";
+import { Content, ContentDescriptor, defineContent } from "./content";
 
-export interface Product extends ContentDescriptor {
+export interface Product extends Content {
     published: Date,
     similar?: [ProductId],
     children?: [ProductId],
