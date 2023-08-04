@@ -1,8 +1,8 @@
 import Button from "../../components/common/Button";
-import { defineAppBaseLayout } from "../../components/layouts/AppBaseLayout";
+import { defineLayout } from "../../components/app/BaseLayout";
 import PostList from "../../components/posts/PostList";
 import { getAllPosts, Post } from "../../lib/posts";
-import { NextPageWithLayout } from "../_app";
+import { PageWithLayout } from '../../components/app/LayoutApp';
 
 const POSTS_PER_PAGE = 10;
 
@@ -10,7 +10,7 @@ interface BlogProps {
     posts: Post[],
 }
 
-const Blog: NextPageWithLayout<BlogProps> = (props) => {
+const Blog: PageWithLayout<BlogProps> = (props) => {
     return (
         <div className="text-white">
             <PostList posts={props.posts}/>
@@ -19,7 +19,7 @@ const Blog: NextPageWithLayout<BlogProps> = (props) => {
     )
 }
 
-Blog.getLayout = defineAppBaseLayout;
+Blog.layout = defineLayout();
 
 export async function getStaticProps() {
     const posts = await getAllPosts();

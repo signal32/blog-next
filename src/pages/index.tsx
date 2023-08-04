@@ -1,6 +1,6 @@
 import Head from 'next/head'
-import { NextPageWithLayout } from './_app'
-import { defineAppBaseLayout, defineLayout } from '../components/layouts/AppBaseLayout'
+import { PageWithLayout } from '../components/app/LayoutApp'
+import { defineLayout } from '../components/app/BaseLayout'
 import { useModalStore } from '../components/common/Modal'
 import Button from '../components/common/Button'
 import { getAllPosts, Post } from '../lib/posts'
@@ -14,7 +14,7 @@ interface BlogProps {
   products: Product[],
 }
 
-const Home: NextPageWithLayout<BlogProps> = (props) => {
+const Home: PageWithLayout<BlogProps> = (props) => {
   const modalStore = useModalStore();
 
   const allContent = [
@@ -47,7 +47,7 @@ const Home: NextPageWithLayout<BlogProps> = (props) => {
   )
 }
 
-Home.getLayout = defineLayout({
+Home.layout = defineLayout({
   breadcrumbs: false,
 })
 

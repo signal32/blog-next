@@ -3,8 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
 import React, { cloneElement, ReactElement, useContext, useEffect, useState } from "react";
-import { useDebounce } from "react-use";
-import { config, PageContext, useAppStore } from "../../pages/_app";
+import { config } from "../../pages/_app";
 import MyLogo from "../../resources/images/logo.svg";
 import Breadcrumbs from "../common/Breadcrumbs";
 import ModalContext from "../common/Modal";
@@ -13,23 +12,18 @@ const DEMO_IMAGE = "https://images.pexels.com/photos/4215110/pexels-photo-421511
 
 export interface MainLayoutProps {
     children: ReactElement<LayoutRequestProps>,
-    defaultHeaderImage?: string,
-    defaultHeaderTitle?: string,
+    headerImage?: string,
+    headerTitle?: string,
     breadcrumbs?: boolean,
 }
 
-interface LayoutConfigRequest {
-    title?: string,
-    image?: string,
-    hidden?: boolean,
-    reset?: boolean,
-}
+export type LayoutConfig = Omit<MainLayoutProps, 'children'>
 
 export interface LayoutRequestProps {
-    requestLayout(request: LayoutConfigRequest): void,
+    updateLayout(config: LayoutConfig): void,
 }
 
-const AppBaseLayout = ({children, defaultHeaderImage, defaultHeaderTitle, breadcrumbs}: MainLayoutProps) => {
+const AppBaseLayout = ({children, headerImage: defaultHeaderImage, headerTitle: defaultHeaderTitle, breadcrumbs}: MainLayoutProps) => {
 
     const router = useRouter();
     const [title, setTitle] = useState(defaultHeaderTitle);
@@ -37,13 +31,14 @@ const AppBaseLayout = ({children, defaultHeaderImage, defaultHeaderTitle, breadc
     const [showHeaderImage, setShowHeaderImage] = useState(true);
     const [showContent, setShowContent] = useState(true);
 
-
-    //HACK Changes made to layout should not persist between different pages
     const resetState = () => {
         setTitle(defaultHeaderTitle);
         setHeaderImage(defaultHeaderImage);
     }
-    useEffect(resetState, [router.asPath]);
+
+    // Layout should be reset when route changes
+    // This ensures that changes made to layout do not persist between pages
+    useEffect(resetState, [defaultHeaderImage, defaultHeaderTitle, router.asPath]);
 
     const showAnimatedContent = debounce(() => {
         setShowHeaderImage(true);
@@ -134,9 +129,9 @@ const AppBaseLayout = ({children, defaultHeaderImage, defaultHeaderTitle, breadc
                         cloneElement(
                             children, 
                             {
-                                requestLayout: (details: LayoutConfigRequest) => {
-                                    if (details.title) setTitle(details.title);
-                                    if (details.image) setHeaderImage(details.image);
+                                updateLayout: (details: LayoutConfig) => {
+                                    if (details.headerTitle) setTitle(details.headerTitle);
+                                    if (details.headerImage) setHeaderImage(details.headerImage);
                                 },
                             }
                         )
@@ -155,7 +150,7 @@ const AppBaseLayout = ({children, defaultHeaderImage, defaultHeaderTitle, breadc
                             </div>
 
                             <div className="w-1/5 hame-markdown">
-                                <p className=" dark:text-gray-300 text-gray-600 text-xs italic">Copyright&#169; Hamish Weir 2022</p>
+                                <p className=" dark:text-gray-300 text-gray-600 text-xs italic">Copyright &#169; Hamish Weir {new Date().getFullYear()}</p>
                             </div>
 
                         </div>
@@ -190,25 +185,8 @@ const AppBaseLayout = ({children, defaultHeaderImage, defaultHeaderTitle, breadc
 
 export default AppBaseLayout;
 
-export const defineAppBaseLayout = (page: ReactElement) => {
-    return(
-      <AppBaseLayout>
-        {page}
-      </AppBaseLayout>
-    )
-}
-
-export const defineAppBaseLayoutParams = (headerImage?: string) => {
-    // eslint-disable-next-line react/display-name
-    return (page: ReactElement) => (
-        <AppBaseLayout defaultHeaderImage={headerImage}>
-        {page}
-        </AppBaseLayout>
-    )
-}
-
 export function defineLayout<P = {}>(
-    config: Omit<MainLayoutProps, 'children'> | ((props: P) => Omit<MainLayoutProps, 'children'>)
+    config: Omit<MainLayoutProps, 'children'> | ((props: P) => Omit<MainLayoutProps, 'children'>) = {}
 ) {
     // eslint-disable-next-line react/display-name
     return (page: ReactElement, props: P) => (

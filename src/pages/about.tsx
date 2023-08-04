@@ -1,14 +1,13 @@
-import { ChangeEvent, useEffect, useState } from "react";
-import AppBaseLayout, { LayoutRequestProps, defineAppBaseLayoutParams } from "../components/layouts/AppBaseLayout";
-import { NextPageWithLayout } from "./_app";
+import { ChangeEvent, useState } from "react";
+import { LayoutRequestProps, defineLayout } from "../components/app/BaseLayout";
+import { PageWithLayout } from '../components/app/LayoutApp';
 import designHeader from "../resources/images/about_header.jpg";
 import TextInput from "../components/common/TextInput";
 import InputLabel from "../components/common/InputLabel";
 
 interface Props extends LayoutRequestProps {}
 
-const Simulation: NextPageWithLayout<Props> = (props) => {
-    useEffect(() => props.requestLayout({title: 'About', image: designHeader.src}));
+const Simulation: PageWithLayout<Props> = (props) => {
     const [feedback, setFeedback] = useState<{}>();
 
     const validate = (e: ChangeEvent<HTMLInputElement>) => {
@@ -37,12 +36,9 @@ const Simulation: NextPageWithLayout<Props> = (props) => {
     )
 }
 
-Simulation.getLayout = (page) => (
-    <AppBaseLayout 
-        defaultHeaderImage={designHeader.src} 
-        defaultHeaderTitle="Simulation">
-        {page}
-    </AppBaseLayout>
-)
+Simulation.layout =  defineLayout({
+    headerImage: designHeader.src,
+    headerTitle: 'Simulation',
+})
 
-export default Simulation;
+export default Simulation

@@ -1,13 +1,11 @@
 import Drawer from "../../components/common/Drawer";
-import AppBaseLayout, { LayoutRequestProps, defineAppBaseLayoutParams, defineLayout } from "../../components/layouts/AppBaseLayout";
+import AppBaseLayout, { LayoutRequestProps, defineLayout } from "../../components/app/BaseLayout";
 import markdownToHtml from "../../lib/markdown";
 import { Product, products, Requirement } from "../../lib/products";
-import { NextPageWithLayout, useAppStore } from "../_app";
+import { PageWithLayout } from '../../components/app/LayoutApp';
 import {FaDownload, FaExternalLinkAlt, FaInfoCircle} from 'react-icons/fa';
 import Button from "../../components/common/Button";
-import { useEffect } from "react";
 import Link from "next/link";
-import { CACHE } from "../../lib/content";
 import { FileDetails, files } from "../../lib/file";
 import { useModalStore } from "../../components/common/Modal";
 import Image from "next/image";
@@ -21,7 +19,7 @@ interface ProductPageProps extends LayoutRequestProps {
     otherFiles: {slug: string, label: string, file: FileDetails}[],
 }
 
-const ProductPage: NextPageWithLayout<ProductPageProps> = (props) => {
+const ProductPage: PageWithLayout<ProductPageProps> = (props) => {
     const modals = useModalStore();
 
     const openGallery = (img: string) => {
@@ -69,9 +67,9 @@ const ProductPage: NextPageWithLayout<ProductPageProps> = (props) => {
     )
 }
 
-ProductPage.getLayout = defineLayout((props) => ({
-    defaultHeaderTitle: props.product.name,
-    defaultHeaderImage: props.product.media?.banner,
+ProductPage.layout = defineLayout((props) => ({
+    headerTitle: props.product.name,
+    headerImage: props.product.media?.banner,
     breadcrumbs: true,
 }))
 

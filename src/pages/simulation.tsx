@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import AppBaseLayout, { LayoutRequestProps, defineAppBaseLayoutParams } from "../components/layouts/AppBaseLayout";
-import { NextPageWithLayout } from "./_app";
+import AppBaseLayout, { LayoutRequestProps, defineAppBaseLayoutParams } from "../components/app/BaseLayout";
+import { PageWithLayout } from '../components/app/LayoutApp';
 import simulationHeader from '../resources/images/simulation_header.jpg';
 import Button from "../components/common/Button";
 import Link from "next/link";
@@ -17,8 +17,8 @@ const PRODUCTS = [
 
 interface Props extends LayoutRequestProps {}
 
-const Simulation: NextPageWithLayout<Props> = (props) => {
-    useEffect(() => props.requestLayout({title: 'Simulation', image: simulationHeader.src}));
+const Simulation: PageWithLayout<Props> = (props) => {
+    useEffect(() => props.updateLayout({title: 'Simulation', image: simulationHeader.src}));
 
     return (
         <div>
@@ -54,10 +54,10 @@ const Simulation: NextPageWithLayout<Props> = (props) => {
     )
 }
 
-Simulation.getLayout = (page) => (
+Simulation.layout = (page) => (
     <AppBaseLayout 
-        defaultHeaderImage={simulationHeader.src} 
-        defaultHeaderTitle="Simulation">
+        headerImage={simulationHeader.src} 
+        headerTitle="Simulation">
         {page}
     </AppBaseLayout>
 )

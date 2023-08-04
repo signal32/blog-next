@@ -1,13 +1,11 @@
-import { useEffect } from "react";
-import { LayoutRequestProps, defineAppBaseLayoutParams } from "../components/layouts/AppBaseLayout";
-import { NextPageWithLayout } from "./_app";
+import { LayoutRequestProps, defineLayout } from "../components/app/BaseLayout";
+import { PageWithLayout } from '../components/app/LayoutApp';
 import designHeader from "../resources/images/design_header.jpg";
 
 interface Props extends LayoutRequestProps {}
 
-const Simulation: NextPageWithLayout<Props> = (props) => {
-    useEffect(() => props.requestLayout({title: 'Web Design', image: designHeader.src}));
-
+const Simulation: PageWithLayout<Props> = (props) => {
+    
     return (
         <div>
             <h1 className="text-lg">Simulation Products</h1>
@@ -15,5 +13,9 @@ const Simulation: NextPageWithLayout<Props> = (props) => {
     )
 }
 
-Simulation.getLayout = defineAppBaseLayoutParams();
+Simulation.layout = defineLayout({
+    headerTitle: 'Web Design',
+    headerImage:  designHeader.src,
+})
+
 export default Simulation;
