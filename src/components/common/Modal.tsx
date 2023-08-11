@@ -36,6 +36,12 @@ const ModalContext = () => {
         }
     }, [store.modals.length])
 
+    useEffect(() => {
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape' && store.modals.length) store.popModal()
+        })
+    })
+
     const handleBackdropClick: MouseEventHandler = (ev) => {
         if (ev.currentTarget.id == 'modalBackdrop') store.popModal()
     }
