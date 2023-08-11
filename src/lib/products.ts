@@ -2,6 +2,7 @@ import { join } from "path";
 import fs from 'fs';
 import { FileDetails } from "./file";
 import { Content, ContentDescriptor, defineContent } from "./content";
+import { Post } from './posts';
 
 export interface Product extends Content {
     published: Date,
@@ -58,5 +59,8 @@ export const products = defineContent<Product>('products', async(descriptor, pat
     return {
         ...descriptor,
         ...product,
+        ...(product.media?.banner ? { coverImage: product.media.banner} : {}), // Can't be undefined
+        ...(product.description && !product.excerpt ? { excerpt: product.description.slice(0, 255).trim()} : {}),
+        baseUrl: '/product',
     }
 });

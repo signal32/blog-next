@@ -1,0 +1,30 @@
+.heroContainer {
+    width: 100%;
+    min-height: 300px;
+    background-color: antiquewhite;
+    margin-bottom: 30px;
+}
+
+.columnContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.aboutCol {
+    flex: 0 0 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.recentPostsCol {
+    flex: 1;
+}
+
+.contactDetailsContainer {
+    flex: 0 0 30%;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    @apply bg-gray-700 rounded-md;
+}

@@ -12,10 +12,13 @@ export interface ContentDescriptor {
 }
 
 export interface Content extends ContentDescriptor {
+    baseUrl: string,
     created?: Date,
     modified?: Date,
     title?: string,
-    abstract?: string,
+    excerpt?: string,
+    thumbnail?: string,
+    coverImage?: string,
 }
 
 export interface ContentLocation {

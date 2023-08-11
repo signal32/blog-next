@@ -4,18 +4,10 @@ import { join } from 'path';
 import { Content, ContentDescriptor, defineContent } from './content';
 import { readFile } from 'fs/promises';
 
-const POST_DIR = join(process.cwd(), 'posts');
+const POST_DIR = join(process.cwd(), '/content/posts');
 
 export interface Post extends Content {
-    slug: string
-    title?: string
-    date?: string
-    coverImage?: string
     author?: string
-    excerpt?: string
-    ogImage?: {
-      url: string
-    }
     content?: string
 }
 
@@ -63,7 +55,9 @@ export function getPostSlugs() {
       [key: string]: string
     }
 
-    const items: Items = {}
+    const items: Items = {
+      baseUrl: '/blog'
+    }
 
     // Ensure only the minimal needed data is exposed
     fields.forEach((field) => {
@@ -97,6 +91,6 @@ export function getAllPosts(fields: string[] = DEFAULT_POST_FIELDS) {
     const slugs = getPostSlugs();
     const posts  = slugs
         .map((slug) => getPostBySlug(slug, fields))
-        .sort((post1, post2) => (post1?.date || 0) > (post2?.date || 1) ? -1 : 1);
+        .sort((post1, post2) => (post1?.created || 0) > (post2?.created || 1) ? -1 : 1);
     return posts;
 }
