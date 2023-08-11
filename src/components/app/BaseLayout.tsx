@@ -91,13 +91,13 @@ const AppBaseLayout = ({children, headerImage: defaultHeaderImage, headerTitle: 
                         <div className="flex-none sm:basis-auto">
                             <div className="flex flex-wrap justify-center sm:justify-end">
                                 <div className="flex">
-                                        {
-                                            config.socialLinks.map((link, i) => (
-                                                <div className="flex" key={i}>
-                                                    <a className="text-slate-300 hover:text-white transition-all w-8 h-8 px-2" href={link.href}>{link.icon}</a>
-                                                </div>
-                                            ))
-                                        }
+                                    {
+                                        config.socialLinks.map((link, i) => (
+                                            <div className="flex" key={i}>
+                                                <a className="text-slate-300 hover:text-white transition-all w-8 h-8 px-2" href={link.href}>{link.icon}</a>
+                                            </div>
+                                        ))
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -106,24 +106,24 @@ const AppBaseLayout = ({children, headerImage: defaultHeaderImage, headerTitle: 
             </header>
 
             <div className="-mt-10">
-                    <div className={`p-2 max-w-4xl mx-auto relative bg-gray-900 transition-all ease-in-out ${headerImage && showHeaderImage? 'h-60 opacity-100' : 'h-0 opacity-0'}`}>
-                        {/* <img src={headerImage} className={`w-full max-h-64 rounded-lg object-cover border-0 transition-all duration-200 ease-in-out -z-20 ${headerImage? 'h-60 opacity-100' : 'h-0 opacity-0'}`} /> */}
-                        {/* {headerImage && */}
-                            <Image
-                                src={headerImage || DEMO_IMAGE}
-                                className={`w-full max-h-64 rounded-b-lg transition-opacity ease-in-out duration-500 ${headerImage ? 'opacity-100' : 'opacity-0'}`}
-                                alt=''
-                                fill
-                                sizes="100vw"
-                                style={{
-                                    objectFit: "cover"
-                                }} />
-                        {/*  */}
-                        <div className="w-full h-10 bottom-0 left-0">
+                <div className={`p-2 max-w-4xl mx-auto relative bg-gray-900 transition-all ease-in-out ${headerImage && showHeaderImage? 'h-60 opacity-100' : 'h-0 opacity-0'}`}>
+                    {/* <img src={headerImage} className={`w-full max-h-64 rounded-lg object-cover border-0 transition-all duration-200 ease-in-out -z-20 ${headerImage? 'h-60 opacity-100' : 'h-0 opacity-0'}`} /> */}
+                    {/* {headerImage && */}
+                    <Image
+                        src={headerImage || DEMO_IMAGE}
+                        className={`w-full max-h-64 rounded-b-lg transition-opacity ease-in-out duration-500 ${headerImage ? 'opacity-100' : 'opacity-0'}`}
+                        alt=''
+                        fill
+                        sizes="100vw"
+                        style={{
+                            objectFit: "cover"
+                        }} />
+                    {/*  */}
+                    <div className="w-full h-10 bottom-0 left-0">
                         <p className="text-white text-lg bottom-0 z-30">{title}</p>
 
-                        </div>
-                    </div> 
+                    </div>
+                </div> 
             </div>
 
             <main className="p-2 max-w-4xl mx-auto w-full flex-grow">
@@ -197,7 +197,7 @@ export function defineLayout<P = {}>(
     // eslint-disable-next-line react/display-name
     return (page: ReactElement, props: P) => (
         <AppBaseLayout { ...(typeof config === 'function' ? config(props) : config) }>
-        {page}
+            {page}
         </AppBaseLayout>
     )
 } 
