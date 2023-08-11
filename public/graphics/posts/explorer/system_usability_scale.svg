@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 2048 1161" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g transform="matrix(1,0,0,1,0,-471)">
+        <g id="system_usability_scale" transform="matrix(4.096,0,0,4.32854,-4.096,-1822.72)">
+            <rect x="1" y="530" width="500" height="268" style="fill:none;"/>
+            <clipPath id="_clip1">
+                <rect x="1" y="530" width="500" height="268"/>
+            </clipPath>
+            <g clip-path="url(#_clip1)">
+                <g transform="matrix(0.22288,0,0,4.51729,-31.532,-1055.21)">
+                    <path d="M476.036,355.317C476.036,354.979 470.154,354.704 462.909,354.704L159.089,354.704C151.844,354.704 145.962,354.979 145.962,355.317L145.962,402.027C145.962,402.365 151.844,402.64 159.089,402.64L462.909,402.64C470.154,402.64 476.036,402.365 476.036,402.027L476.036,355.317Z" style="fill:rgb(235,235,235);fill-opacity:0.8;"/>
+                </g>
+                <g transform="matrix(0.885142,0,0,0.234806,2.24846,446.713)">
+                    <path d="M476.036,366.495C476.036,359.987 474.554,354.704 472.73,354.704L149.267,354.704C147.443,354.704 145.962,359.987 145.962,366.495L145.962,390.849C145.962,397.356 147.443,402.64 149.267,402.64L472.73,402.64C474.554,402.64 476.036,397.356 476.036,390.849L476.036,366.495Z" style="fill:rgb(235,235,235);fill-opacity:0.8;"/>
+                </g>
+                <g transform="matrix(0.244141,0,0,0.485654,219.506,283.758)">
+                    <path d="M260,537L260,997" style="fill:none;stroke:black;stroke-width:2.21px;"/>
+                </g>
+                <g id="Bars" transform="matrix(0.244141,0,0,0.231025,27.8555,384.223)">
+                    <g transform="matrix(0.84668,0,0,0.982539,204,28.6543)">
+                        <path d="M2048,1183.21C2048,1176.47 2041.65,1171 2033.83,1171L14.173,1171C6.351,1171 -0,1176.47 -0,1183.21L-0,1628.79C-0,1635.53 6.351,1641 14.173,1641L2033.83,1641C2041.65,1641 2048,1635.53 2048,1628.79L2048,1183.21Z" style="fill:rgb(255,20,0);fill-opacity:0.18;"/>
+                    </g>
+                    <g transform="matrix(0.0717773,0,0,0.087234,1064,531.849)">
+                        <path d="M2048,1288.5C2048,1223.65 1984.01,1171 1905.2,1171L142.803,1171C63.988,1171 -0,1223.65 -0,1288.5L-0,1523.5C-0,1588.35 63.988,1641 142.803,1641L1905.2,1641C1984.01,1641 2048,1588.35 2048,1523.5L2048,1288.5Z" style="fill:rgb(255,20,0);fill-opacity:0.18;stroke:black;stroke-width:27.91px;stroke-linejoin:miter;"/>
+                    </g>
+                    <g transform="matrix(0.84668,0,0,0.991489,204,-456.034)">
+                        <path d="M2048,1183.1C2048,1176.42 2041.65,1171 2033.83,1171L14.173,1171C6.351,1171 -0,1176.42 -0,1183.1L-0,1628.9C-0,1635.58 6.351,1641 14.173,1641L2033.83,1641C2041.65,1641 2048,1635.58 2048,1628.9L2048,1183.1Z" style="fill:rgb(0,255,43);fill-opacity:0.18;"/>
+                    </g>
+                    <g transform="matrix(0.0717773,0,0,0.087234,465,531.849)">
+                        <path d="M2048,1288.5C2048,1223.65 1984.01,1171 1905.2,1171L142.803,1171C63.988,1171 -0,1223.65 -0,1288.5L-0,1523.5C-0,1588.35 63.988,1641 142.803,1641L1905.2,1641C1984.01,1641 2048,1588.35 2048,1523.5L2048,1288.5Z" style="fill:rgb(0,255,43);fill-opacity:0.18;stroke:black;stroke-width:27.54px;stroke-linejoin:miter;"/>
+                    </g>
+                    <g transform="matrix(1,0,0,1,4.26326e-14,362.612)">
+                        <g transform="matrix(1,0,0,1,24,86.5769)">
+                            <g transform="matrix(2.6,0,0,4.4893,66.4,-1954.24)">
+                                <g transform="matrix(0.0682692,0,0,0.392578,389.942,467.078)">
+                                    <rect x="100" y="547" width="400" height="40" style="fill:rgb(0,73,129);stroke:white;stroke-width:0.77px;stroke-linejoin:miter;"/>
+                                </g>
+                                <g transform="matrix(0.1375,0,0,0.392578,327.827,467.042)">
+                                    <rect x="100" y="547" width="400" height="40" style="fill:rgb(147,147,147);stroke:white;stroke-width:0.76px;stroke-linejoin:miter;"/>
+                                </g>
+                                <g transform="matrix(0.549038,0,0,0.392578,67.0577,467.042)">
+                                    <rect x="100" y="547" width="400" height="40" style="fill:rgb(245,111,0);stroke:white;stroke-width:0.6px;stroke-linejoin:miter;"/>
+                                </g>
+                                <g transform="matrix(0.205769,0,0,0.392578,18.8846,467.042)">
+                                    <rect x="100" y="547" width="400" height="40" style="fill:rgb(197,57,0);stroke:white;stroke-width:0.74px;stroke-linejoin:miter;"/>
+                                </g>
+                            </g>
+                            <g transform="matrix(1,0,0,1,0,-86.1501)">
+                                <g transform="matrix(1,0,0,1,210,425.246)">
+                                    <text x="777.005px" y="814px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">14.<tspan x="815.015px " y="814px ">3</tspan>%</text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,-580,423.603)">
+                                    <text x="819.58px" y="814px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">2<tspan x="834.25px 847.93px 854.38px 869.89px " y="814px 814px 814px 814px ">1.4%</tspan></text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,-363,423.603)">
+                                    <text x="999.365px" y="814px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">5<tspan x="1014.37px 1028.22px 1032.42px " y="814px 814px 814px ">7.1</tspan>%</text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,345,426.164)">
+                                    <text x="757.865px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">7.<tspan x="775.925px " y="813.621px ">1</tspan>%</text>
+                                </g>
+                            </g>
+                        </g>
+                        <g transform="matrix(1,0,0,1,-110,460.528)">
+                            <text x="0px" y="749.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">I thought ther<tspan x="150.072px " y="749.856px ">e</tspan> w<tspan x="186.432px 199.248px " y="749.856px 749.856px ">as</tspan> t<tspan x="225.12px " y="749.856px ">o</tspan>o</text>
+                            <text x="0px" y="773.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">much inc<tspan x="98.256px " y="773.856px ">o</tspan>nsist<tspan x="163.824px " y="773.856px ">e</tspan>ncy in this</text>
+                            <text x="0px" y="797.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">s<tspan x="10.8px 22.44px 33.648px 41.952px " y="797.856px 797.856px 797.856px 797.856px ">yste</tspan>m.</text>
+                        </g>
+                    </g>
+                    <g transform="matrix(1,0,0,1,-46,176.712)">
+                        <g transform="matrix(1,0,0,1,47,52.1173)">
+                            <g>
+                                <g transform="matrix(2.6,0,0,4.4893,206.4,-1917.33)">
+                                    <g transform="matrix(0.0769231,0,0,0.392578,391,425.326)">
+                                        <rect x="100" y="547" width="400" height="40" style="fill:rgb(0,73,129);stroke:white;stroke-width:0.77px;stroke-linejoin:miter;"/>
+                                    </g>
+                                    <g transform="matrix(0.192308,0,0,0.392578,302.538,425.203)">
+                                        <rect x="100" y="547" width="400" height="40" style="fill:rgb(0,122,177);stroke:white;stroke-width:0.74px;stroke-linejoin:miter;"/>
+                                    </g>
+                                    <g transform="matrix(0.256731,0,0,0.392578,193.404,425.326)">
+                                        <rect x="100" y="547" width="400" height="40" style="fill:rgb(245,111,0);stroke:white;stroke-width:0.72px;stroke-linejoin:miter;"/>
+                                    </g>
+                                    <g transform="matrix(0.449038,0,0,0.392578,-5.44231,425.163)">
+                                        <rect x="100" y="547" width="400" height="40" style="fill:rgb(197,57,0);stroke:white;stroke-width:0.64px;stroke-linejoin:miter;"/>
+                                    </g>
+                                </g>
+                                <g transform="matrix(1,0,0,1,0,-49.2565)">
+                                    <g transform="matrix(1,0,0,1,-440,238.734)">
+                                        <text x="938.86px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">46.7<tspan x="993.61px " y="813.621px ">%</tspan></text>
+                                    </g>
+                                    <g transform="matrix(1,0,0,1,20,238.734)">
+                                        <text x="846.535px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">26.7<tspan x="899.935px " y="813.621px ">%</tspan></text>
+                                    </g>
+                                    <g transform="matrix(1,0,0,1,294,237.247)">
+                                        <text x="808.78px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">20.<tspan x="848.32px " y="813.621px ">0</tspan>%</text>
+                                    </g>
+                                    <g transform="matrix(1,0,0,1,496,237.247)">
+                                        <text x="756.215px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">6.7<tspan x="794.255px " y="813.621px ">%</tspan></text>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                        <g transform="matrix(1,0,0,1,-110,275.649)">
+                            <text x="0px" y="749.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">I think that I woul<tspan x="192px " y="749.856px ">d</tspan> need the</text>
+                            <text x="0px" y="773.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">support of a t<tspan x="148.128px " y="773.856px ">e</tspan>chnic<tspan x="218.808px 231.624px " y="773.856px 773.856px ">al</tspan> per<tspan x="281.256px " y="773.856px ">s</tspan>on</text>
+                            <text x="0px" y="797.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">t<tspan x="8.304px " y="797.856px ">o</tspan> be abl<tspan x="96.6px " y="797.856px ">e</tspan> t<tspan x="124.344px " y="797.856px ">o</tspan> use this s<tspan x="247.2px 258.84px 270.048px 278.352px " y="797.856px 797.856px 797.856px 797.856px ">yste</tspan>m.</text>
+                        </g>
+                    </g>
+                    <g transform="matrix(1,0,0,1,-1.81899e-12,546.351)">
+                        <g transform="matrix(1,0,0,1,24,17.6576)">
+                            <g transform="matrix(2.6,0,0,4.4893,126.4,-1879.29)">
+                                <g transform="matrix(0.127885,0,0,0.392578,360.135,383.328)">
+                                    <rect x="100" y="547" width="400" height="40" style="fill:rgb(0,122,177);stroke:white;stroke-width:0.76px;stroke-linejoin:miter;"/>
+                                </g>
+                                <g transform="matrix(0.127885,0,0,0.392578,308.596,383.328)">
+                                    <rect x="100" y="547" width="400" height="40" style="fill:rgb(147,147,147);stroke:white;stroke-width:0.76px;stroke-linejoin:miter;"/>
+                                </g>
+                                <g transform="matrix(0.5125,0,0,0.392578,65.1346,383.328)">
+                                    <rect x="100" y="547" width="400" height="40" style="fill:rgb(245,111,0);stroke:white;stroke-width:0.62px;stroke-linejoin:miter;"/>
+                                </g>
+                                <g transform="matrix(0.192308,0,0,0.392578,20.2308,383.328)">
+                                    <rect x="100" y="547" width="400" height="40" style="fill:rgb(197,57,0);stroke:white;stroke-width:0.74px;stroke-linejoin:miter;"/>
+                                </g>
+                            </g>
+                            <g transform="matrix(1,0,0,1,0,-34.6214)">
+                                <g transform="matrix(1,0,0,1,-519,73.6031)">
+                                    <text x="819.87px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">20%</text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,-289,73.6031)">
+                                    <text x="939.19px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">5<tspan x="954.76px 970.21px 977.83px " y="813.621px 813.621px 813.621px ">3.3</tspan>%</text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,212,73.8642)">
+                                    <text x="776.635px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">13.<tspan x="813.385px " y="813.621px ">3</tspan>%</text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,345,73.8642)">
+                                    <text x="777.635px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">13.<tspan x="814.385px " y="813.621px ">3</tspan>%</text>
+                                </g>
+                            </g>
+                        </g>
+                        <g transform="matrix(1,0,0,1,-110,91.4234)">
+                            <text x="0px" y="749.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">I f<tspan x="21.24px " y="749.856px ">o</tspan>und the s<tspan x="136.968px 148.608px 159.816px 168.12px " y="749.856px 749.856px 749.856px 749.856px ">yste</tspan>m</text>
+                            <text x="0px" y="773.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">unnec<tspan x="66.168px 79.248px 90.216px 101.184px " y="773.856px 773.856px 773.856px 773.856px ">essa</tspan>ril<tspan x="137.064px " y="773.856px ">y</tspan> c<tspan x="166.224px " y="773.856px ">o</tspan>mpl<tspan x="221.976px 234.84px " y="773.856px 773.856px ">ex</tspan>.</text>
+                        </g>
+                    </g>
+                    <g transform="matrix(1,0,0,1,-1.81899e-12,-99.6172)">
+                        <g transform="matrix(1,0,0,1,79,121.036)">
+                            <g>
+                                <g transform="matrix(2.6,0,0,4.4893,136.4,-1970.65)">
+                                    <g transform="matrix(0.192308,0,0,0.392578,328.308,503.719)">
+                                        <rect x="100" y="547" width="400" height="40" style="fill:rgb(0,122,177);stroke:white;stroke-width:0.74px;stroke-linejoin:miter;"/>
+                                    </g>
+                                    <g transform="matrix(0.127885,0,0,0.392578,283.404,503.719)">
+                                        <rect x="100" y="547" width="400" height="40" style="fill:rgb(147,147,147);stroke:white;stroke-width:0.76px;stroke-linejoin:miter;"/>
+                                    </g>
+                                    <g transform="matrix(0.320192,0,0,0.392578,7.44231,503.719)">
+                                        <rect x="100" y="547" width="400" height="40" style="fill:rgb(197,57,0);stroke:white;stroke-width:0.7px;stroke-linejoin:miter;"/>
+                                    </g>
+                                    <g transform="matrix(0.320192,0,0,0.392578,136.096,503.719)">
+                                        <rect x="100" y="547" width="400" height="40" style="fill:rgb(245,111,0);stroke:white;stroke-width:0.7px;stroke-linejoin:miter;"/>
+                                    </g>
+                                </g>
+                                <g transform="matrix(1,0,0,1,0,-114.23)">
+                                    <g transform="matrix(1,0,0,1,157,603.982)">
+                                        <text x="776.885px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">13.<tspan x="813.635px " y="813.621px ">3</tspan>%</text>
+                                    </g>
+                                    <g transform="matrix(1,0,0,1,290.5,603.225)">
+                                        <text x="808.03px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">20.<tspan x="847.57px " y="813.621px ">0</tspan>%</text>
+                                    </g>
+                                    <g transform="matrix(1,0,0,1,-509,603.603)">
+                                        <text x="874.75px" y="814px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">33.<tspan x="913.27px " y="814px ">3</tspan>%</text>
+                                    </g>
+                                    <g transform="matrix(1,0,0,1,-178,603.603)">
+                                        <text x="876.75px" y="814px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">33.<tspan x="915.27px " y="814px ">3</tspan>%</text>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                        <g transform="matrix(1,0,0,1,-110,644.753)">
+                            <text x="0px" y="749.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">I f<tspan x="21.24px " y="749.856px ">o</tspan>und the s<tspan x="136.968px 148.608px 159.816px 168.12px " y="749.856px 749.856px 749.856px 749.856px ">yste</tspan>m very</text>
+                            <text x="0px" y="773.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">c<tspan x="11.232px " y="773.856px ">u</tspan>mber<tspan x="82.008px " y="773.856px ">s</tspan>ome t<tspan x="155.544px " y="773.856px ">o</tspan> use<tspan x="213.936px " y="773.856px ">.</tspan></text>
+                        </g>
+                    </g>
+                    <g transform="matrix(1,0,0,1,-1.81899e-12,-98.8973)">
+                        <g transform="matrix(1,0,0,1,33,155.496)">
+                            <g>
+                                <g transform="matrix(2.6,0,0,4.4893,87.4,-1819.88)">
+                                    <g transform="matrix(0.127885,0,0,0.392578,360.135,503.83)">
+                                        <rect x="100" y="547" width="400" height="40" style="fill:rgb(0,122,177);stroke:white;stroke-width:0.76px;stroke-linejoin:miter;"/>
+                                    </g>
+                                    <g transform="matrix(0.0644231,0,0,0.392578,340.712,503.83)">
+                                        <rect x="100" y="547" width="400" height="40" style="fill:rgb(147,147,147);stroke:white;stroke-width:0.77px;stroke-linejoin:miter;"/>
+                                    </g>
+                                    <g transform="matrix(0.449038,0,0,0.392578,-5.44231,503.719)">
+                                        <rect x="100" y="547" width="400" height="40" style="fill:rgb(197,57,0);stroke:white;stroke-width:0.64px;stroke-linejoin:miter;"/>
+                                    </g>
+                                    <g transform="matrix(0.320192,0,0,0.392578,187.058,503.719)">
+                                        <rect x="100" y="547" width="400" height="40" style="fill:rgb(245,111,0);stroke:white;stroke-width:0.7px;stroke-linejoin:miter;"/>
+                                    </g>
+                                </g>
+                                <g transform="matrix(1,0,0,1,0,-145)">
+                                    <g transform="matrix(1,0,0,1,307,783.107)">
+                                        <text x="779.135px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">13.<tspan x="815.885px " y="813.621px ">3</tspan>%</text>
+                                    </g>
+                                    <g transform="matrix(1,0,0,1,-553.5,783.107)">
+                                        <text x="939.11px" y="814px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">46.7<tspan x="993.86px " y="814px ">%</tspan></text>
+                                    </g>
+                                    <g transform="matrix(1,0,0,1,-59,783.107)">
+                                        <text x="843.75px" y="814px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">33.<tspan x="882.27px " y="814px ">3</tspan>%</text>
+                                    </g>
+                                    <g transform="matrix(1,0,0,1,241,784.36)">
+                                        <text x="750.215px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">6.7<tspan x="788.255px " y="813.621px ">%</tspan></text>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                        <g transform="matrix(1,0,0,1,-110,830.992)">
+                            <text x="0px" y="749.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">I needed t<tspan x="110.112px " y="749.856px ">o</tspan> l<tspan x="137.4px 150.24px " y="749.856px 749.856px ">ea</tspan>rn a l<tspan x="219.312px " y="749.856px ">o</tspan>t of</text>
+                            <text x="0px" y="773.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">thing<tspan x="55.872px " y="773.856px ">s</tspan> bef<tspan x="108.576px 122.592px 131.136px " y="773.856px 773.856px 773.856px ">ore</tspan> I c<tspan x="175.008px " y="773.856px ">o</tspan>ul<tspan x="209.904px " y="773.856px ">d</tspan> g<tspan x="242.712px " y="773.856px ">e</tspan>t</text>
+                            <text x="0px" y="797.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">g<tspan x="12.096px " y="797.856px ">o</tspan>ing with this s<tspan x="176.712px 188.352px 199.56px 207.864px " y="797.856px 797.856px 797.856px 797.856px ">yste</tspan>m.</text>
+                        </g>
+                    </g>
+                </g>
+                <g id="Text" transform="matrix(0.244141,0,0,0.231025,1,384.223)">
+                    <g transform="matrix(1,0,0,1,190,2)">
+                        <g transform="matrix(0.5775,0,0,0.962402,290.25,1132.07)">
+                            <rect x="100" y="547" width="400" height="40" style="fill:rgb(197,57,0);stroke:white;stroke-width:1.21px;stroke-linejoin:miter;"/>
+                        </g>
+                        <text x="369px" y="1686.75px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;fill:white;">Str<tspan x="399.288px " y="1686.75px ">o</tspan>ngl<tspan x="446.64px " y="1686.75px ">y</tspan> Dis<tspan x="498px 510.816px 523.296px 531.84px " y="1686.75px 1686.75px 1686.75px 1686.75px ">agre</tspan>e</text>
+                        <g transform="matrix(0.5775,0,0,0.962402,538.25,1132.07)">
+                            <rect x="100" y="547" width="400" height="40" style="fill:rgb(245,111,0);stroke:white;stroke-width:1.21px;stroke-linejoin:miter;"/>
+                        </g>
+                        <g transform="matrix(0.5775,0,0,0.962402,783.25,1132.07)">
+                            <rect x="100" y="547" width="400" height="40" style="fill:rgb(147,147,147);stroke:white;stroke-width:1.21px;stroke-linejoin:miter;"/>
+                        </g>
+                        <g transform="matrix(0.5775,0,0,0.962402,1033.25,1132.07)">
+                            <rect x="100" y="547" width="400" height="40" style="fill:rgb(0,122,177);stroke:white;stroke-width:1.21px;stroke-linejoin:miter;"/>
+                        </g>
+                        <g transform="matrix(0.5775,0,0,0.962402,1289.25,1132.07)">
+                            <rect x="100" y="547" width="400" height="40" style="fill:rgb(0,73,129);stroke:white;stroke-width:1.21px;stroke-linejoin:miter;"/>
+                        </g>
+                        <g transform="matrix(1,0,0,1,248,-2.27374e-13)">
+                            <text x="416.904px" y="1686.75px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;fill:white;">Dis<tspan x="450.096px 462.912px 475.392px 483.936px " y="1686.75px 1686.75px 1686.75px 1686.75px ">agre</tspan>e</text>
+                        </g>
+                        <g transform="matrix(1,0,0,1,493,-2.27374e-13)">
+                            <text x="423.312px" y="1686.75px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;fill:white;">Neutr<tspan x="483.84px 496.656px " y="1686.75px 1686.75px ">al</tspan></text>
+                        </g>
+                        <g transform="matrix(1,0,0,1,743,-2.27374e-13)">
+                            <text x="433.032px" y="1686.75px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;fill:white;">Agr<tspan x="467.808px " y="1686.75px ">e</tspan>e</text>
+                        </g>
+                        <g transform="matrix(1,0,0,1,999,-2.27374e-13)">
+                            <text x="385.128px" y="1686.75px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;fill:white;">Str<tspan x="415.416px " y="1686.75px ">o</tspan>ngl<tspan x="462.768px " y="1686.75px ">y</tspan> Agr<tspan x="515.712px " y="1686.75px ">e</tspan>e</text>
+                        </g>
+                    </g>
+                    <g transform="matrix(1,0,0,1,374,-1022)">
+                        <text x="396.856px" y="1686.75px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">P<tspan x="410.08px " y="1686.75px ">o</tspan>sitivel<tspan x="489.088px " y="1686.75px ">y</tspan> phr<tspan x="544px 556.816px " y="1686.75px 1686.75px ">as</tspan>ed questions</text>
+                    </g>
+                    <g transform="matrix(1,0,0,1,973,-1024.5)">
+                        <text x="392.188px" y="1686.75px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">Neg<tspan x="433.684px " y="1686.75px ">a</tspan>tivel<tspan x="493.756px " y="1686.75px ">y</tspan> phr<tspan x="548.668px 561.484px " y="1686.75px 1686.75px ">as</tspan>ed questions</text>
+                    </g>
+                </g>
+                <g transform="matrix(0.244141,0,0,0.231025,521.508,360.96)">
+                    <g transform="matrix(1,0,0,1,-2132,370)">
+                        <text x="0px" y="749.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">I f<tspan x="21.24px " y="749.856px ">o</tspan>und the v<tspan x="137.592px " y="749.856px ">a</tspan>rious</text>
+                        <text x="0px" y="773.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">functions in this s<tspan x="193.68px 205.32px 216.528px 224.832px " y="773.856px 773.856px 773.856px 773.856px ">yste</tspan>m</text>
+                        <text x="0px" y="797.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">wer<tspan x="38.832px " y="797.856px ">e</tspan> well int<tspan x="138.12px " y="797.856px ">e</tspan>gr<tspan x="172.104px 185.16px 193.464px " y="797.856px 797.856px 797.856px ">ate</tspan>d.</text>
+                    </g>
+                    <g transform="matrix(1,0,0,1,-1975,68.2113)">
+                        <g>
+                            <g transform="matrix(2.6,0,0,4.4893,626.4,-1935.9)">
+                                <g transform="matrix(0.192308,0,0,0.392578,327.923,446.141)">
+                                    <rect x="100" y="547" width="400" height="40" style="fill:rgb(0,73,129);stroke:white;stroke-width:0.74px;stroke-linejoin:miter;"/>
+                                </g>
+                                <g transform="matrix(0.449038,0,0,0.392578,122.635,446.141)">
+                                    <rect x="100" y="547" width="400" height="40" style="fill:rgb(0,122,177);stroke:white;stroke-width:0.64px;stroke-linejoin:miter;"/>
+                                </g>
+                                <g transform="matrix(0.127885,0,0,0.392578,103.596,446.141)">
+                                    <rect x="100" y="547" width="400" height="40" style="fill:rgb(147,147,147);stroke:white;stroke-width:0.76px;stroke-linejoin:miter;"/>
+                                </g>
+                                <g transform="matrix(0.192308,0,0,0.392578,20.2308,446.141)">
+                                    <rect x="100" y="547" width="400" height="40" style="fill:rgb(245,111,0);stroke:white;stroke-width:0.74px;stroke-linejoin:miter;"/>
+                                </g>
+                            </g>
+                            <g transform="matrix(1,0,0,1,0,-67.7285)">
+                                <g transform="matrix(1,0,0,1,313,331.332)">
+                                    <text x="942.36px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">46.7<tspan x="997.11px " y="813.621px ">%</tspan></text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,-19.5,333.864)">
+                                    <text x="817.77px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">20.<tspan x="854.7px " y="813.621px ">%</tspan></text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,780,331.332)">
+                                    <text x="807.78px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">20.<tspan x="847.32px " y="813.621px ">0</tspan>%</text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,209,331.71)">
+                                    <text x="749.135px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">13.<tspan x="785.885px " y="813.621px ">3</tspan>%</text>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+                <g transform="matrix(0.244141,0,0,0.231025,27.8555,425.001)">
+                    <g transform="matrix(1,0,0,1,44,0.855677)">
+                        <g transform="matrix(2.6,0,0,4.9514,646.4,-2152.42)">
+                            <g transform="matrix(0.961538,0,0,0.340234,-73.6154,396.238)">
+                                <rect x="100" y="547" width="400" height="40" style="fill:rgb(235,235,235);stroke:white;stroke-width:0.45px;stroke-linejoin:miter;"/>
+                            </g>
+                            <g transform="matrix(0.618269,0,0,0.340234,98.0192,396.236)">
+                                <rect x="100" y="547" width="400" height="40" style="fill:rgb(0,122,177);stroke:white;stroke-width:0.58px;stroke-linejoin:miter;"/>
+                            </g>
+                            <g transform="matrix(0.1375,0,0,0.340234,91.0962,396.236)">
+                                <rect x="100" y="547" width="400" height="40" style="fill:rgb(147,147,147);stroke:white;stroke-width:0.79px;stroke-linejoin:miter;"/>
+                            </g>
+                            <g transform="matrix(0.205769,0,0,0.340234,1.96154,396.236)">
+                                <rect x="100" y="547" width="400" height="40" style="fill:rgb(245,111,0);stroke:white;stroke-width:0.77px;stroke-linejoin:miter;"/>
+                            </g>
+                        </g>
+                        <g transform="matrix(1,0,0,1,0,-30)">
+                            <g transform="matrix(1,0,0,1,313,2.10321e-12)">
+                                <text x="1029.51px" y="809.251px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">64.<tspan x="1070.52px " y="809.251px ">3</tspan>%</text>
+                            </g>
+                            <g transform="matrix(1,0,0,1,-44,1.74881)">
+                                <text x="818.08px" y="809.251px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">2<tspan x="832.75px 846.43px 852.88px 868.39px " y="809.251px 809.251px 809.251px 809.251px ">1.4%</tspan></text>
+                            </g>
+                            <g transform="matrix(1,0,0,1,171,1.74881)">
+                                <text x="780.505px" y="809.251px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">14.<tspan x="818.515px " y="809.251px ">3</tspan>%</text>
+                            </g>
+                        </g>
+                    </g>
+                    <g transform="matrix(1,0,0,1,-110,-1.74881)">
+                        <text x="0px" y="749.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">I think that I woul<tspan x="192px " y="749.856px ">d</tspan> lik<tspan x="238.584px " y="749.856px ">e</tspan> t<tspan x="266.328px " y="749.856px ">o</tspan></text>
+                        <text x="0px" y="773.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">use the s<tspan x="97.584px 109.224px 120.432px 128.736px " y="773.856px 773.856px 773.856px 773.856px ">yste</tspan>m fr<tspan x="185.328px " y="773.856px ">e</tspan>quent<tspan x="262.296px 269.088px " y="773.856px 773.856px ">ly</tspan></text>
+                    </g>
+                </g>
+                <g transform="matrix(0.244141,0,0,0.231025,27.8555,360.794)">
+                    <g transform="matrix(1,0,0,1,47,35.1355)">
+                        <g transform="matrix(2.6,0,0,4.4893,666.4,-1898.4)">
+                            <g transform="matrix(0.256731,0,0,0.392578,307.827,404.435)">
+                                <rect x="100" y="547" width="400" height="40" style="fill:rgb(0,73,129);stroke:white;stroke-width:0.72px;stroke-linejoin:miter;"/>
+                            </g>
+                            <g transform="matrix(0.449038,0,0,0.392578,108.981,404.266)">
+                                <rect x="100" y="547" width="400" height="40" style="fill:rgb(0,122,177);stroke:white;stroke-width:0.64px;stroke-linejoin:miter;"/>
+                            </g>
+                            <g transform="matrix(0.127885,0,0,0.392578,89.9423,404.266)">
+                                <rect x="100" y="547" width="400" height="40" style="fill:rgb(147,147,147);stroke:white;stroke-width:0.76px;stroke-linejoin:miter;"/>
+                            </g>
+                            <g transform="matrix(0.127885,0,0,0.392578,38.7885,404.266)">
+                                <rect x="100" y="547" width="400" height="40" style="fill:rgb(245,111,0);stroke:white;stroke-width:0.76px;stroke-linejoin:miter;"/>
+                            </g>
+                        </g>
+                        <g transform="matrix(1,0,0,1,0,-41.9843)">
+                            <g transform="matrix(1,0,0,1,53,155.849)">
+                                <text x="776.635px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">13.<tspan x="813.385px " y="813.621px ">3</tspan>%</text>
+                            </g>
+                            <g transform="matrix(1,0,0,1,186,155.849)">
+                                <text x="775.885px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">13.<tspan x="812.635px " y="813.621px ">3</tspan>%</text>
+                            </g>
+                            <g transform="matrix(1,0,0,1,317.5,155.849)">
+                                <text x="942.36px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">46.7<tspan x="997.11px " y="813.621px ">%</tspan></text>
+                            </g>
+                            <g transform="matrix(1,0,0,1,784.5,155.849)">
+                                <text x="843.035px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">26.7<tspan x="896.435px " y="813.621px ">%</tspan></text>
+                            </g>
+                        </g>
+                    </g>
+                    <g transform="matrix(1,0,0,1,-110,185.135)">
+                        <text x="0px" y="749.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">I thought the s<tspan x="158.688px 170.328px 181.536px 189.84px " y="749.856px 749.856px 749.856px 749.856px ">yste</tspan>m w<tspan x="246.768px 259.584px " y="749.856px 749.856px ">as</tspan></text>
+                        <text x="0px" y="773.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">e<tspan x="12.84px 25.656px 36.456px " y="773.856px 773.856px 773.856px ">asy</tspan> t<tspan x="62.928px " y="773.856px ">o</tspan> use<tspan x="121.32px " y="773.856px ">.</tspan></text>
+                    </g>
+                </g>
+                <g transform="matrix(0.244141,0,0,0.231025,27.8555,297.053)">
+                    <g transform="matrix(1,0,0,1,81,139.893)">
+                        <g>
+                            <g transform="matrix(2.6,0,0,4.4893,626.4,-1982.88)">
+                                <g transform="matrix(0.192308,0,0,0.392578,329.269,523.086)">
+                                    <rect x="100" y="547" width="400" height="40" style="fill:rgb(0,73,129);stroke:white;stroke-width:0.74px;stroke-linejoin:miter;"/>
+                                </g>
+                                <g transform="matrix(0.5125,0,0,0.392578,92.25,523.086)">
+                                    <rect x="100" y="547" width="400" height="40" style="fill:rgb(0,122,177);stroke:white;stroke-width:0.62px;stroke-linejoin:miter;"/>
+                                </g>
+                                <g transform="matrix(0.0644231,0,0,0.392578,110.904,523.086)">
+                                    <rect x="100" y="547" width="400" height="40" style="fill:rgb(147,147,147);stroke:white;stroke-width:0.77px;stroke-linejoin:miter;"/>
+                                </g>
+                                <g transform="matrix(0.192308,0,0,0.392578,20.2308,523.086)">
+                                    <rect x="100" y="547" width="400" height="40" style="fill:rgb(245,111,0);stroke:white;stroke-width:0.74px;stroke-linejoin:miter;"/>
+                                </g>
+                            </g>
+                            <g transform="matrix(1,0,0,1,0,-133.514)">
+                                <g transform="matrix(1,0,0,1,786,695.561)">
+                                    <text x="804.78px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">20.<tspan x="844.32px " y="813.621px ">0</tspan>%</text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,-20,697.379)">
+                                    <text x="807.78px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">20.<tspan x="847.32px " y="813.621px ">0</tspan>%</text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,248,693.864)">
+                                    <text x="975.19px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">5<tspan x="990.76px 1006.21px 1013.83px " y="813.621px 813.621px 813.621px ">3.3</tspan>%</text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,180,695.94)">
+                                    <text x="751.215px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">6.7<tspan x="789.255px " y="813.621px ">%</tspan></text>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                    <g transform="matrix(1,0,0,1,-110,740.479)">
+                        <text x="6.36px" y="749.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">I f<tspan x="27.6px " y="749.856px ">e</tspan>lt very c<tspan x="125.952px " y="749.856px ">o</tspan>nﬁdent using</text>
+                        <text x="0px" y="773.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">the s<tspan x="52.968px 64.608px 75.816px 84.12px " y="773.856px 773.856px 773.856px 773.856px ">yste</tspan>m.</text>
+                    </g>
+                </g>
+                <g transform="matrix(0.244141,0,0,0.231025,27.8555,254.174)">
+                    <g transform="matrix(1,0,0,1,47,105.026)">
+                        <g>
+                            <g transform="matrix(2.6,0,0,4.4893,788.4,-1962.63)">
+                                <g transform="matrix(0.192308,0,0,0.392578,332.538,485.399)">
+                                    <rect x="100" y="547" width="400" height="40" style="fill:rgb(0,73,129);stroke:white;stroke-width:0.74px;stroke-linejoin:miter;"/>
+                                </g>
+                                <g transform="matrix(0.641346,0,0,0.392578,31.0962,485.399)">
+                                    <rect x="100" y="547" width="400" height="40" style="fill:rgb(0,122,177);stroke:white;stroke-width:0.56px;stroke-linejoin:miter;"/>
+                                </g>
+                                <g transform="matrix(0.0644231,0,0,0.392578,62.6346,485.399)">
+                                    <rect x="100" y="547" width="400" height="40" style="fill:rgb(147,147,147);stroke:white;stroke-width:0.77px;stroke-linejoin:miter;"/>
+                                </g>
+                                <g transform="matrix(0.0644231,0,0,0.392578,36.8654,485.399)">
+                                    <rect x="100" y="547" width="400" height="40" style="fill:rgb(245,111,0);stroke:white;stroke-width:0.77px;stroke-linejoin:miter;"/>
+                                </g>
+                            </g>
+                            <g transform="matrix(1,0,0,1,12,-106.214)">
+                                <g transform="matrix(1,0,0,1,274,519.321)">
+                                    <text x="1042.88px" y="814px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">66.7<tspan x="1097.6px " y="814px ">%</tspan></text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,942,520.078)">
+                                    <text x="801.53px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">20.<tspan x="841.07px " y="813.621px ">0</tspan>%</text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,207,519.321)">
+                                    <text x="750.715px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">6.7<tspan x="788.755px " y="813.621px ">%</tspan></text>
+                                </g>
+                                <g transform="matrix(1,0,0,1,141,517.379)">
+                                    <text x="750.215px" y="813.621px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:30px;fill:white;">6.7<tspan x="788.255px " y="813.621px ">%</tspan></text>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                    <g transform="matrix(1,0,0,1,-110,554.24)">
+                        <text x="0px" y="749.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">I woul<tspan x="65.544px " y="749.856px ">d</tspan> ima<tspan x="126.408px " y="749.856px ">g</tspan>ine that most</text>
+                        <text x="0px" y="773.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">peopl<tspan x="62.52px " y="773.856px ">e</tspan> woul<tspan x="134.064px " y="773.856px ">d</tspan> l<tspan x="161.688px 174.528px " y="773.856px 773.856px ">ea</tspan>rn t<tspan x="225.576px " y="773.856px ">o</tspan> use</text>
+                        <text x="0px" y="797.856px" style="font-family:'FiraSans-Regular', 'Fira Sans', sans-serif;font-size:24px;">this s<tspan x="57.864px 69.504px 80.712px 89.016px " y="797.856px 797.856px 797.856px 797.856px ">yste</tspan>m very quickl<tspan x="246.888px 257.736px " y="797.856px 797.856px ">y.</tspan></text>
+                    </g>
+                </g>
+                <g transform="matrix(0.616763,0,0,0.231025,60.1615,701.062)">
+                    <path d="M476.036,366.688C476.036,360.074 473.91,354.704 471.292,354.704L150.706,354.704C148.087,354.704 145.962,360.074 145.962,366.688L145.962,390.656C145.962,397.27 148.087,402.64 150.706,402.64L471.292,402.64C473.91,402.64 476.036,397.27 476.036,390.656L476.036,366.688Z" style="fill:rgb(235,235,235);fill-opacity:0.8;"/>
+                </g>
+                <g transform="matrix(0.244141,0,0,0.231025,113.083,-495.37)">
+                    <text x="162.525px" y="5567.09px" style="font-family:'FiraSans-SemiBold', 'Fira Sans', sans-serif;font-weight:600;font-size:24px;stroke:black;stroke-width:1px;stroke-miterlimit:2;">F<tspan x="173.517px 180.285px 193.101px 206.877px 215.685px " y="5567.09px 5567.09px 5567.09px 5567.09px 5567.09px ">igure</tspan> 6</text>
+                    <text x="253.965px" y="5567.09px" style="font-family:'FiraSans-ExtraLight', 'Fira Sans', sans-serif;font-weight:275;font-size:24px;stroke:black;stroke-width:1px;stroke-miterlimit:2;">U<tspan x="269.397px " y="5567.09px ">s</tspan>er study p<tspan x="387.333px " y="5567.09px ">a</tspan>rticip<tspan x="454.557px " y="5567.09px ">a</tspan>nt r<tspan x="504.333px " y="5567.09px ">e</tspan>sponses t<tspan x="619.245px " y="5567.09px ">o</tspan> applic<tspan x="704.205px " y="5567.09px ">a</tspan>tion us<tspan x="790.581px " y="5567.09px ">a</tspan>bilit<tspan x="844.629px " y="5567.09px ">y</tspan> questions</text>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

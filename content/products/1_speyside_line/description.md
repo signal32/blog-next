@@ -7,7 +7,7 @@ The Speyside line closed to passengers on 18 October 1965, the same date as the 
 
 ## In Train Simulator
 
-![Speyside Line route map](http://rails.hamishweir.uk/wp-content/uploads/2020/07/Route-Map-Black.svg)
+![Speyside Line route map](/graphics/speyside_line/Route-Map-Black.svg)
 Speyside Line route map
 
 In this project my aim is to recreate the line between Craigelachie and Boat of Garten as it was in the 1950’s. This will allow for a great variety of rolling stock and traction to be used. In addition the section between Craigelachie and Keith Junction will also be included in the route, although this was not part of the Speyside Line.
