@@ -11,16 +11,16 @@ export interface AppConfig {
   siteName: string,
 }
 
-export const config: AppConfig = {
-  mainMenu: [
-    {name: `Blog`, href: `/blog`},
-    {name: `Design`, href: `/design`},
-    {name: `Simulation`, href: `/simulation`},
-    {name: `About`, href: `/about`},
-  ],
-  socialLinks: [
-    {name: `GitHub`, href: 'https://github.com/signal32', icon: <div><FaGithub/></div>},
-    {name: `Instagram`, href: 'https://www.instagram.com/hamishweirphoto/', icon: <div><FaInstagram/></div>}
-  ],
-  siteName: `Hamish Weir Blog!`
+export const websiteConfig: AppConfig = {
+    mainMenu: [
+        //{name: `Blog`, href: `/blog`},
+        //{name: `Software`, href: `/software`},
+        {name: `Rail Simulation`, href: `/simulation`},
+        {name: `About`, href: `/about`},
+    ],
+    socialLinks: [
+        {name: `GitHub`, href: 'https://github.com/signal32', icon: <div><FaGithub/></div>},
+        {name: `Instagram`, href: 'https://www.instagram.com/hamishweirphoto/', icon: <div><FaInstagram/></div>}
+    ],
+    siteName: `Hamish Weir Blog!`
 }

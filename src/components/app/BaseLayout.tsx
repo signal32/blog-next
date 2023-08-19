@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
 import React, { cloneElement, ReactElement, useContext, useEffect, useState } from "react";
-import { config } from "../../pages/_app";
+import { websiteConfig } from "../../pages/_app";
 import MyLogo from "../../resources/images/logo.svg";
 import Breadcrumbs from "../common/Breadcrumbs";
 import ModalContext from "../common/Modal";
@@ -12,7 +12,7 @@ const DEMO_IMAGE = "https://images.pexels.com/photos/4215110/pexels-photo-421511
 
 export interface MainLayoutProps {
     children: ReactElement<LayoutRequestProps>,
-    headerImage?: string,
+    header?: { type: 'image', href: string } | { type: 'component', component: JSX.Element },
     headerTitle?: string,
     breadcrumbs?: boolean,
 }
@@ -23,30 +23,32 @@ export interface LayoutRequestProps {
     updateLayout(config: LayoutConfig): void,
 }
 
-const AppBaseLayout = ({children, headerImage: defaultHeaderImage, headerTitle: defaultHeaderTitle, breadcrumbs}: MainLayoutProps) => {
+//const AppBaseLayout = ({children, header: defaultHeaderImage, headerTitle: defaultHeaderTitle, breadcrumbs}: MainLayoutProps) => {
+const AppBaseLayout = (props: MainLayoutProps) => {
 
     const router = useRouter();
-    const [title, setTitle] = useState(defaultHeaderTitle);
-    const [headerImage, setHeaderImage] = useState(defaultHeaderImage);
-    const [showHeaderImage, setShowHeaderImage] = useState(true);
+    const [title, setTitle] = useState(props.headerTitle);
+    const [header, setHeader] = useState(props.header);
+    const [showHeader, setShowHeader] = useState(true);
     const [showContent, setShowContent] = useState(true);
 
     const resetState = () => {
-        setTitle(defaultHeaderTitle);
-        setHeaderImage(defaultHeaderImage);
+        console.log('state reset')
+        setTitle(props.headerTitle);
+        setHeader(props.header);
     }
 
     // Layout should be reset when route changes
     // This ensures that changes made to layout do not persist between pages
-    useEffect(resetState, [defaultHeaderImage, defaultHeaderTitle, router.asPath]);
+    useEffect(resetState, [props.header, props.headerTitle, router.asPath]);
 
     const showAnimatedContent = debounce(() => {
-        setShowHeaderImage(true);
+        setShowHeader(true);
         setShowContent(true);
     }, 300);
 
     const hideAnimatedContent = debounce(() => {
-        setShowHeaderImage(false);
+        setShowHeader(false);
         setShowContent(false);
     }, 0);
 
@@ -72,7 +74,7 @@ const AppBaseLayout = ({children, headerImage: defaultHeaderImage, headerTitle: 
                         <div className="flex-auto basis-3/4 sm:basis-auto">
                             <div className="flex grow flex-wrap justify-center sm:justify-end py-0">
                                 {
-                                    config.mainMenu.map((item, i) => (
+                                    websiteConfig.mainMenu.map((item, i) => (
                                         <div className="flex" key={i}>
                                             <Link
                                                 href={item.href}
@@ -92,7 +94,7 @@ const AppBaseLayout = ({children, headerImage: defaultHeaderImage, headerTitle: 
                             <div className="flex flex-wrap justify-center sm:justify-end">
                                 <div className="flex">
                                     {
-                                        config.socialLinks.map((link, i) => (
+                                        websiteConfig.socialLinks.map((link, i) => (
                                             <div className="flex" key={i}>
                                                 <a className="text-slate-300 hover:text-white transition-all w-8 h-8 px-2" href={link.href}>{link.icon}</a>
                                             </div>
@@ -105,39 +107,47 @@ const AppBaseLayout = ({children, headerImage: defaultHeaderImage, headerTitle: 
                 </div>
             </header>
 
-            <div className="-mt-10">
-                <div className={`p-2 max-w-4xl mx-auto relative bg-gray-900 transition-all ease-in-out ${headerImage && showHeaderImage? 'h-60 opacity-100' : 'h-0 opacity-0'}`}>
-                    {/* <img src={headerImage} className={`w-full max-h-64 rounded-lg object-cover border-0 transition-all duration-200 ease-in-out -z-20 ${headerImage? 'h-60 opacity-100' : 'h-0 opacity-0'}`} /> */}
-                    {/* {headerImage && */}
-                    <Image
-                        src={headerImage || DEMO_IMAGE}
-                        className={`w-full max-h-64 rounded-b-lg transition-opacity ease-in-out duration-500 ${headerImage ? 'opacity-100' : 'opacity-0'}`}
-                        alt=''
-                        fill
-                        sizes="100vw"
-                        style={{
-                            objectFit: "cover"
-                        }} />
-                    {/*  */}
-                    <div className="w-full h-10 bottom-0 left-0">
-                        <p className="text-white text-lg bottom-0 z-30">{title}</p>
-
-                    </div>
+            <div className={ header !== undefined ? '-mt-10' : ' -mt-5'}>
+                <div className={`p-0 max-w-4xl mx-auto relative transition-all ease-in-out overflow-clip rounded-xl ${showHeader ? ' max-h-screen opacity-100' : ' max-h-4 opacity-0'}`}>
+                    {
+                        header?.type === 'image' 
+                            ? <div className='w-full rounded-b-lg h-64'>
+                                <Image
+                                    src={header.href ?? DEMO_IMAGE}
+                                    className='w-full h-64'
+                                    alt=''
+                                    sizes='100vw'
+                                    fill
+                                    style={{ objectFit: 'cover' }}
+                                />
+                                { title &&
+                                    <div className="absolute bottom-0 left-0 right-0  text-white">
+                                        <p className="text-white text-2xl w-fit bottom-0 z-30 bg-black bg-opacity-50 backdrop-blur-[1px] p-2 rounded-tr-lg">{title}</p>
+                                    </div> 
+                                }
+                            </div>
+                            : header?.component
+                    }
                 </div> 
             </div>
 
             <main className="p-2 max-w-4xl mx-auto w-full flex-grow">
 
-                { (breadcrumbs ?? true) && <Breadcrumbs/> }
+                { (props.breadcrumbs ?? true) && <Breadcrumbs/> }
+                {/* { title && 
+                    <div className="w-full h-10 bottom-0 left-0">
+                        <p className="text-white text-2xl bottom-0 z-30">{title}</p>
+                    </div>      
+                } */}
 
                 <div className={`transition-all duration-500 ${showContent? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
                     { showContent &&
                         cloneElement(
-                            children, 
+                            props.children, 
                             {
                                 updateLayout: (details: LayoutConfig) => {
                                     if (details.headerTitle) setTitle(details.headerTitle);
-                                    if (details.headerImage) setHeaderImage(details.headerImage);
+                                    if (details.header) setHeader(details.header);
                                 },
                             }
                         )

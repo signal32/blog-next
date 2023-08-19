@@ -27,6 +27,7 @@ const ProductPage: PageWithLayout<ProductPageProps> = (props) => {
         <div className=" h-full">
             <Image
                 src={img}
+                alt='product image'
                 onLoadingComplete={(e) => console.log(e)}
                 fill
                 sizes="100vw"
@@ -65,7 +66,7 @@ const ProductPage: PageWithLayout<ProductPageProps> = (props) => {
                     {/* TODO basic info */}
                     <ProductDetails product={props.product}/>
                     {/* TODO download links */}
-                    <Button text="Download" icon={<FaInfoCircle/>} href={props.mainFile?.href}/>
+                    <Button text="Download" icon={<FaInfoCircle/>} href={props.mainFile?.href} target='_blank'/>
                     <p className="italic text-sm text-right">{props.mainFile?.fileName}</p>
                     <p className="italic text-sm text-right">Details: {JSON.stringify(props.mainFile)}</p>
                 </div>
@@ -76,7 +77,9 @@ const ProductPage: PageWithLayout<ProductPageProps> = (props) => {
 
 ProductPage.layout = defineLayout((props) => ({
     headerTitle: props.product.name,
-    headerImage: props.product.media?.banner,
+    header: props.product.media?.banner
+        ? { type: 'image', href: props.product.media.banner }
+        : undefined,
     breadcrumbs: true,
 }))
 

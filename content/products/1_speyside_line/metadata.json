@@ -2,6 +2,9 @@
     "$schema": "../../../schema.json",
     "id": "speyside_line",
     "name": "The Speyside Line",
+    "title": "The Speyside Line",
+    "created": "10 Jan 2020",
+    "excerpt": "Travel back in time to revisit the sights and sounds of Scotland's whisky country by train.",
     "requirements": [
         {"id": "UKTS Clutter", "site": "UkTrainSim", "href": ["http://uktrainsim.com/"], "type": "external"},
         {"type": "external", "id": "London to Brighton", "site": "Steam", "href": ["http://uktrainsim.com/"]},

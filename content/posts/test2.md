@@ -1,7 +1,7 @@
 ---
-title: Markdown Example
+name: Markdown Example
 slug: test2
-date: 10 June
+date: 10 June 2012
 coverImage: https://images.pexels.com/photos/4215110/pexels-photo-4215110.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1
 ---
 

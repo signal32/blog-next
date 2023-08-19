@@ -1,67 +1,83 @@
 import { useEffect } from "react";
-import AppBaseLayout, { LayoutRequestProps, defineAppBaseLayoutParams } from "../components/app/BaseLayout";
+import AppBaseLayout, { LayoutRequestProps, defineLayout } from "../components/app/BaseLayout";
 import { PageWithLayout } from '../components/app/LayoutApp';
 import simulationHeader from '../resources/images/simulation_header.jpg';
 import Button from "../components/common/Button";
 import Link from "next/link";
+import { GetStaticProps } from 'next';
+import { Product, products } from '../lib/products';
+import PostItem from '../components/posts/PostItem';
 
 const TEXT = [
-    'Rails Developments are developers of Train Simulation add-ons. Our add-ons for Dovetail Games Train Simulator focus on providing exceptional realism.',
-    'We are also working towards developing a range of exciting new simulation technologies.',
-    'For all the latest news, visit our blog or like us on Facebook.',
+    'I develop Train Simulator add-ons in my spare time with a focus on realism and authenticity.',
+    'These projects are inspired by my local surroundings that are now void of their industrial past and aim to reproduce a forgotten time.',
+    '',
+    'I am also available to take on freelance 3D modelling work for Train Simulator'
 ]
 
-const PRODUCTS = [
-    'product1', 'product2', 'product3',
+const CONTENT = [
+    {
+        title: 'High quality railway simulation products',
+        text: [
+            'I develop Train Simulator add-ons in my spare time with a focus on realism and authenticity.',
+            'These projects are inspired by my local surroundings that are now void of their industrial past and aim to reproduce a forgotten time.',
+        ]
+    },
+    {
+        title: 'Freelance work',
+        text: [
+            'I am also available to take on freelance 3D modelling work for Train Simulator'
+        ]
+    }
 ]
 
-interface Props extends LayoutRequestProps {}
+interface Props {
+    products: Product[]
+}
 
 const Simulation: PageWithLayout<Props> = (props) => {
-    useEffect(() => props.updateLayout({title: 'Simulation', image: simulationHeader.src}));
 
     return (
         <div>
-            <h1 className="text-lg">Simulation Products</h1>
-            {/* Text container */}
-            <div className="w-full p-2 rounded-lg shadow-md bg-slate-400 dark:bg-slate-800">
-                <h3 className="text-xl">Title</h3>
-                {TEXT.map((line, i) => <p key={i}>{line}</p>)}
-            </div>
+
+            {
+                CONTENT.map((item, idx) => (
+                    <div key={idx} className=' pb-5'>
+                        <h3 className="text-xl">{item.title}</h3>
+                        {item.text.map((line, i) => <p key={i}>{line}</p>)}
+                    </div>
+                ))
+            }
 
             {/* Product items grid */}
+            <h3 className="text-xl">Releases</h3>
             <div className="flex flex-auto gap-3 flex-row my-5">
-                {PRODUCTS.map((product, i) => (
-                    <Link
+                {props.products.map((product, i) => (
+                    <PostItem 
+                        post={product}
                         key={i}
-                        href="/product/speyside_line"
-                        className="basis-1/2 h-48 bg-slate-700 rounded-lg shadow-md overflow-hidden"
-                        style={{backgroundImage: `url(${simulationHeader.src})`}}
-                        legacyBehavior>
-                        
-                        <div className="w-full h-full p-2 opacity-0 hover:opacity-100 transition backdrop-blur-sm" style={{background: 'rgba(0,0,0,0.3)'}}>
-                            {product}
-                            {/* <Button text="See more..." href="/"/> */}
-                        </div>
-
-                    </Link>
+                    />
                 ))}
-            </div>
-
-            {/* Freelance text container */}
-            <div className="w-full p-2 rounded-lg shadow-md bg-slate-400 dark:bg-slate-800">
-                <h3 className="text-xl">Freelance Title</h3>
-                {TEXT.map((line, i) => <p key={i}>{line}</p>)}
             </div>
         </div>
     );
 }
 
-Simulation.layout = (page) => (
-    <AppBaseLayout 
-        headerImage={simulationHeader.src} 
-        headerTitle="Simulation">
-        {page}
-    </AppBaseLayout>
-)
+Simulation.layout = defineLayout({
+    headerTitle: 'Railway Simulation',
+    header: {
+        type: 'image',
+        href: '/graphics/posts/dava/aviemore_box_shed.jpg'
+    }
+})
+
 export default Simulation;
+
+export const getStaticProps: GetStaticProps<Props> = async () => {
+    const pageProducts = []
+
+    const speysideLineProduct = await products.getBySlug('speyside_line')
+    if (speysideLineProduct) pageProducts.push(speysideLineProduct)
+
+    return { props: { products: pageProducts } }
+}

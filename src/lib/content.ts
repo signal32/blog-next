@@ -13,9 +13,8 @@ export interface ContentDescriptor {
 
 export interface Content extends ContentDescriptor {
     baseUrl: string,
-    created?: Date,
-    modified?: Date,
-    title?: string,
+    created?: string,
+    modified?: string,
     excerpt?: string,
     thumbnail?: string,
     coverImage?: string,
@@ -103,6 +102,7 @@ export type Loader<T> = (descriptor: ContentDescriptor, path: string) => Promise
  */
 export function defineContent<T>(dir: string, loader: Loader<T>): {
     getAll: () => ContentDescriptor[]
+    getAllDetailed: () => Promise<T[]>
     getById: (id: string) => Promise<T | undefined>
     getBySlug: (slug: string) => Promise<T | undefined>
     getByName: (name: string) => Promise<T | undefined>
@@ -111,6 +111,17 @@ export function defineContent<T>(dir: string, loader: Loader<T>): {
 
     return {
         getAll: () => loadContent(dir),
+
+        async getAllDetailed() {
+            const items  = []
+
+            for (const item of this.getAll()) {
+                const detailedItem = await this.getById(item.id)
+                if (detailedItem) items.push(detailedItem)
+            }
+
+            return items
+        },
         
         getById: async (id) => {
             const content = getById(id);

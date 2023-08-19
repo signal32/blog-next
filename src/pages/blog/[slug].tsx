@@ -15,21 +15,23 @@ const BlogPost: PageWithLayout<PostProps> = ({post}) => {
 
     return (
         <div className="text-white">
-            <div className="mb-4 p-3 mx-auto dark:bg-gray-900 bg-gray-300 bg-opacity-75 rounded-xl">
-                <h1 className=" dark:text-gray-100 text-gray-800 text-2xl">{ post.title }</h1>
-                {
-                    post.date && <DateDisplay date={post.date}/>
-                }
-                <div className="text-slate-200 hame-markdown" dangerouslySetInnerHTML={{__html: post.content || ''}} />
-            </div>
+            {
+                post.created && <DateDisplay date={new Date(post.created)}/>
+            }
+            <div className="text-slate-200 hame-markdown" dangerouslySetInnerHTML={{__html: post.content || ''}} />
         </div>
     )
 }
 
 BlogPost.layout = defineLayout(props => ({
-    headerTitle: props.post.title,
-    headerImage: props.post.coverImage,
-}));
+    headerTitle: props.post.name,
+    header: props.post.coverImage
+        ? {
+            type: 'image',
+            href: props.post.coverImage ?? ''
+        }
+        : undefined
+}))
 
 export default BlogPost;
 
@@ -51,7 +53,7 @@ export async function getStaticProps({ params }: Params) {
             },
             morePosts: [],
             preview: false,
-      }
+        }
     }
 }
 
@@ -60,11 +62,11 @@ export async function getStaticPaths() {
 
     return {
         paths: allPosts.map((post) => {
-          return {
-            params: {
-              slug: post.slug,
-            },
-          }
+            return {
+                params: {
+                    slug: post.slug,
+                },
+            }
         }),
         fallback: false,
     }

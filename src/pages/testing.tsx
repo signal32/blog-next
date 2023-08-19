@@ -19,7 +19,7 @@ const Simulation: PageWithLayout<Props> = (props) => {
     return (
         <div>
             <h1 className="text-lg">Stuff about me</h1>
-            <TextInput placeholder="some value"/>
+            {/* <TextInput placeholder="some value"/>
             <InputLabel text="Your email address">
                 <TextInput placeholder="some value"/>
                 <TextInput placeholder="some value" feedback={{message: 'Hello'}}/>
@@ -31,13 +31,16 @@ const Simulation: PageWithLayout<Props> = (props) => {
             <p>Test</p>
             <InputLabel text="Your email address">
                 <TextInput placeholder="some value" onChange={validate} feedback={feedback}/>
-            </InputLabel>
+            </InputLabel> */}
         </div>
     )
 }
 
 Simulation.layout =  defineLayout({
-    headerImage: designHeader.src,
+    header: {
+        type: 'image',
+        href: designHeader.src,
+    },
     headerTitle: 'Simulation',
 })
 
