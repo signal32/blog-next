@@ -53,10 +53,8 @@ const Home: PageWithLayout<BlogProps> = (props) => {
                     <div className={ styles.aboutCol }>
 
                         <div>
-                            <div style={{fontFamily: 'caveat'}} className=' float-left pr-6'>
-                                <p className=' font-bold text-6xl'>Hello!</p>
-                                {/* <img src="https://media.geeksforgeeks.org/wp-content/uploads/20190808143838/logsm.png"
-                                    alt="Longtail boat in Thailand"/> */}
+                            <div style={{fontFamily: 'caveat'}} className='float-left pr-6'>
+                                <p className=' font-bold text-5xl'>Hello!</p>
                             </div>
                             <p>I am Hamish, programmer, photographer, and general technology nerd from Scotland. Here you can find things I have created, discovered or otherwise found interesting. Aute dolor incididunt nulla nostrud ullamco eu laborum minim Lorem commodo anim pariatur.Sit proident esse deserunt eu proident ullamco ex labore non.Magna non reprehenderit eiusmod Lorem ipsum.
                             </p>
@@ -104,8 +102,8 @@ const HomeHero = () => (
             />                
         </div>
         <div className={styles.heroRightCol}>
-            <h1 className='text-white text-3xl font-semibold'>Hamish Weir</h1>
-            <h1 className='text-white text-xl font-medium'>Digital content creator</h1>
+            <h1 className='text-white text-5xl font-semibold' style={{fontFamily: 'caveat'}}>Hamish Weir</h1>
+            <h1 className='text-white text-xl font-medium' >Digital content creator</h1>
 
             <div style={{ display: 'flex', gap: '1rem', paddingTop: '1.5rem'}}>
                 <Button text='Software' href='/design'></Button>
