@@ -10,6 +10,7 @@ import cambridgeUni3 from "../resources/images/pics/DSC00122.jpg";
 import green from "../resources/images/pics/DSC00457.jpg";
 import spectra from "../resources/images/pics/DSC06314.jpg";
 import toHeaven from "../resources/images/pics/DSC09168.jpg";
+import stretham from '../../public/graphics/stretham.jpg'
 
 
 const PICS = [
@@ -40,6 +41,10 @@ const PICS = [
     {
         title: 'Stairway to Pint',
         source: toHeaven,
+    },
+    {
+        title: 'Boat',
+        source: stretham,
     },
 ]
 

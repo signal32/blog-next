@@ -10,6 +10,7 @@ import styles from './_styles/index.module.scss'
 import Image from "next/image";
 
 import { useState } from 'react'
+import AboutHamish from '../components/AboutHamish'
 
 interface BlogProps {
   posts: Post[],
@@ -21,18 +22,6 @@ interface BlogProps {
 const Home: PageWithLayout<BlogProps> = (props) => {
     const modalStore = useModalStore();
 
-    const [emailText, setEmailText] = useState({
-        hidden: true,
-        text: `If you would like to get in touch with me for any reason, please click here to reveal my email.`
-    }
-        
-    )
-
-    const revealEmail = () => setEmailText({
-        hidden: false,
-        text: `If you would like to get in touch with me for any reason, please email me at ${atob(props.encodedEmail)}`
-    })
-
     return (
         <div className='h-full w-full'>
 
@@ -43,33 +32,12 @@ const Home: PageWithLayout<BlogProps> = (props) => {
             </Head>
 
             <div>
-
                 <h3 className='text-center text-xl pb-3'>Latest Updates</h3>
                 <PostList posts={props.allContent}/>
-                {/* Column container */}
                 <div className = { styles.columnContainer }>
 
                     {/* About */}
-                    <div className={ styles.aboutCol }>
-
-                        <div>
-                            <div style={{fontFamily: 'caveat'}} className='float-left pr-6'>
-                                <p className=' font-bold text-5xl'>Hello!</p>
-                            </div>
-                            <p>I am Hamish, programmer, photographer, and general technology nerd from Scotland. Here you can find things I have created, discovered or otherwise found interesting. Aute dolor incididunt nulla nostrud ullamco eu laborum minim Lorem commodo anim pariatur.Sit proident esse deserunt eu proident ullamco ex labore non.Magna non reprehenderit eiusmod Lorem ipsum.
-                            </p>
-                        </div>
-
-                    
-                        <div>
-                            <h3 className='text-lg font-semibold pt-2'>👋 Get in touch!</h3>
-                            <p className={emailText.hidden ? 'cursor-pointer' : ''} onClick={revealEmail}>{emailText.text}</p>
-                            <p>You can also find me on <a href='https://github.com/signal32'>Github</a> and <a>Instrgram</a></p>
-                        </div>
-
-                    </div>
-
-                    
+                    <AboutHamish encodedEmail={props.encodedEmail}/>
 
                     {/* Recent posts */}
                     <div className={styles.recentPostsCol}>

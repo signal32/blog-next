@@ -12,7 +12,7 @@ const TEXT = [
     'I develop Train Simulator add-ons in my spare time with a focus on realism and authenticity.',
     'These projects are inspired by my local surroundings that are now void of their industrial past and aim to reproduce a forgotten time.',
     '',
-    'I am also available to take on freelance 3D modelling work for Train Simulator'
+    'I am also available to take on freelance 3D modelling work for Train Simulator.'
 ]
 
 const CONTENT = [
@@ -26,7 +26,13 @@ const CONTENT = [
     {
         title: 'Freelance work',
         text: [
-            'I am also available to take on freelance 3D modelling work for Train Simulator'
+            'I am also available to take on freelance 3D modelling work for Train Simulator.'
+        ]
+    },
+    {
+        title: 'Releases',
+        text: [
+            'For information about upcoming releases, please see my blog.'
         ]
     }
 ]
@@ -50,8 +56,7 @@ const Simulation: PageWithLayout<Props> = (props) => {
             }
 
             {/* Product items grid */}
-            <h3 className="text-xl">Releases</h3>
-            <div className="flex flex-auto gap-3 flex-row my-5">
+            <div className="flex flex-auto gap-3 flex-row">
                 {props.products.map((product, i) => (
                     <PostItem 
                         post={product}
