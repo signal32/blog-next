@@ -1,19 +1,18 @@
-import Drawer from "../../components/common/Drawer";
-import AppBaseLayout, { LayoutRequestProps, defineLayout } from "../../components/app/BaseLayout";
-import markdownToHtml from "../../lib/markdown";
-import { Product, products, Requirement } from "../../lib/products";
-import { PageWithLayout } from '../../components/app/LayoutApp';
-import {FaDownload, FaExternalLinkAlt, FaInfoCircle} from 'react-icons/fa';
-import Button from "../../components/common/Button";
-import Link from "next/link";
-import { FileDetails, files } from "../../lib/file";
-import { useModalStore } from "../../components/common/Modal";
 import Image from "next/image";
-
+import Link from "next/link";
+import { FaDownload, FaExternalLinkAlt, FaInfoCircle } from 'react-icons/fa';
+import Markdown from 'react-markdown';
+import { LayoutRequestProps, defineLayout } from "../../components/app/BaseLayout";
+import { PageWithLayout } from '../../components/app/LayoutApp';
+import Button from "../../components/common/Button";
+import Drawer from "../../components/common/Drawer";
+import { useModalStore } from "../../components/common/Modal";
+import { FileDetails, files } from "../../lib/file";
+import { Product, Requirement, products } from "../../lib/products";
+import markDownStyles from '../../styles/md.module.scss';
 
 interface ProductPageProps extends LayoutRequestProps {
     product: Product,
-    productDescriptionHtml: string,
     dependencyProducts: {product: Product, file: FileDetails}[],
     mainFile: FileDetails,
     otherFiles: {slug: string, label: string, file: FileDetails}[],
@@ -24,17 +23,17 @@ const ProductPage: PageWithLayout<ProductPageProps> = (props) => {
 
     const openGallery = (img: string) => {
         modals.pushModal(
-        <div className=" h-full">
-            <Image
-                src={img}
-                alt='product image'
-                onLoadingComplete={(e) => console.log(e)}
-                fill
-                sizes="100vw"
-                style={{
-                    objectFit: "contain"
-                }} />
-        </div>
+            <div className=" h-full">
+                <Image
+                    src={img}
+                    alt='product image'
+                    onLoadingComplete={(e) => console.log(e)}
+                    fill
+                    sizes="100vw"
+                    style={{
+                        objectFit: "contain"
+                    }} />
+            </div>
         )
     }
 
@@ -45,10 +44,7 @@ const ProductPage: PageWithLayout<ProductPageProps> = (props) => {
 
                 {/* Main content */}
                 <div className="flex-auto w-80 p-2">
-                    <div
-                        className="text-slate-200 hame-markdown" 
-                        dangerouslySetInnerHTML={{__html: props.productDescriptionHtml || ''}} 
-                    />
+                    <Markdown className={markDownStyles.markdown}>{props.product.description}</Markdown>
 
                     <Drawer title="Requirements">
                         {props.product.requirements?.map((item, i) => <RequirementItem key={i} requirement={item} products={props.dependencyProducts} />)}
@@ -91,7 +87,6 @@ type Params = {
 
 export async function getStaticProps({params}: Params) {
     const product = await products.getBySlug(params.slug);
-    const productDescriptionHtml = await markdownToHtml(product?.description || '');
 
     // Fetch internal products for dependencies
     // TODO do this for children, parent & related products
@@ -112,8 +107,7 @@ export async function getStaticProps({params}: Params) {
 
     return {
         props: { 
-            product, 
-            productDescriptionHtml, 
+            product,
             dependencyProducts,
             mainFile,
             otherFiles,

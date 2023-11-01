@@ -1,9 +1,9 @@
-import { useEffect } from "react";
-import DateDisplay from "../../components/common/DateDisplay";
+import Markdown from 'react-markdown';
 import { LayoutRequestProps, defineLayout } from "../../components/app/BaseLayout";
-import markdownToHtml from "../../lib/markdown";
-import { getAllPosts, getPostBySlug, Post, posts } from "../../lib/posts";
 import { PageWithLayout } from '../../components/app/LayoutApp';
+import DateDisplay from "../../components/common/DateDisplay";
+import { Post, posts } from "../../lib/posts";
+import markdownStyles from '../../styles/md.module.scss';
 
 interface PostProps extends LayoutRequestProps {
     post: Post
@@ -15,10 +15,8 @@ const BlogPost: PageWithLayout<PostProps> = ({post}) => {
 
     return (
         <div className="text-white">
-            {
-                post.created && <DateDisplay date={new Date(post.created)}/>
-            }
-            <div className="text-slate-200 hame-markdown" dangerouslySetInnerHTML={{__html: post.content || ''}} />
+            { post.created && <DateDisplay date={new Date(post.created)}/> }
+            <Markdown className={markdownStyles.markdown}>{post.content}</Markdown>
         </div>
     )
 }
@@ -43,13 +41,11 @@ type Params = {
 
 export async function getStaticProps({ params }: Params) {
     const post = await posts.getBySlug(params.slug)
-    const content = await markdownToHtml(post?.content || '')
 
     return {
         props: {
             post: {
                 ...post,
-                content,
             },
             morePosts: [],
             preview: false,

@@ -18,7 +18,6 @@ My client side expertise is founded in the core pairing HTML, CSS, and JavaScrip
 
 On the server I have a wide ranging skill set, such as developing REST APIs for backend services using tools such as Express.JS, Spring, and PHP. I am not tied to one particular technology, and will choose the most effective tool for the job. My database experience is focussed on MySQL and MongoDB. 
 
-
 - Web (JavaScript, CSS, HTML)
     - Static sites with Zola and TailWindCSS
     - Progressive Web Apps with VueJS, Ionic, and TypeScript
@@ -31,16 +30,12 @@ On the server I have a wide ranging skill set, such as developing REST APIs for 
     - Unit tests with Junit
 - SQL	
     - Providing persistence for backend web services with MySQL
-
 - Git	
     - With CI using GitHub Actions
-
 - Linux
     - Web service deployment with Docker and NGINX
-
 - Photoshop + Affinity Photo/Designer
     - Graphic design
     - Texture authoring for 3D games
-
 - Blender
     - Architectural 3D modelling for games

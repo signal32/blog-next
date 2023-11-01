@@ -1,0 +1,105 @@
+.markdown {
+    &:not(.no-markdown) {
+
+        /* Headers */
+        h1, h2, h3, h4, h5, h6 {
+            margin: 1em 0 0.5em;
+        }
+
+        /* Links */
+        a {
+            color: #0366d6;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Lists */
+        ul, ol {
+            padding-left: 2em;
+            list-style: disc;
+        }
+
+        li {
+            margin-bottom: 0.5em;
+        }
+
+        /* Blockquotes */
+        blockquote {
+            margin: 0;
+            padding: 0 1em;
+            color: #6a737d;
+            border-left: 0.25em solid #dfe2e5;
+        }
+
+        /* Code Blocks */
+        pre {
+            margin: 0;
+            padding: 1em;
+            background-color: #f6f8fa;
+            border: 1px solid #d1d5da;
+            border-radius: 3px;
+            overflow: auto;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        /* Inline Code */
+        p code, li code {
+            padding: 0.2em 0.5em;
+            margin: 0;
+            font-size: 85%;
+            background-color: #f6f8fa;
+            border-radius: 3px;
+        }
+
+        /* Horizontal Rule */
+        hr {
+            border: 0;
+            height: 1px;
+            background: #ccc;
+            margin: 1em 0;
+        }
+
+        /* Images */
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Tables */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 1em;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 0.5em;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f6f8fa;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+        }
+
+        p {
+            line-height: 1.5rem;
+        
+            &:not(:last-child)  {
+                margin-bottom: 2rem;
+            }
+        }
+    }
+}
