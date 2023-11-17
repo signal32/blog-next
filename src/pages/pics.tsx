@@ -3,49 +3,49 @@ import { LayoutRequestProps, defineLayout } from "../components/app/BaseLayout";
 import { PageWithLayout } from '../components/app/LayoutApp';
 import { useModalStore } from '../components/common/Modal';
 import { useState } from 'react';
-import cambridgeSunset from "../resources/images/pics/DSC00018.jpg";
-import cambridgeUni1 from "../resources/images/pics/DSC00101.jpg";
-import cambridgeUni2 from "../resources/images/pics/DSC00104.jpg";
-import cambridgeUni3 from "../resources/images/pics/DSC00122.jpg";
-import green from "../resources/images/pics/DSC00457.jpg";
-import spectra from "../resources/images/pics/DSC06314.jpg";
-import toHeaven from "../resources/images/pics/DSC09168.jpg";
-import stretham from '../../public/graphics/stretham.jpg'
+// import cambridgeSunset from "../resources/images/pics/DSC00018.jpg";
+// import cambridgeUni1 from "../resources/images/pics/DSC00101.jpg";
+// import cambridgeUni2 from "../resources/images/pics/DSC00104.jpg";
+// import cambridgeUni3 from "../resources/images/pics/DSC00122.jpg";
+// import green from "../resources/images/pics/DSC00457.jpg";
+// import spectra from "../resources/images/pics/DSC06314.jpg";
+// import toHeaven from "../resources/images/pics/DSC09168.jpg";
+// import stretham from '../../public/graphics/stretham.jpg'
 
 
-const PICS = [
-    {
-        title: 'Cambridge Sunset',
-        source: cambridgeSunset,
-    },
-    {
-        title: 'Cambridge Uni',
-        source: cambridgeUni1,
-    },    
-    {
-        title: 'Cambridge Uni',
-        source: cambridgeUni2,
-    }, 
-    {
-        title: 'Cambridge Uni',
-        source: cambridgeUni3,
-    }, 
-    {
-        title: 'Green',
-        source: green,
-    },    
-    {
-        title: 'Aliens?',
-        source: spectra,
-    },    
-    {
-        title: 'Stairway to Pint',
-        source: toHeaven,
-    },
-    {
-        title: 'Boat',
-        source: stretham,
-    },
+const PICS: { title: string, source: string }[] = [
+    // {
+    //     title: 'Cambridge Sunset',
+    //     source: cambridgeSunset,
+    // },
+    // {
+    //     title: 'Cambridge Uni',
+    //     source: cambridgeUni1,
+    // },    
+    // {
+    //     title: 'Cambridge Uni',
+    //     source: cambridgeUni2,
+    // }, 
+    // {
+    //     title: 'Cambridge Uni',
+    //     source: cambridgeUni3,
+    // }, 
+    // {
+    //     title: 'Green',
+    //     source: green,
+    // },    
+    // {
+    //     title: 'Aliens?',
+    //     source: spectra,
+    // },    
+    // {
+    //     title: 'Stairway to Pint',
+    //     source: toHeaven,
+    // },
+    // {
+    //     title: 'Boat',
+    //     source: stretham,
+    // },
 ]
 
 
@@ -81,10 +81,10 @@ const Software: PageWithLayout<Props> = (props) => {
 
 Software.layout = defineLayout({
     headerTitle: 'Web Design',
-    header:  {
-        type: 'image',
-        href: toHeaven.src,
-    },
+    // header:  {
+    //     type: 'image',
+    //     href: toHeaven.src,
+    // },
 })
 
 export default Software;

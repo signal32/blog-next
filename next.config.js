@@ -1,3 +1,5 @@
+const path = require('path')
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
@@ -17,6 +19,13 @@ const nextConfig = {
         });
 
         return config;
+    },
+
+    sassOptions: {   
+        includePaths: [
+            path.join(__dirname, 'node_modules'),
+            '/home/hamish/dev/blog-next/node_modules/scss-utils/src'
+        ],
     },
 }
 

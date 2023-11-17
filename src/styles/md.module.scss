@@ -1,5 +1,9 @@
+@use 'scss-utils/src/util' as util;
+
 .markdown {
     &:not(.no-markdown) {
+
+        // @include util.;
 
         /* Headers */
         h1, h2, h3, h4, h5, h6 {
