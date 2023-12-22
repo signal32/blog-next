@@ -56,10 +56,10 @@ const AppBaseLayout = (props: MainLayoutProps) => {
     Router.events.on('routeChangeStart', hideAnimatedContent);
 
     return (
-        <div className="dark:bg-gray-900 bg-gray-300 bg-repeat flex flex-col min-h-screen h-full">
+        <div className="dark:bg-gray-900 bg-gray-300 bg-repeat flex flex-col min-h-screen h-full md:px-3">
             <header className="mb-5 top-0 sticky bg-gradient-to-t from-transparent dark:to-gray-900 to-gray-300 z-20">
-                <div className="max-w-4xl mx-auto px-2 sm:px-6 mt-2 rounded-lg shadow-lg bg-ocean">
-                    <div className="flex flex-wrap gap-2 justify-center items-center">
+                <div className="max-w-4xl mx-auto px-2 sm:px-6 mt-0 md:mt-2 rounded-b-lg md:rounded-lg shadow-lg bg-ocean">
+                    <div className="flex flex-wrap gap-2 justify-center items-center pb-1 md:pb-0">
 
                         {/* Main logo */}
                         <Link
@@ -91,16 +91,14 @@ const AppBaseLayout = (props: MainLayoutProps) => {
 
                         {/* Extra links (i.e. external social media) */}
                         <div className="flex-none sm:basis-auto">
-                            <div className="flex flex-wrap justify-center sm:justify-end">
-                                <div className="flex">
-                                    {
-                                        websiteConfig.socialLinks.map((link, i) => (
-                                            <div className="flex" key={i}>
-                                                <a className="text-slate-300 hover:text-white transition-all w-8 h-8 px-2" href={link.href}>{link.icon}</a>
-                                            </div>
-                                        ))
-                                    }
-                                </div>
+                            <div className="flex flex-wrap justify-center sm:justify-end items-center">
+                                {
+                                    websiteConfig.socialLinks.map((link, i) => (
+                                        <div className="flex" key={i}>
+                                            <a className="text-slate-300 hover:text-white transition-all px-2" href={link.href}>{link.icon}</a>
+                                        </div>
+                                    ))
+                                }
                             </div>
                         </div>
                     </div>
