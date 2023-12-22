@@ -1,0 +1,58 @@
+.postListContainer {
+    // Hide the scrollbar
+    position: relative;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: scroll;
+    display: flex;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    
+    -ms-overflow-style: none; // IE & Edge
+    scrollbar-width: none;  // Firefox
+    &::-webkit-scrollbar { // Chrome
+      display: none; 
+    }
+}
+
+.scrollButton {
+    position: absolute;
+    top: 43%;
+    z-index: 100;
+    //align-content: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+    aspect-ratio: 1 / 1;
+    border-radius: 100%;
+    cursor: pointer
+}
+
+.scrollButtonLeft {
+    @extend .scrollButton;
+    left: 0;
+}
+
+.scrollButtonRight {
+    @extend .scrollButton;
+    right: 0;
+}
+
+.scrollGradient {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    z-index: 50;
+    width: 50px;
+}
+
+.scrollGradientLeft {
+    @extend .scrollGradient;
+    left: 0;
+}
+
+.scrollGradientRight {
+    @extend .scrollGradient;
+    right: 0
+}
