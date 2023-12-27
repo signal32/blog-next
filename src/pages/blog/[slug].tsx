@@ -1,7 +1,9 @@
-import Markdown from 'react-markdown';
+
 import { LayoutRequestProps, defineLayout } from "../../components/app/BaseLayout";
 import { PageWithLayout } from '../../components/app/LayoutApp';
 import DateDisplay from "../../components/common/DateDisplay";
+import { Markdown } from '../../components/common/Markdown';
+import { Text } from '../../components/common/Text';
 import { Post, posts } from "../../lib/posts";
 import markdownStyles from '../../styles/md.module.scss';
 
@@ -12,12 +14,11 @@ interface PostProps extends LayoutRequestProps {
 }
 
 const BlogPost: PageWithLayout<PostProps> = ({post}) => {
-
     return (
-        <div className="text-white">
+        <Text>
             { post.created && <DateDisplay date={new Date(post.created)}/> }
-            <Markdown className={markdownStyles.markdown}>{post.content}</Markdown>
-        </div>
+            <Markdown content={post.content ?? ''} />
+        </Text>
     )
 }
 

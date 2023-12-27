@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FaDownload, FaExternalLinkAlt, FaInfoCircle } from 'react-icons/fa';
-import Markdown from 'react-markdown';
+import { Markdown } from '../../components/common/Markdown';
 import { LayoutRequestProps, defineLayout } from "../../components/app/BaseLayout";
 import { PageWithLayout } from '../../components/app/LayoutApp';
 import Button from "../../components/common/Button";
@@ -44,7 +44,7 @@ const ProductPage: PageWithLayout<ProductPageProps> = (props) => {
 
                 {/* Main content */}
                 <div className="flex-auto w-80 p-2">
-                    <Markdown className={markDownStyles.markdown}>{props.product.description}</Markdown>
+                    <Markdown content={props.product.description ?? ''} />
 
                     <Drawer title="Requirements">
                         {props.product.requirements?.map((item, i) => <RequirementItem key={i} requirement={item} products={props.dependencyProducts} />)}

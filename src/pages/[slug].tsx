@@ -1,4 +1,5 @@
-import Markdown from 'react-markdown';
+import { Markdown } from '../components/common/Markdown';
+import { Text } from '../components/common/Text';
 import { LayoutRequestProps, defineLayout } from "../components/app/BaseLayout";
 import { PageWithLayout } from '../components/app/LayoutApp';
 import DateDisplay from "../components/common/DateDisplay";
@@ -13,14 +14,11 @@ interface PostProps extends LayoutRequestProps {
 }
 
 const SimplePage: PageWithLayout<PostProps> = ({post}) => {
-
     return (
-        <div className="text-white">
-            <div className="mb-4 p-3 mx-auto dark:bg-gray-900 bg-gray-300 bg-opacity-75 rounded-xl">
-                { post.created && <DateDisplay date={post.created.toString()}/> }
-                <Markdown className={markdownStyles.markdown}>{post.content}</Markdown>
-            </div>
-        </div>
+        <Text>
+            { post.created && <DateDisplay date={post.created.toString()}/> }
+            <Markdown content={post.content ?? ''}/>
+        </Text>
     )
 }
 

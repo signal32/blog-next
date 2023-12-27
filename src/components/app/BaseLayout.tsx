@@ -2,7 +2,7 @@ import { debounce } from "lodash";
 import Image from "next/image";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
-import React, { cloneElement, ReactElement, useContext, useEffect, useState } from "react";
+import { cloneElement, ReactElement, useEffect, useState } from "react";
 import { websiteConfig } from "../../pages/_app";
 import MyLogo from "../../resources/images/logo.svg";
 import Breadcrumbs from "../common/Breadcrumbs";
