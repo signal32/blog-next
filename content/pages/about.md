@@ -10,7 +10,7 @@ I am Hamish, a software engineer and technologist, floating around on the Britis
 
 Away from the desk I am a keen photographer and publish some of my favourite shots here on this site.
 
-### My skill set
+# My skill set
 
 I have significant experience with web based technologies across the entire stack.
 

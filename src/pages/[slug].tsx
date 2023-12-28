@@ -15,10 +15,10 @@ interface PostProps extends LayoutRequestProps {
 
 const SimplePage: PageWithLayout<PostProps> = ({post}) => {
     return (
-        <Text>
-            { post.created && <DateDisplay date={post.created.toString()}/> }
+        <div>
+            <Text>{ post.created && <DateDisplay date={post.created.toString()}/> }</Text>
             <Markdown content={post.content ?? ''}/>
-        </Text>
+        </div>
     )
 }
 

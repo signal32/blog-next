@@ -1,13 +1,27 @@
 @use 'scss-utils/src/util' as util;
+@use './text.module.scss' as text;
 
 .markdown {
     &:not(.no-markdown) {
+        @extend .body;
 
         // @include util.;
 
         /* Headers */
         h1, h2, h3, h4, h5, h6 {
-            margin: 1em 0 0.5em;
+            @extend .heading;
+        }
+
+        h1 {
+            @extend .h1
+        }
+
+        h2 {
+            @extend .h2
+        }
+
+        h3 {
+            @extend .h3
         }
 
         /* Links */
@@ -77,6 +91,7 @@
 
         /* Tables */
         table {
+            @extend .body;
             border-collapse: collapse;
             width: 100%;
             margin-bottom: 1em;
@@ -99,6 +114,8 @@
         }
 
         p {
+            @extend .body;
+
             line-height: 1.5rem;
         
             &:not(:last-child)  {

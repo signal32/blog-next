@@ -1,0 +1,45 @@
+.heading {
+    margin: 1em 0 0.5em;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.subHeading {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.body {
+ font-size: 1rem;
+}
+
+.caption {
+    font-size: 0.95rem;
+    font-weight: 100;
+}
+
+.h1 {
+    @extend .heading;
+    font-size: 1.75rem;
+}
+
+.h2 {
+    @extend .heading;
+    font-size: 1.75rem;
+}
+
+.h3 {
+    @extend .heading;
+}
+
+.h4 {
+    @extend .subHeading;
+}
+
+.h5 {
+    @extend .subHeading;
+}
+
+.h6 {
+    @extend .subHeading;
+}
