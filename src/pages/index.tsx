@@ -61,17 +61,17 @@ const HomeHero = () => (
     <div className={styles.heroContainer}>
         <div className={styles.heroLeftCol}>
             <Image 
-                style={{ width: '70%', borderRadius: '1000px', paddingBottom: '1.5rem'}}
+                style={{ width: '70%', borderRadius: '1000px', marginBottom: '1.5rem', border: 'solid 2px white'}}
                 objectFit='contain'
                 src='/graphics/hamish_weir_portrait_square.jpg'
-                width='500'
-                height='500'
+                width='100'
+                height='100'
                 alt='Portrait of Hamish Weir'
             />                
         </div>
         <div className={styles.heroRightCol}>
-            <h1 className='text-white text-5xl font-semibold' style={{fontFamily: 'caveat'}}>Hamish Weir</h1>
-            <h1 className='text-white text-xl font-medium' >Digital content creator</h1>
+            <h1 className='sm:text-air text-white text-5xl font-semibold' style={{fontFamily: 'caveat'}}>Hamish Weir</h1>
+            <h1 className='text-white text-xl font-medium'>Digital content creator</h1>
 
             <div style={{ display: 'flex', gap: '1rem', paddingTop: '1.5rem'}}>
                 <Button text='Software' href='/design'></Button>

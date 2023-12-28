@@ -1,3 +1,5 @@
+@use 'scss-utils/src/util' as util;
+
 
 .columnContainer {
     display: flex;
@@ -33,28 +35,33 @@
 }
 
 .heroContainer {
-    height: 30rem;
+    //height: 30rem;
     padding: 2.2rem;
     background-position: center;
     background-size: cover;
-    background-image: url(https://images.pexels.com/photos/1834404/pexels-photo-1834404.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2);
+    background-image: url('/graphics/hero_landscape.jpg');
     display: flex;
+    flex-wrap: wrap;
     gap: 2rem;
 }
 
 .heroLeftCol {
-    flex: 0 0 40%;
+    flex: 1 0 40%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
+    //max-height: 50%;
 }
 
 .heroRightCol {
-    flex: 1 1;
+    //max-height: 50%;
+    flex: 1 0;
     text-align: right;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
 }
