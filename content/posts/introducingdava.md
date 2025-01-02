@@ -4,7 +4,7 @@ slug: introducingdava
 created: '6 Jan 2021'
 coverImage: /graphics/posts/dava/grantown_station.jpg
 excerpt: Built to connect Inverness to the south, the Dava Line served as the main route south until 1892 when the current Highland Mainline was built via Carrbridge.
-published: true
+public: true
 ---
 
 Hope the New Year finds you well, although the current global situation shows no sign of abating any time soon it has provided me the opportunity to spend more time working on various projects. One of these is a new route; The Dava Line in North East Scotland.

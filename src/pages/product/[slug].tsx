@@ -134,7 +134,7 @@ export async function getStaticPaths() {
 
 const ProductDetails = (props: {product: Product}) => {
     const details = [
-        {name: 'Published', value: props.product.published?.toDateString()},
+        {name: 'Published', value: props.product.public?.toDateString()},
         {name: 'Product ID', value: props.product.id},
         {name: 'Product name', value: props.product.name},
         {name: 'Has requirements', value: !props.product.requirements == undefined}

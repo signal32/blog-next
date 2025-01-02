@@ -4,7 +4,7 @@ created: '12 May 2022'
 slug: explorer
 coverImage: "/graphics/posts/explorer_app_demo.jpg"
 excerpt: "As part of my computing science degree, I created a mobile application to improve access to geospatial information on WikiData. This post describes the problem, my solution, and the results of its implementation."
-published: true
+public: true
 ---
 
 As part of my computing science degree, I created a mobile application to improve access to geospatial information on WikiData. This post describes the problem, my solution, and the results of its implementation.

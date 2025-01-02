@@ -18,7 +18,7 @@ export interface Content extends ContentDescriptor {
     excerpt?: string,
     thumbnail?: string,
     coverImage?: string,
-    published?: boolean,
+    public?: boolean,
 }
 
 export interface ContentLocation {
