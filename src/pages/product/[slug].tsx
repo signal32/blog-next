@@ -62,9 +62,15 @@ const ProductPage: PageWithLayout<ProductPageProps> = (props) => {
                     {/* TODO basic info */}
                     <ProductDetails product={props.product}/>
                     {/* TODO download links */}
-                    <Button text="Download" icon={<FaInfoCircle/>} href={props.mainFile?.href} target='_blank'/>
-                    <p className="italic text-sm text-right">{props.mainFile?.fileName}</p>
-                    <p className="italic text-sm text-right">Details: {JSON.stringify(props.mainFile)}</p>
+                    { props.mainFile
+                        ? <>
+                            <Button text="Download" icon={<FaInfoCircle/>} href={props.mainFile.href} target='_blank'/>
+                            <p className="italic text-sm text-right">{props.mainFile.fileName}</p>
+                        </>
+                        : <p>Sorry, this file is currently unavailable.</p>
+                    }
+
+                    {/* <p className="italic text-sm text-right">Details: {JSON.stringify(props.mainFile)}</p> */}
                 </div>
             </div>
         </div>
@@ -95,7 +101,7 @@ export async function getStaticProps({params}: Params) {
             if (item.type == 'internal') {
                 const product = (await products.getBySlug(item.id)) || null;
                 const file = product?.files?.primary ? await files.getBySlug(product?.files?.primary) : null;
-                return {product, file} 
+                return {product, file}
             }
         }) || []);
 
@@ -106,7 +112,7 @@ export async function getStaticProps({params}: Params) {
     })) || []
 
     return {
-        props: { 
+        props: {
             product,
             dependencyProducts,
             mainFile,
