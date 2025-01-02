@@ -13,13 +13,7 @@
     "media": {
         "banner": "/graphics/speyside_line/ProductBanner_SpeysideLine.webp",
         "gallery": [
-            "/graphics/speyside_line/banner.png",
-            "http://rails.hamishweir.uk/wp-content/uploads/2020/07/Screenshot_SB-The-Speyside-Line_57.43277-3.36209_14-00-35-1920x1080-1.jpg",
-            "http://rails.hamishweir.uk/wp-content/uploads/2020/07/Screenshot_SB-The-Speyside-Line_57.41212-3.39198_14-01-07-1920x1080-1.jpg",
-            "http://rails.hamishweir.uk/wp-content/uploads/2020/07/Screenshot_SB-The-Speyside-Line_57.32491-3.53364_18-02-20-1920x1080-1.jpg",
-            "http://rails.hamishweir.uk/wp-content/uploads/2020/07/Screenshot_SB-The-Speyside-Line_57.24829-3.75247_14-01-56-1920x1080-1.jpg",
-            "http://rails.hamishweir.uk/wp-content/uploads/2020/07/Screenshot_SB-The-Speyside-Line_57.45819-3.35020_12-00-36-1920x1080-1.jpg",
-            "http://rails.hamishweir.uk/wp-content/uploads/2020/07/Screenshot_SB-The-Speyside-Line_57.45140-3.27367_14-09-58-1920x1080-1.jpg"    
+            "/graphics/speyside_line/banner.png"
         ]
     },
     "files": {
