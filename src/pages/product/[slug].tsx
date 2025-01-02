@@ -1,15 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FaDownload, FaExternalLinkAlt, FaInfoCircle } from 'react-icons/fa';
-import { Markdown } from '../../components/common/Markdown';
 import { LayoutRequestProps, defineLayout } from "../../components/app/BaseLayout";
 import { PageWithLayout } from '../../components/app/LayoutApp';
 import Button from "../../components/common/Button";
 import Drawer from "../../components/common/Drawer";
+import { Markdown } from '../../components/common/Markdown';
 import { useModalStore } from "../../components/common/Modal";
 import { FileDetails, files } from "../../lib/file";
 import { Product, Requirement, products } from "../../lib/products";
-import markDownStyles from '../../styles/md.module.scss';
 
 interface ProductPageProps extends LayoutRequestProps {
     product: Product,
@@ -37,7 +36,7 @@ const ProductPage: PageWithLayout<ProductPageProps> = (props) => {
         )
     }
 
-    return (
+    return ( props.product &&
         <div>
             <h1>Product: {props.product.name}</h1>
             <div className="flex gap-3">
@@ -47,7 +46,7 @@ const ProductPage: PageWithLayout<ProductPageProps> = (props) => {
                     <Markdown content={props.product.description ?? ''} />
 
                     <Drawer title="Requirements">
-                        {props.product.requirements?.map((item, i) => <RequirementItem key={i} requirement={item} products={props.dependencyProducts} />)}
+                        {props.product.requirements?.map((item, i) => <RequirementItem key={i} requirement={item} products={props.dependencyProducts ?? []} />)}
                     </Drawer>
                 </div>
 
@@ -78,8 +77,8 @@ const ProductPage: PageWithLayout<ProductPageProps> = (props) => {
 }
 
 ProductPage.layout = defineLayout((props) => ({
-    headerTitle: props.product.name,
-    header: props.product.media?.banner
+    headerTitle: props.product?.name,
+    header: props.product?.media?.banner
         ? { type: 'image', href: props.product.media.banner }
         : undefined,
     breadcrumbs: true,
@@ -92,7 +91,7 @@ type Params = {
 }
 
 export async function getStaticProps({params}: Params) {
-    const product = await products.getBySlug(params.slug);
+    const product = await products.getBySlug(params.slug) ?? null;
 
     // Fetch internal products for dependencies
     // TODO do this for children, parent & related products

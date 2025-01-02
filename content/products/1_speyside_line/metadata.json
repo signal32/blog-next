@@ -21,5 +21,6 @@
         "other": [
             {"name": "Test Product Manual", "file": "test_product", "tag": "manual"}
         ]
-    }
+    },
+    "public": true
 }

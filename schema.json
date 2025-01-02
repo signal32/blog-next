@@ -28,13 +28,6 @@
             },
             "type": "object"
         },
-        "FileTag": {
-            "enum": [
-                "manual",
-                "misc"
-            ],
-            "type": "string"
-        },
         "InternalRequirement": {
             "properties": {
                 "id": {
@@ -71,6 +64,9 @@
         }
     },
     "properties": {
+        "baseUrl": {
+            "type": "string"
+        },
         "children": {
             "items": [
                 {
@@ -81,7 +77,16 @@
             "minItems": 1,
             "type": "array"
         },
+        "coverImage": {
+            "type": "string"
+        },
+        "created": {
+            "type": "string"
+        },
         "description": {
+            "type": "string"
+        },
+        "excerpt": {
             "type": "string"
         },
         "fileName": {
@@ -93,14 +98,15 @@
                     "description": "Miscellaneous files belonging to the product",
                     "items": {
                         "properties": {
-                            "file": {
-                                "type": "string"
-                            },
-                            "name": {
+                            "slug": {
                                 "type": "string"
                             },
                             "tag": {
-                                "$ref": "#/definitions/FileTag"
+                                "enum": [
+                                    "manual",
+                                    "misc"
+                                ],
+                                "type": "string"
                             }
                         },
                         "type": "object"
@@ -120,11 +126,17 @@
         "media": {
             "$ref": "#/definitions/ProductMedia"
         },
+        "modified": {
+            "type": "string"
+        },
         "name": {
             "type": "string"
         },
         "parent": {
             "type": "string"
+        },
+        "public": {
+            "type": "boolean"
         },
         "published": {
             "format": "date-time",
@@ -154,6 +166,9 @@
             "type": "array"
         },
         "slug": {
+            "type": "string"
+        },
+        "thumbnail": {
             "type": "string"
         }
     },

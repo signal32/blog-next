@@ -101,13 +101,19 @@ export type Loader<T> = (descriptor: ContentDescriptor, path: string) => Promise
  * @param loader Method to transform each `ContentDescriptor` into T
  * @returns
  */
-export function defineContent<T>(dir: string, loader: Loader<T>): {
+export function defineContent<T extends Content>(dir: string, loader: Loader<T>): {
     getAll: () => ContentDescriptor[]
     getAllDetailed: () => Promise<T[]>
     getById: (id: string) => Promise<T | undefined>
     getBySlug: (slug: string) => Promise<T | undefined>
     getByName: (name: string) => Promise<T | undefined>
 } {
+    // Logic common to all loaders should live here
+    const commonLoader: Loader<T> = async (descriptor, path) => {
+        const content = await loader(descriptor, path)
+        if (content && content.public) return content
+    }
+
     loadContent(dir);
 
     return {
@@ -127,7 +133,7 @@ export function defineContent<T>(dir: string, loader: Loader<T>): {
         getById: async (id) => {
             const content = getById(id);
 
-            if (content) return loader(
+            if (content) return commonLoader(
                 content.descriptor,
                 join(content?.dir, content?.descriptor.fileName),
             )
@@ -135,7 +141,7 @@ export function defineContent<T>(dir: string, loader: Loader<T>): {
         getBySlug: async (slug) => {
             const content = getBySlug(slug)
 
-            if (content) return loader(
+            if (content) return commonLoader(
                 content.descriptor,
                 join(content?.dir, content?.descriptor.fileName),
 
@@ -144,7 +150,7 @@ export function defineContent<T>(dir: string, loader: Loader<T>): {
         getByName: async (name) => {
             const content = getByName(name)
 
-            if (content) return loader(
+            if (content) return commonLoader(
                 content.descriptor,
                 join(content?.dir, content?.descriptor.fileName),
 

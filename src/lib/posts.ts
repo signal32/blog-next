@@ -37,8 +37,8 @@ export const posts = defineContent<Post>('posts', async(descriptor, path) => {
         baseUrl: '/blog'
     } as Post
 
-    if (!isPost(post)) throw new Error("Invalid post data")
-    else if (post.public) return post
+    if (isPost(post)) return post
+    else throw new Error("Invalid post data")
 })
 
 export function getPostSlugs() {

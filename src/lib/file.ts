@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { join } from 'path';
-import { ContentDescriptor, defineContent } from './content';
+import { Content, ContentDescriptor, defineContent } from './content';
 
 const PUBLIC_FILE_DIR = join(process.cwd(), 'public', 'content', 'files');
 const API_FILE_DIR = join(process.cwd(), 'public', 'content', 'files');
@@ -12,7 +12,7 @@ const METHODS = {
 
 type Method = keyof typeof METHODS;
 
-export interface FileDetails extends ContentDescriptor {
+export interface FileDetails extends Content {
     type: string
     method: Method,
     href: string
@@ -23,7 +23,6 @@ export const files = defineContent<FileDetails>('files', async (desc, path) => {
     const details = getDetails(desc, path, metadataPath);
 
     details.href = METHODS[details.method].href(details);
-    
     return details;
 })
 
@@ -50,7 +49,7 @@ const getDetails = (desc: ContentDescriptor, path: string, metadataPath?: string
         const buf = fs.readFileSync(metadataPath, 'utf8');
         const json = JSON.parse(buf);
         return {...desc, ...json} as FileDetails;
-    } 
+    }
     else return {
             type: path.substring(path.indexOf('.') + 1),
             method: 'public',
