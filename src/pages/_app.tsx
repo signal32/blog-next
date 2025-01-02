@@ -17,12 +17,13 @@ export const websiteConfig: AppConfig = {
         //{name: `Software`, href: `/software`},
         {name: `Rail Simulation`, href: `/simulation`},
         {name: `Development`, href: `/about`},
-        {name: `Photos`, href: `/pics`},
+        // {name: `Photos`, href: `/pics`},
 
     ],
     socialLinks: [
         {name: `GitHub`, href: 'https://github.com/signal32', icon: <div><FaGithub/></div>},
         {name: `Instagram`, href: 'https://www.instagram.com/hamishweirphoto/', icon: <div><FaInstagram/></div>}
     ],
-    siteName: `Hamish Weir Blog!`
+    siteName: `Hamish Weir Blog`,
+
 }
