@@ -17,7 +17,7 @@
         ]
     },
     "files": {
-        "primary": "test_file",
+        "_primary": "test_file",
         "other": [
             {"name": "Test Product Manual", "file": "test_product", "tag": "manual"}
         ]
