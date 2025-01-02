@@ -13,17 +13,16 @@ export interface Post extends Content {
 }
 
 export function isPost(obj: any): obj is Post {
-    console.log(new Date(obj.created),'---',  obj.created, obj)
     return (
-        typeof obj === 'object' && obj !== null 
-    && 'slug' in obj && typeof obj.slug === 'string'
-    && 'name' in obj && typeof obj.name === 'string'
-    && (
-        'created' in obj && !isNaN(new Date(obj.created).valueOf())
-        || !('created' in obj)
-    )
-    //&& 'date' in obj && typeof obj.date === 'string'
-    // && ...
+        typeof obj === 'object' && obj !== null
+        && 'slug' in obj && typeof obj.slug === 'string'
+        && 'name' in obj && typeof obj.name === 'string'
+        && (
+            'created' in obj && !isNaN(new Date(obj.created).valueOf())
+            || !('created' in obj)
+        )
+        //&& 'date' in obj && typeof obj.date === 'string'
+        // && ...
     );
 }
 
@@ -36,10 +35,10 @@ export const posts = defineContent<Post>('posts', async(descriptor, path) => {
         ...data,
         content,
         baseUrl: '/blog'
-    }
+    } as Post
 
-    if (isPost(post)) return post
-    else throw Error('Invalid post data')
+    if (!isPost(post)) throw new Error("Invalid post data")
+    else if (post.published) return post
 })
 
 export function getPostSlugs() {

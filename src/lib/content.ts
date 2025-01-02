@@ -18,6 +18,7 @@ export interface Content extends ContentDescriptor {
     excerpt?: string,
     thumbnail?: string,
     coverImage?: string,
+    published?: boolean,
 }
 
 export interface ContentLocation {
@@ -35,7 +36,7 @@ export const CACHE = {
 /**
  * Extracts id, slug and nme from file name of the form:
  * `<id>_<slug/name>.<extension>`
- *  
+ *
  * Extensions are ignored and have no effect on parsed details
  * Id is optional, and will be replaced with slug ig not found
  */
@@ -46,8 +47,8 @@ const parseFileName = (fileName: string): ContentDescriptor => {
 
     return {
         fileName,
-        id: idEndIdx > 0 
-            ? fileName.substring(0, idEndIdx) 
+        id: idEndIdx > 0
+            ? fileName.substring(0, idEndIdx)
             : fileName,
         slug: fileName.substring(nameStartIdx, extensionIdx > 0 ? extensionIdx : undefined),
         name: fileName.substring(nameStartIdx, extensionIdx > 0 ? extensionIdx : undefined),
@@ -66,14 +67,14 @@ export const loadContent = (dir: string, useCache = true) => {
     else {
         const fileDir = join(CONTENT_DIR, dir);
         const descriptors = getAllFiles(fileDir);
-    
+
         // Cache file descriptors for indexed lookup
         descriptors.forEach(descriptor => {
             CACHE.id.set(descriptor.id, {descriptor, dir: fileDir});
             CACHE.slug.set(descriptor.slug, descriptor.id);
             CACHE.name.set(descriptor.name, descriptor.id);
         });
-    
+
         // Cache each id of everything in this dir
         CACHE.dir.set(dir, descriptors.map(item => item.id));
         return descriptors
@@ -92,13 +93,13 @@ const getByName = (name: string) => getById(CACHE.name.get(name) || '');
 //     }
 // }
 
-export type Loader<T> = (descriptor: ContentDescriptor, path: string) => Promise<T>;
+export type Loader<T> = (descriptor: ContentDescriptor, path: string) => Promise<T | undefined>;
 
 /**
  * Defines methods for loading content of type T.
  * @param dir Subdirectory of `CONTENT_DIR` that contains content of T
  * @param loader Method to transform each `ContentDescriptor` into T
- * @returns 
+ * @returns
  */
 export function defineContent<T>(dir: string, loader: Loader<T>): {
     getAll: () => ContentDescriptor[]
@@ -122,7 +123,7 @@ export function defineContent<T>(dir: string, loader: Loader<T>): {
 
             return items
         },
-        
+
         getById: async (id) => {
             const content = getById(id);
 
