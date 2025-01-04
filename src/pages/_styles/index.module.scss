@@ -15,7 +15,7 @@
     font-size: 30px;
     float: left;
     font-weight: bold;
-      
+
     // // /* Change the shape according
     //     to the image */
     // shape-outside: circle();
@@ -32,36 +32,4 @@
     margin-bottom: 1rem;
     padding: 1rem;
     @apply bg-gray-700 rounded-md;
-}
-
-.heroContainer {
-    //height: 30rem;
-    padding: 2.2rem;
-    background-position: center;
-    background-size: cover;
-    background-image: url('/graphics/hero_landscape.jpg');
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2rem;
-}
-
-.heroLeftCol {
-    flex: 1 0 40%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    //max-height: 50%;
-}
-
-.heroRightCol {
-    //max-height: 50%;
-    flex: 1 0;
-    text-align: right;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
 }

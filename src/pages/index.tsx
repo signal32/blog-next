@@ -42,11 +42,11 @@ const Home: PageWithLayout<BlogProps> = (props) => {
                     {/* Recent posts */}
                     <div className={styles.recentPostsCol}>
                         {/* <PostList posts={allContent}/> */}
-                        <Image 
+                        <Image
                             className='rounded-lg'
-                            src='/graphics/hamish_weir_portrait.jpg' 
-                            alt='me!' 
-                            width='300' 
+                            src='/graphics/hamish_weir_portrait.jpg'
+                            alt='me!'
+                            width='300'
                             height='300'
                         />
                     </div>
@@ -58,18 +58,47 @@ const Home: PageWithLayout<BlogProps> = (props) => {
 }
 
 const HomeHero = () => (
-    <div className={styles.heroContainer}>
-        <div className={styles.heroLeftCol}>
-            <Image 
+    <div
+        style={{
+            padding: '2.2rem',
+            backgroundPosition: 'center',
+            backgroundSize: 'cover',
+            backgroundImage: `url('/graphics/hero_landscape.jpg');`,
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '2rem',
+        }}
+    >
+        <div
+            style={{
+                flex: '1 0 40%',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                textAlign: 'center',
+            }}
+        >
+            <Image
                 style={{ width: '70%', borderRadius: '1000px', marginBottom: '1.5rem', border: 'solid 2px white'}}
                 objectFit='contain'
                 src='/graphics/hamish_weir_portrait_square.jpg'
                 width='100'
                 height='100'
                 alt='Portrait of Hamish Weir'
-            />                
+            />
         </div>
-        <div className={styles.heroRightCol}>
+        <div
+            style={{
+                flex: '1 0',
+                // textAlign: 'right',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                textAlign: 'center',
+            }}
+        >
             <h1 className='sm:text-air text-white text-5xl font-semibold' style={{fontFamily: 'caveat'}}>Hamish Weir</h1>
             <h1 className='text-white text-xl font-medium'>Digital content creator</h1>
 
