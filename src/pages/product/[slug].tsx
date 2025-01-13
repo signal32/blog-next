@@ -154,10 +154,10 @@ const ProductDetails = (props: {product: Product}) => {
 const RequirementItem = (props: {requirement: Requirement, products: {product:Product, file: FileDetails}[]}) => (
     <div className="flex justify-between gap-2 p-2 my-2 rounded shadow bg-slate-200 hover:bg-slate-300 dark:bg-slate-600 dark:hover:bg-slate-500 transition-colors">
         { props.requirement.type == 'internal' && [
-            <div key={1}>{props.products.find((p) => p.product.id = props.requirement.id)?.product.name}</div>,
+            <div key={1}>{props.products.find((p) => p.product?.id === props.requirement.id)?.product.name}</div>,
             <div key={2} className="flex items-center gap-2"> <Link href={'/product/' + props.requirement.id}>Details</Link></div>,
             <div key={3} className="flex items-center gap-2">
-                <Button text="Download" size="small" style="text" icon={<FaDownload/>} href={props.products.find((p) => p.product.id = props.requirement.id)?.file?.href}/>
+                <Button text="Download" size="small" style="text" icon={<FaDownload/>} href={props.products.find((p) => p.product?.id === props.requirement.id)?.file?.href}/>
             </div>
         ]}
         { props.requirement.type == 'external' && [
