@@ -38,11 +38,10 @@ const ProductPage: PageWithLayout<ProductPageProps> = (props) => {
 
     return ( props.product &&
         <div>
-            <h1>Product: {props.product.name}</h1>
-            <div className="flex gap-3">
+            <div className="flex flex-wrap-reverse gap-5">
 
                 {/* Main content */}
-                <div className="flex-auto w-80 p-2">
+                <div className=" flex-grow basis-80">
                     <Markdown content={props.product.description ?? ''} />
 
                     <Drawer title="Requirements">
@@ -51,25 +50,27 @@ const ProductPage: PageWithLayout<ProductPageProps> = (props) => {
                 </div>
 
                 {/* Sidebar */}
-                <div className="flex-auto w-24 p-2 rounded-lg shadow-lg bg-slate-200 dark:bg-slate-800">
-                    {/* TODO images */}
-                    <div className="flex gap-3 flex-wrap">
-                        {props.product.media?.gallery?.map((item, i) => (
-                            <div key={i} className="flex-auto w-24 h-24 rounded-lg shadow-md bg-cover hover:shadow-xl hover:scale-105 transition-transform" style={{backgroundImage: `url(${item})`}} onClick={() => openGallery(item)}></div>
-                        ))}
-                    </div>
-                    {/* TODO basic info */}
-                    <ProductDetails product={props.product}/>
-                    {/* TODO download links */}
-                    { props.mainFile
-                        ? <>
-                            <Button text="Download" icon={<FaInfoCircle/>} href={props.mainFile.href} target='_blank'/>
-                            <p className="italic text-sm text-right">{props.mainFile.fileName}</p>
-                        </>
-                        : <p>Sorry, this file is currently unavailable.</p>
-                    }
+                <div className="flex-grow basis-20">
+                    <div className='p-2 rounded-lg shadow-lg bg-slate-200 dark:bg-slate-800'>
+                        {/* TODO images */}
+                        <div className="flex gap-3 flex-wrap">
+                            {props.product.media?.gallery?.map((item, i) => (
+                                <div key={i} className="flex-auto w-24 h-24 rounded-lg shadow-md bg-cover hover:shadow-xl hover:scale-105 transition-transform" style={{backgroundImage: `url(${item})`}} onClick={() => openGallery(item)}></div>
+                            ))}
+                        </div>
+                        {/* TODO basic info */}
+                        <ProductDetails product={props.product}/>
+                        {/* TODO download links */}
+                        { props.mainFile
+                            ? <>
+                                <Button text="Download" icon={<FaInfoCircle/>} href={props.mainFile.href} target='_blank'/>
+                                <p className="italic text-sm text-right">{props.mainFile.fileName}</p>
+                            </>
+                            : <p>Sorry, this file is currently unavailable.</p>
+                        }
 
-                    {/* <p className="italic text-sm text-right">Details: {JSON.stringify(props.mainFile)}</p> */}
+                        {/* <p className="italic text-sm text-right">Details: {JSON.stringify(props.mainFile)}</p> */}
+                    </div>
                 </div>
             </div>
         </div>
