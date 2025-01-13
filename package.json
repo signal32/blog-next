@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "serve": "serve out",
     "lint": "next lint",
     "schema": "typescript-json-schema -o schema.json tsconfig.json Product"
   },

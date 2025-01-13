@@ -11,15 +11,31 @@
         {"type": "internal", "id": "test_product"}
     ],
     "media": {
-        "banner": "/graphics/speyside_line/ProductBanner_SpeysideLine.webp",
+        "banner": "/graphics/speyside_line/Screenshot_SB-The-Speyside-Line_57.24829-3.75247_14-01-56-1920x1080.jpg",
         "gallery": [
-            "/graphics/speyside_line/banner.png"
+            "/graphics/speyside_line/banner.png",
+            "/graphics/speyside_line/Screenshot_SB-The-Speyside-Line_57.24829-3.75247_14-01-56-1920x1080.jpg",
+            "/graphics/speyside_line/Screenshot_SB-The-Speyside-Line_57.26526-3.66762_13-00-11.jpg",
+            "/graphics/speyside_line/Screenshot_SB-The-Speyside-Line_57.29232-3.63790_15-01-26.jpg",
+            "/graphics/speyside_line/Screenshot_SB-The-Speyside-Line_57.31581-3.59923_13-00-03.jpg",
+            "/graphics/speyside_line/Screenshot_SB-The-Speyside-Line_57.32491-3.53364_18-02-20-1920x1080.jpg",
+            "/graphics/speyside_line/Screenshot_SB-The-Speyside-Line_57.35479-3.52167_16-04-55.jpg",
+            "/graphics/speyside_line/Screenshot_SB-The-Speyside-Line_57.41212-3.39198_14-01-07-1920x1080.jpg",
+            "/graphics/speyside_line/Screenshot_SB-The-Speyside-Line_57.42471-3.37049_16-09-05.jpg",
+            "/graphics/speyside_line/Screenshot_SB-The-Speyside-Line_57.43277-3.36209_14-00-35-1920x1080.jpg",
+            "/graphics/speyside_line/Screenshot_SB-The-Speyside-Line_57.43382-3.36169_16-00-44.jpg",
+            "/graphics/speyside_line/Screenshot_SB-The-Speyside-Line_57.45140-3.27367_14-09-58-1920x1080.jpg",
+            "/graphics/speyside_line/Screenshot_SB-The-Speyside-Line_57.45511-3.30273_13-03-31.jpg",
+            "/graphics/speyside_line/Screenshot_SB-The-Speyside-Line_57.45819-3.35020_12-00-36-1920x1080.jpg",
+            "/graphics/speyside_line/Screenshot_SB-The-Speyside-Line_57.45839-3.35031_16-26-21.jpg",
+            "/graphics/speyside_line/Screenshot_SB-The-Speyside-Line_57.47514-3.21586_07-07-16-1920x1080.jpg",
+            "/graphics/speyside_line/speyside_line_map.svg"
         ]
     },
     "files": {
-        "_primary": "test_file",
+        "primary": "speyside_line_201",
         "other": [
-            {"name": "Test Product Manual", "file": "test_product", "tag": "manual"}
+            {"name": "Test Product Manual", "file": "speyside_line_201", "tag": "manual"}
         ]
     },
     "public": true
