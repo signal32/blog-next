@@ -28,6 +28,7 @@ const Home: PageWithLayout<BlogProps> = (props) => {
             <Head>
                 <title>Hamish Weir Blog: Home</title>
                 <meta name="description" content="test"/>
+                <meta name="darkreader-lock"/>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
