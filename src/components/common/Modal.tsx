@@ -1,5 +1,5 @@
 import { MouseEventHandler, useEffect, useState } from "react";
-import create from "zustand";
+import { create } from "zustand";
 
 interface ModalStore {
     modals: JSX.Element[],
