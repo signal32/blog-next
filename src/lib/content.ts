@@ -1,5 +1,6 @@
 import { join } from "path";
 import fs from 'fs';
+import { Config } from '@react-router/dev/config'
 
 const CONTENT_DIR = join(process.cwd(), 'content');
 const DELIMINATOR = '_';
@@ -27,7 +28,7 @@ export interface ContentLocation {
 }
 
 export const CACHE = {
-    id: new Map<string, {descriptor: ContentDescriptor, dir: string}>(),
+    id: new Map<string, { descriptor: ContentDescriptor, dir: string }>(),
     slug: new Map<string, string>(), // slug -> id
     name: new Map<string, string>(), // name -> id
     dir: new Map<string, string[]>(), // dir -> child content ids
@@ -63,14 +64,14 @@ const getAllFiles = (dir: string) => fs.readdirSync(dir).map(parseFileName);
  */
 export const loadContent = (dir: string, useCache = true) => {
     const cached = CACHE.dir.get(dir);
-    if (cached && useCache ) return cached.map((item) => CACHE.id.get(item)?.descriptor).filter(item => item != undefined) as ContentDescriptor[]
+    if (cached && useCache) return cached.map((item) => CACHE.id.get(item)?.descriptor).filter(item => item != undefined) as ContentDescriptor[]
     else {
         const fileDir = join(CONTENT_DIR, dir);
         const descriptors = getAllFiles(fileDir);
 
         // Cache file descriptors for indexed lookup
         descriptors.forEach(descriptor => {
-            CACHE.id.set(descriptor.id, {descriptor, dir: fileDir});
+            CACHE.id.set(descriptor.id, { descriptor, dir: fileDir });
             CACHE.slug.set(descriptor.slug, descriptor.id);
             CACHE.name.set(descriptor.name, descriptor.id);
         });
@@ -120,7 +121,7 @@ export function defineContent<T extends Content>(dir: string, loader: Loader<T>)
         getAll: () => loadContent(dir),
 
         async getAllDetailed() {
-            const items  = []
+            const items = []
 
             for (const item of this.getAll()) {
                 const detailedItem = await this.getById(item.id)

@@ -1,12 +1,7 @@
-import { useEffect } from "react";
-import AppBaseLayout, { LayoutRequestProps, defineLayout } from "../components/app/BaseLayout";
-import { PageWithLayout } from '../components/app/LayoutApp';
-import simulationHeader from '../resources/images/simulation_header.jpg';
-import Button from "../components/common/Button";
-import Link from "next/link";
-import { GetStaticProps } from 'next';
-import { Product, products } from '../lib/products';
+import { ContentLayout, defineLayout } from "../components/app/BaseLayout";
 import PostItem from '../components/posts/PostItem';
+import { Product, products } from '../lib/products';
+import { Route } from "./+types/simulation";
 
 const TEXT = [
     'I develop Train Simulator add-ons in my spare time with a focus on realism and authenticity.',
@@ -41,11 +36,13 @@ interface Props {
     products: Product[]
 }
 
-const Simulation: PageWithLayout<Props> = (props) => {
+export default function Simulation({ loaderData }: Route.ComponentProps) {
 
-    return (
+    return <ContentLayout
+        headerTitle="Railway Simulation"
+        header={{ type: 'image', href: '/graphics/posts/dava/aviemore_box_shed.jpg' }}
+    >
         <div>
-
             {
                 CONTENT.map((item, idx) => (
                     <div key={idx} className=' pb-5'>
@@ -57,32 +54,22 @@ const Simulation: PageWithLayout<Props> = (props) => {
 
             {/* Product items grid */}
             <div className="flex flex-auto gap-3 flex-row">
-                {props.products.map((product, i) => (
-                    <PostItem 
+                {loaderData.products.map((product, i) => (
+                    <PostItem
                         post={product}
                         key={i}
                     />
                 ))}
             </div>
-        </div>
-    );
+        </div >
+    </ContentLayout >
 }
 
-Simulation.layout = defineLayout({
-    headerTitle: 'Railway Simulation',
-    header: {
-        type: 'image',
-        href: '/graphics/posts/dava/aviemore_box_shed.jpg'
-    }
-})
-
-export default Simulation;
-
-export const getStaticProps: GetStaticProps<Props> = async () => {
+export async function loader() {
     const pageProducts = []
 
     const speysideLineProduct = await products.getBySlug('speyside_line')
     if (speysideLineProduct) pageProducts.push(speysideLineProduct)
 
-    return { props: { products: pageProducts } }
+    return { products: pageProducts }
 }

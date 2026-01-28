@@ -1,17 +1,34 @@
-import { debounce } from "lodash";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { cloneElement, ReactElement, useEffect, useRef, useState } from "react";
-import { websiteConfig } from "../../pages/_app";
-import MyLogo from "../../resources/images/logo.svg";
+// import Image from "next/image";
+// import Link from "next/link";
+// import { useRouter } from "next/router";
+import { cloneElement, ReactElement, ReactNode, useEffect, useRef, useState } from "react";
+import { websiteConfig } from "../../routes/_app";
 import Breadcrumbs from "../common/Breadcrumbs";
 import ModalContext from "../common/Modal";
+import { useNavigation } from "react-router";
+import { Link } from "react-router";
+
+export function debounce<Args extends unknown[]>(
+    fn: (...args: Args) => void,
+    delay: number
+): (...args: Args) => void {
+    let timer: ReturnType<typeof setTimeout>
+
+    return (...args: Args): void => {
+        if (timer !== undefined) {
+            clearTimeout(timer)
+        }
+
+        timer = setTimeout(() => {
+            fn(...args)
+        }, delay)
+    }
+}
 
 const DEMO_IMAGE = "https://images.pexels.com/photos/4215110/pexels-photo-4215110.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
 
 export interface MainLayoutProps {
-    children: ReactElement<LayoutRequestProps>,
+    children: ReactNode,
     header?: { type: 'image', href: string } | { type: 'component', component: JSX.Element },
     headerTitle?: string,
     breadcrumbs?: boolean,
@@ -25,7 +42,7 @@ export interface LayoutRequestProps {
 
 //const AppBaseLayout = ({children, header: defaultHeaderImage, headerTitle: defaultHeaderTitle, breadcrumbs}: MainLayoutProps) => {
 const AppBaseLayout = (props: MainLayoutProps) => {
-    const router = useRouter();
+    const router = useNavigation();
     const headerRef = useRef<HTMLDivElement>(null);
     const [title, setTitle] = useState(props.headerTitle);
     const [header, setHeader] = useState(props.header);
@@ -37,11 +54,11 @@ const AppBaseLayout = (props: MainLayoutProps) => {
 
         const hideHeaderWhenScrolled = () => {
             const headerImageHeight = headerRef.current?.scrollHeight ?? 500
-    
+
             if (window.scrollY > headerImageHeight && showHeader) setShowHeader(false)
             else if (window.scrollY <= headerImageHeight && !showHeader) setShowHeader(true)
         }
-    
+
         window.addEventListener('scroll', hideHeaderWhenScrolled, { passive: true })
         return () => void window.removeEventListener('scroll', hideHeaderWhenScrolled)
     }, [showHeader])
@@ -50,7 +67,7 @@ const AppBaseLayout = (props: MainLayoutProps) => {
         setTitle(props.headerTitle);
         setHeader(props.header);
         setShowHeader(true);
-        setShowContent(true); 
+        setShowContent(true);
     }, 300);
 
     const hideAnimatedContent = debounce(() => {
@@ -61,9 +78,10 @@ const AppBaseLayout = (props: MainLayoutProps) => {
     useEffect(() => {
         hideAnimatedContent()
         setTimeout(showAnimatedContent, 400)
-    // Will cause infinite loop
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [router.asPath])
+        // Will cause infinite loop
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [router.location?.pathname])
+
 
     return (
         <div className="dark:bg-gray-900 bg-gray-300 bg-repeat flex flex-col min-h-screen h-full md:px-3">
@@ -73,11 +91,9 @@ const AppBaseLayout = (props: MainLayoutProps) => {
 
                         {/* Main logo */}
                         <Link
-                            href={'/'}
-                            className="flex-auto basis-full sm:basis-1/8 max-w-xs p-2 invert">
-
-                            <MyLogo className="dark:block h-12"/>
-
+                            to={'/'}
+                            className="flex-auto basis-full sm:basis-1/8 max-w-xs p-2">
+                            <h1 className='text-white/85 text-5xl font-semibold' style={{ fontFamily: 'caveat' }}>Hamish Weir</h1>
                         </Link>
 
                         {/* Main navigation */}
@@ -87,8 +103,8 @@ const AppBaseLayout = (props: MainLayoutProps) => {
                                     websiteConfig.mainMenu.map((item, i) => (
                                         <div className="flex" key={i}>
                                             <Link
-                                                href={item.href}
-                                                className={`p-1 mx-1 rounded border-2 border-transparent hover:border-air transition-all text-slate-300 ${router.asPath == item.href? 'bg-air': ''}`}>
+                                                to={item.href}
+                                                className={`p-1 mx-1 rounded border-2 border-transparent hover:border-air transition-all text-slate-300 ${router.asPath == item.href ? 'bg-air' : ''}`}>
 
                                                 {item.name}
 
@@ -114,48 +130,10 @@ const AppBaseLayout = (props: MainLayoutProps) => {
                     </div>
                 </div>
             </header>
+            {((props.breadcrumbs ?? true) && showHeader) && <Breadcrumbs />}
 
-            <div ref={headerRef} className={ header !== undefined ? '-mt-10' : '-mt-5'}>
-                <div className={`p-0 max-w-4xl mx-auto relative transition-all ease-in-out overflow-clip rounded-xl ${showHeader ? 'opacity-100' : '-translate-y-10 opacity-0'}`}>
-                    {
-                        header?.type === 'image' 
-                            ? <div className='w-full rounded-b-lg h-64'>
-                                <Image
-                                    src={header.href ?? DEMO_IMAGE}
-                                    className='w-full h-64'
-                                    alt=''
-                                    sizes='100vw'
-                                    fill
-                                    style={{ objectFit: 'cover' }}
-                                />
-                                { title &&
-                                    <div className="absolute bottom-0 left-0 right-0 text-white">
-                                        <p className="text-white text-2xl w-fit bottom-0 z-30 bg-black bg-opacity-50 backdrop-blur-[1px] p-2 rounded-tr-lg">{title}</p>
-                                    </div> 
-                                }
-                            </div>
-                            : header?.component
-                    }
-                </div> 
-            </div>
 
-            <main className="p-2 max-w-4xl mx-auto w-full flex-grow">
-                { ((props.breadcrumbs ?? true) && showHeader) && <Breadcrumbs/> }
-
-                <div className={`transition-all duration-500 ${showContent? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
-                    { showContent &&
-                        cloneElement(
-                            props.children, 
-                            {
-                                updateLayout: (details: LayoutConfig) => {
-                                    if (details.headerTitle) setTitle(details.headerTitle);
-                                    if (details.header) setHeader(details.header);
-                                },
-                            }
-                        )
-                    }
-                </div>
-            </main>
+            {props.children}
 
             <footer className="align-bottom dark:text-gray-300 text-gray-700">
                 <div className="max-w-4xl mx-auto -z-20">
@@ -163,7 +141,7 @@ const AppBaseLayout = (props: MainLayoutProps) => {
                         <div className="mx-auto flex justify-between items-center">
 
                             <div className="w-1/5 dark:invert">
-                                <MyLogo/>
+                                {/*<MyLogo />*/}
                             </div>
 
                             <div className="w-1/5 hame-markdown">
@@ -182,7 +160,7 @@ const AppBaseLayout = (props: MainLayoutProps) => {
 
                             {/* {% for site in config.extra.other_sites_list %} */}
                             <div className="flex text-sm text-gray-300 hover:text-gray-50 hover:underline text-center">
-                                <a href="{{site.href}}">{"title placeholder"}</a>
+                                {/*<a href="{{site.href}}">{"title placeholder"}</a>*/}
                             </div>
                             <div className="flex text-sm text-gray-300 text-center">
                                 <p>|</p>
@@ -194,7 +172,7 @@ const AppBaseLayout = (props: MainLayoutProps) => {
                 </div>
             </footer>
 
-            <ModalContext/>
+            <ModalContext />
 
         </div>
     );
@@ -207,8 +185,49 @@ export function defineLayout<P = {}>(
 ) {
     // eslint-disable-next-line react/display-name
     return (page: ReactElement, props: P) => (
-        <AppBaseLayout { ...(typeof config === 'function' ? config(props) : config) }>
+        <AppBaseLayout {...(typeof config === 'function' ? config(props) : config)}>
             {page}
         </AppBaseLayout>
     )
-} 
+}
+
+export function ContentLayout(props: MainLayoutProps) {
+    const headerRef = useRef<HTMLDivElement>(null);
+    const [title, setTitle] = useState(props.headerTitle);
+    const [header, setHeader] = useState(props.header);
+
+
+    return (
+        <>
+            <div ref={headerRef} className={header !== undefined ? '-mt-10' : '-mt-5'}>
+                <div className={`p-0 max-w-4xl mx-auto relative transition-all ease-in-out overflow-clip rounded-xl opacity-100`}>
+                    {
+                        header?.type === 'image'
+                            ? <div className='w-full rounded-b-lg h-64'>
+                                <img
+                                    src={header.href ?? DEMO_IMAGE}
+                                    className='w-full h-64'
+                                    alt=''
+                                    sizes='100vw'
+                                    // fill
+                                    style={{ objectFit: 'cover' }}
+                                />
+                                {title &&
+                                    <div className="absolute bottom-0 left-0 right-0 text-white">
+                                        <p className="text-white text-2xl w-fit bottom-0 z-30 bg-black bg-opacity-50 backdrop-blur-[1px] p-2 rounded-tr-lg">{title}</p>
+                                    </div>
+                                }
+                            </div>
+                            : header?.component
+                    }
+                </div>
+            </div>
+
+            <main className="p-2 max-w-4xl mx-auto w-full flex-grow">
+                <div>
+                    {props.children}
+                </div>
+            </main>
+        </>
+    )
+}

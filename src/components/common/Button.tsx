@@ -1,4 +1,4 @@
-import Link from "next/link"
+import { Link } from 'react-router';
 import { match } from 'ts-pattern';
 
 interface ButtonProps {
@@ -18,11 +18,11 @@ const Button = (props: ButtonProps) => {
     const className = [
         'py-2 px-4 my-2', // basics
         'flex justify-between items-center', // flex stuff
-        (props.fullWidth? 'w-full' : ''),
+        (props.fullWidth ? 'w-full' : ''),
 
     ]
 
-    const baseClasses  = match(props.style)
+    const baseClasses = match(props.style)
         .with('outline', () => `bg-ocean text-white rounded-lg shadow-md hover:bg-air`)
         .with('text', () => `hover:text-slate-200`)
         .otherwise(() => `bg-ocean text-white rounded-lg shadow-md hover:bg-air`)
@@ -40,18 +40,19 @@ const Button = (props: ButtonProps) => {
     ].join(' ');
 
     const baseButton = (
-        <div 
+        <div
             className={classes}
             // className="py-2 px-4 my-2 w-full flex justify-between items-center bg-ocean text-white rounded-lg shadow-md hover:bg-air focus:outline-none focus:ring-2 focus:ring-paua focus:ring-opacity-75 transition-all"
             onClick={props.onClick}
-            >
+        >
             <a>{props.text}</a>
             {props.icon}
         </div>
     )
 
     // Wrap with Next.js Link for SPA functionality on local links
-    return props.href? <Link href={props.href} target={props.target} rel={props.rel} legacyBehavior>{baseButton}</Link> : <button className="w-full">{baseButton}</button>;
+    // return <button className="w-full">{baseButton}</button>;
+    return props.href ? <Link to={props.href}><p>wow</p></Link> : <button className="w-full">{baseButton}</button>;
 }
 
 export default Button;

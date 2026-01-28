@@ -1,6 +1,4 @@
-import Link from "next/link";
 import { Post as Content } from "../../lib/posts";
-import {FaCalendar} from 'react-icons/fa'
 import Button from "../common/Button";
 import DateDisplay from "../common/DateDisplay";
 import { useModalStore } from '../common/Modal';
@@ -12,7 +10,7 @@ interface PostItemProps {
     showImage?: boolean;
 }
 
-const PostItem = ({post, showImage = true}: PostItemProps) => {
+const PostItem = ({ post, showImage = true }: PostItemProps) => {
     const modals = useModalStore()
 
     return (
@@ -23,8 +21,8 @@ const PostItem = ({post, showImage = true}: PostItemProps) => {
 
                 {
                     showImage && post.coverImage &&
-                    <img className="object-cover h-40 w-full overflow-clip rounded-xl mt-1" src={post.coverImage} 
-                        onClick={() => modals.pushModal(<img className="object-cover overflow-clip rounded-xl w-full p-0" src={post.coverImage}  />)}
+                    <img className="object-cover h-40 w-full overflow-clip rounded-xl mt-1" src={post.coverImage}
+                        onClick={() => modals.pushModal(<img className="object-cover overflow-clip rounded-xl w-full p-0" src={post.coverImage} />)}
                     />
                 }
 
@@ -34,7 +32,7 @@ const PostItem = ({post, showImage = true}: PostItemProps) => {
                     {
                         post.created &&
                         <div className="">
-                            <DateDisplay date={ new Date(post.created) }/>
+                            <DateDisplay date={new Date(post.created)} />
                         </div>
                     }
 
@@ -47,10 +45,10 @@ const PostItem = ({post, showImage = true}: PostItemProps) => {
 
             </div>
 
-            
+
             <div className="px-1 bottom-0 left-0 cursor-pointer">
-                    <Button text="Read More" href={`${post.baseUrl}/${post.slug}`}/>
-                </div>
+                <Button text="Read More" href={`${post.baseUrl}/${post.slug}`} />
+            </div>
         </div>
     )
 }

@@ -1,16 +1,23 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap');
+@import "tailwindcss";
 
-@font-face {
-  font-family: "BalooRegular";
-  src: url("/fonts/BalooTammudu2-Regular.ttf");
+@theme {
+    --color-transparent: transparent;
+    --color-current: currentColor;
+    --color-paua: #262356;
+    --color-air: #0A59E2;
+    --color-ocean: #1532a7;
+    --color-matisse: #3c5f82;
+    --color-heather: #88639D;
+    --color-htest: #1a0c0e;
+
+    --font-display: BalooRegular;
 }
 
-html {
-    @apply dark:bg-gray-900 bg-gray-300
+
+@font-face {
+    font-family: "BalooRegular";
+    src: url("/fonts/BalooTammudu2-Regular.ttf");
 }
 
 body {

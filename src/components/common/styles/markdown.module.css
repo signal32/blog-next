@@ -1,28 +1,6 @@
-@use 'scss-utils/src/util' as util;
-@use './text.module.scss' as text;
-
 .markdown {
     &:not(.no-markdown) {
-        @extend .body;
 
-        // @include util.;
-
-        /* Headers */
-        h1, h2, h3, h4, h5, h6 {
-            @extend .heading;
-        }
-
-        h1 {
-            @extend .h1
-        }
-
-        h2 {
-            @extend .h2
-        }
-
-        h3 {
-            @extend .h3
-        }
 
         /* Links */
         a {
@@ -35,7 +13,8 @@
         }
 
         /* Lists */
-        ul, ol {
+        ul,
+        ol {
             padding-left: 2em;
             list-style: disc;
         }
@@ -67,7 +46,8 @@
         }
 
         /* Inline Code */
-        p code, li code {
+        p code,
+        li code {
             padding: 0.2em 0.5em;
             margin: 0;
             font-size: 85%;
@@ -91,7 +71,7 @@
 
         /* Tables */
         table {
-            @extend .body;
+            /*@extend .body;*/
             border-collapse: collapse;
             width: 100%;
             margin-bottom: 1em;
@@ -114,11 +94,11 @@
         }
 
         p {
-            @extend .body;
+            /*@extend .body;*/
 
             line-height: 1.5rem;
-        
-            &:not(:last-child)  {
+
+            &:not(:last-child) {
                 margin-bottom: 2rem;
             }
         }

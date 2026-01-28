@@ -1,49 +1,47 @@
-import Head from 'next/head'
-import { defineLayout } from '../components/app/BaseLayout'
-import { PageWithLayout } from '../components/app/LayoutApp'
+import { ContentLayout } from '../components/app/BaseLayout'
 import Button from '../components/common/Button'
 import { useModalStore } from '../components/common/Modal'
 import PostList from '../components/posts/PostList'
-import { getAllPosts, Post, posts as yeet } from '../lib/posts'
+import { Post, posts as yeet } from '../lib/posts'
 import { Product, products } from '../lib/products'
-import styles from './_styles/index.module.scss'
-import Image from "next/image";
+import type { Route } from './+types/home'
 
-import { useState } from 'react'
 import AboutHamish from '../components/AboutHamish'
 
 interface BlogProps {
-  posts: Post[],
-  products: Product[],
-  allContent: Post[],
-  encodedEmail: string,
+    posts: Post[],
+    products: Product[],
+    allContent: Post[],
+    encodedEmail: string,
 }
 
-const Home: PageWithLayout<BlogProps> = (props) => {
+export default function Home({ loaderData }: Route.ComponentProps) {
     const modalStore = useModalStore();
+    const props = loaderData.props
 
-    return (
+    // return <div className='bg-red-700'>hi</div>
+
+    return <ContentLayout header={{ type: 'component', component: <HomeHero /> }}>
         <div className='h-full w-full'>
-
-            <Head>
+            {/*<Head>
                 <title>Hamish Weir Blog: Home</title>
-                <meta name="description" content="test"/>
-                <meta name="darkreader-lock"/>
+                <meta name="description" content="test" />
+                <meta name="darkreader-lock" />
                 <link rel="icon" href="/favicon.ico" />
-            </Head>
+            </Head>*/}
 
             <div>
                 <h3 className='text-center text-xl pb-3'>Latest Updates</h3>
-                <PostList posts={props.allContent}/>
-                <div className = { styles.columnContainer }>
+                <PostList posts={props.allContent} />
+                <div className={'flex gap-2'}>
 
                     {/* About */}
-                    <AboutHamish encodedEmail={props.encodedEmail}/>
+                    <AboutHamish encodedEmail={props.encodedEmail} />
 
                     {/* Recent posts */}
-                    <div className={styles.recentPostsCol}>
-                        {/* <PostList posts={allContent}/> */}
-                        <Image
+                    <div className={'flex-1'}>
+                        {/*<PostList posts={props.allContent} />*/}
+                        <img
                             className='rounded-lg'
                             src='/graphics/hamish_weir_portrait.jpg'
                             alt='me!'
@@ -55,7 +53,7 @@ const Home: PageWithLayout<BlogProps> = (props) => {
 
             </div>
         </div>
-    )
+    </ContentLayout>
 }
 
 const HomeHero = () => (
@@ -80,9 +78,9 @@ const HomeHero = () => (
                 textAlign: 'center',
             }}
         >
-            <Image
-                style={{ width: '70%', borderRadius: '1000px', marginBottom: '1.5rem', border: 'solid 2px white'}}
-                objectFit='contain'
+            <img
+                style={{ width: '70%', borderRadius: '1000px', marginBottom: '1.5rem', border: 'solid 2px white' }}
+                // objectFit='contain'
                 src='/graphics/hamish_weir_portrait_square.jpg'
                 width='100'
                 height='100'
@@ -100,10 +98,10 @@ const HomeHero = () => (
                 textAlign: 'center',
             }}
         >
-            <h1 className='sm:text-air text-white text-5xl font-semibold' style={{fontFamily: 'caveat'}}>Hamish Weir</h1>
+            <h1 className='sm:text-air text-white text-5xl font-semibold' style={{ fontFamily: 'caveat' }}>Hamish Weir</h1>
             <h1 className='text-white text-xl font-medium'>Digital content creator</h1>
 
-            <div style={{ display: 'flex', gap: '1rem', paddingTop: '1.5rem'}}>
+            <div style={{ display: 'flex', gap: '1rem', paddingTop: '1.5rem' }}>
                 <Button text='Software' href='/design'></Button>
                 <Button text='Games' href='/simulation'></Button>
                 <Button text='Photo'></Button>
@@ -112,17 +110,7 @@ const HomeHero = () => (
     </div>
 )
 
-Home.layout = defineLayout({
-    breadcrumbs: false,
-    header: {
-        type: 'component',
-        component: <HomeHero/>
-    }
-})
-
-export default Home
-
-export const getStaticProps = async () => {
+export const loader = async () => {
     const allPosts = await yeet.getAllDetailed()
     const allProducts = await products.getAllDetailed()
     const allContent = [...allPosts, ...allProducts]
@@ -132,7 +120,7 @@ export const getStaticProps = async () => {
             return new Date(a.created).getTime() - new Date(b.created).getTime()
         })
         .reverse()
-        //.slice(0,4)
+    //.slice(0,4)
 
     return ({
         props: {
