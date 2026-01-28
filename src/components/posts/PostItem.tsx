@@ -1,7 +1,8 @@
 import { Post as Content } from "../../lib/posts";
-import Button from "../common/Button";
+import { Button } from "../ui/button";
 import DateDisplay from "../common/DateDisplay";
 import { useModalStore } from '../common/Modal';
+import { Link } from "react-router";
 
 const TEMP_IMAGE = `https://images.pexels.com/photos/4215110/pexels-photo-4215110.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1`;
 
@@ -46,9 +47,11 @@ const PostItem = ({ post, showImage = true }: PostItemProps) => {
             </div>
 
 
-            <div className="px-1 bottom-0 left-0 cursor-pointer">
-                <Button text="Read More" href={`${post.baseUrl}/${post.slug}`} />
-            </div>
+            <Button asChild className="m-1 bottom-0 left-0">
+                <Link to={`${post.baseUrl}/${post.slug}`}>
+                    Read more
+                </Link>
+            </Button>
         </div>
     )
 }

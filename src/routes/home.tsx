@@ -1,5 +1,4 @@
 import { ContentLayout } from '../components/app/BaseLayout'
-import Button from '../components/common/Button'
 import { useModalStore } from '../components/common/Modal'
 import PostList from '../components/posts/PostList'
 import { Post, posts as yeet } from '../lib/posts'
@@ -102,9 +101,9 @@ const HomeHero = () => (
             <h1 className='text-white text-xl font-medium'>Digital content creator</h1>
 
             <div style={{ display: 'flex', gap: '1rem', paddingTop: '1.5rem' }}>
-                <Button text='Software' href='/design'></Button>
+                {/*<Button text='Software' href='/design'></Button>
                 <Button text='Games' href='/simulation'></Button>
-                <Button text='Photo'></Button>
+                <Button text='Photo'></Button>*/}
             </div>
         </div>
     </div>

@@ -1,13 +1,13 @@
-import { FaDownload, FaExternalLinkAlt, FaInfoCircle } from 'react-icons/fa';
+import { FaDownload, FaExternalLinkAlt, FaFileDownload, FaInfoCircle } from 'react-icons/fa';
 import { Link } from 'react-router';
 import { ContentLayout } from "../../components/app/BaseLayout";
-import Button from "../../components/common/Button";
 import Drawer from "../../components/common/Drawer";
 import { Markdown } from '../../components/common/Markdown';
 import { useModalStore } from "../../components/common/Modal";
 import { FileDetails, files } from "../../lib/file";
 import { Product, Requirement, products } from "../../lib/products";
 import { Route } from './+types/product';
+import { Button } from 'src/components/ui/button';
 
 export default function Product({ loaderData }: Route.ComponentProps) {
 
@@ -62,7 +62,13 @@ export default function Product({ loaderData }: Route.ComponentProps) {
                         {/* TODO download links */}
                         {props.mainFile
                             ? <>
-                                <Button text="Download" icon={<FaInfoCircle />} href={props.mainFile.href} target='_blank' />
+                                {/*<Button text="Download" icon={<FaInfoCircle />} href={props.mainFile.href} target='_blank' />*/}
+                                <Button asChild className='w-full'>
+                                    <a href={props.mainFile.href} target='_blank'>
+                                        <FaFileDownload />
+                                        Download
+                                    </a>
+                                </Button>
                                 <p className="italic text-sm text-right">{props.mainFile.fileName}</p>
                             </>
                             : <p>Sorry, this file is currently unavailable.</p>
@@ -129,14 +135,25 @@ const RequirementItem = (props: { requirement: Requirement, products: { product:
             <div key={1}>{props.products.find((p) => p.product?.id === props.requirement.id)?.product.name}</div>,
             <div key={2} className="flex items-center gap-2"> <Link to={'/product/' + props.requirement.id}>Details</Link></div>,
             <div key={3} className="flex items-center gap-2">
-                <Button text="Download" size="small" style="text" icon={<FaDownload />} href={props.products.find((p) => p.product?.id === props.requirement.id)?.file?.href} />
+                <Button asChild variant={'outline'}>
+                    <a href={props.products.find((p) => p.product?.id === props.requirement.id)?.file?.href} target='_blank'>
+                        <FaFileDownload />
+                        Download
+                    </a>
+                </Button>
             </div>
         ]}
         {props.requirement.type == 'external' && [
             <div key={1} className="">{props.requirement.id}</div>,
             <div key={2} className="flex items-center gap-2">
                 <p className="text-xs px-2 rounded-full bg-amber-200 dark:bg-amber-600">third party</p>
-                <Button text={props.requirement.site} size="small" style="text" icon={<FaExternalLinkAlt />} href={props.requirement.href[0]} target="_blank" rel="noreferrer" />
+                <Button asChild variant={'outline'}>
+                    <a
+                        href={props.requirement.href[0]} target="_blank">
+                        <FaExternalLinkAlt />
+                        {props.requirement.site}
+                    </a>
+                </Button>
             </div>
         ]}
     </div>

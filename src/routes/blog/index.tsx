@@ -1,14 +1,17 @@
+import { Button } from "src/components/ui/button";
 import { ContentLayout } from "../../components/app/BaseLayout";
-import Button from "../../components/common/Button";
 import PostList from "../../components/posts/PostList";
 import { getAllPosts } from "../../lib/posts";
 import { Route } from "./+types/index";
+import { Link } from "react-router";
 
 export default function ({ loaderData }: Route.ComponentProps) {
     return <ContentLayout>
         <div className="text-white">
             <PostList posts={loaderData.posts} />
-            <Button text="Older posts" href="/" />
+            <Button asChild>
+                <Link to={'/'}>Older posts</Link>
+            </Button>
         </div>
     </ContentLayout>
 }
