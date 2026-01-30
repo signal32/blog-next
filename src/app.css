@@ -13,7 +13,6 @@
     --color-matisse: #3c5f82;
     --color-heather: #88639D;
     --color-htest: #1a0c0e;
-
     --font-display: BalooRegular;
 }
 
@@ -22,6 +21,7 @@
     src: url("/fonts/BalooTammudu2-Regular.ttf");
 }
 
+html,
 body {
     @apply dark:text-slate-200 text-slate-700
 }
@@ -68,6 +68,13 @@ body {
 }
 
 :root {
+    --color-paua: #262356;
+    --color-air: #0A59E2;
+    --color-ocean: #1532a7;
+    --color-matisse: #3c5f82;
+    --color-heather: #88639D;
+    --color-htest: #1a0c0e;
+
     --radius: 0.625rem;
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
@@ -75,9 +82,9 @@ body {
     --card-foreground: oklch(0.145 0 0);
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
+    --primary: var(--color-air);
     --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
+    --secondary: var(--color-matisse);
     --secondary-foreground: oklch(0.205 0 0);
     --muted: oklch(0.97 0 0);
     --muted-foreground: oklch(0.556 0 0);
@@ -137,10 +144,11 @@ body {
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+    * {
+        @apply border-border outline-ring/50;
     }
-  body {
-    @apply bg-background text-foreground;
-    }
+
+    /*body {
+            @apply bg-background text-foreground;
+        }*/
 }

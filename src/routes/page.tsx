@@ -1,28 +1,30 @@
 import { redirect } from 'react-router';
+import { pages } from 'src/lib/pages';
 import { ContentLayout } from "../components/app/BaseLayout";
 import DateDisplay from "../components/common/DateDisplay";
 import { Markdown } from '../components/common/Markdown';
 import { Text } from '../components/common/Text';
-import { posts } from "../lib/posts";
 import { Route } from './+types/page';
 
-export default function Page({ loaderData: { post } }: Route.ComponentProps) {
+export default function Page({ loaderData: { page } }: Route.ComponentProps) {
     return <ContentLayout
-        headerTitle={post.name}
-        header={post.coverImage
+        headerTitle={page.name}
+        header={page.coverImage
             ? {
                 type: 'image',
-                href: post.coverImage ?? ''
+                href: page.coverImage ?? ''
             }
             : undefined}
     >
-        <Text>{post.created && <DateDisplay date={post.created.toString()} />}</Text>
-        <Markdown content={post.content ?? ''} />
+        <Text>{page.created && <DateDisplay date={page.created.toString()} />}</Text>
+        <Markdown content={page.content ?? ''} />
     </ContentLayout>
 }
 
 export async function loader({ params }: Route.LoaderArgs) {
-    const post = await posts.getBySlug(params.slug)
-    if (!post) return redirect('/', 404)
-    return { post }
+    const slug = params['slug']
+    if (!slug) throw new Response("No slug", { status: 404 })
+    const page = await pages.getBySlug(slug)
+    if (!page) throw new Response("Not found", { status: 404 })
+    return { page }
 }

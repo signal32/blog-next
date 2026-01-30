@@ -49,38 +49,38 @@ const AppBaseLayout = (props: MainLayoutProps) => {
     const [showHeader, setShowHeader] = useState(true);
     const [showContent, setShowContent] = useState(true);
 
-    useEffect(() => {
-        if (typeof window === 'undefined') return
+    // useEffect(() => {
+    //     if (typeof window === 'undefined') return
 
-        const hideHeaderWhenScrolled = () => {
-            const headerImageHeight = headerRef.current?.scrollHeight ?? 500
+    //     const hideHeaderWhenScrolled = () => {
+    //         const headerImageHeight = headerRef.current?.scrollHeight ?? 500
 
-            if (window.scrollY > headerImageHeight && showHeader) setShowHeader(false)
-            else if (window.scrollY <= headerImageHeight && !showHeader) setShowHeader(true)
-        }
+    //         if (window.scrollY > headerImageHeight && showHeader) setShowHeader(false)
+    //         else if (window.scrollY <= headerImageHeight && !showHeader) setShowHeader(true)
+    //     }
 
-        window.addEventListener('scroll', hideHeaderWhenScrolled, { passive: true })
-        return () => void window.removeEventListener('scroll', hideHeaderWhenScrolled)
-    }, [showHeader])
+    //     window.addEventListener('scroll', hideHeaderWhenScrolled, { passive: true })
+    //     return () => void window.removeEventListener('scroll', hideHeaderWhenScrolled)
+    // }, [showHeader])
 
-    const showAnimatedContent = debounce(() => {
-        setTitle(props.headerTitle);
-        setHeader(props.header);
-        setShowHeader(true);
-        setShowContent(true);
-    }, 300);
+    // const showAnimatedContent = debounce(() => {
+    //     setTitle(props.headerTitle);
+    //     setHeader(props.header);
+    //     setShowHeader(true);
+    //     setShowContent(true);
+    // }, 300);
 
-    const hideAnimatedContent = debounce(() => {
-        setShowHeader(false);
-        setShowContent(false);
-    }, 0);
+    // const hideAnimatedContent = debounce(() => {
+    //     setShowHeader(false);
+    //     setShowContent(false);
+    // }, 0);
 
-    useEffect(() => {
-        hideAnimatedContent()
-        setTimeout(showAnimatedContent, 400)
-        // Will cause infinite loop
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [router.location?.pathname])
+    // useEffect(() => {
+    //     hideAnimatedContent()
+    //     setTimeout(showAnimatedContent, 400)
+    //     // Will cause infinite loop
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [router.location?.pathname])
 
 
     return (
@@ -131,7 +131,6 @@ const AppBaseLayout = (props: MainLayoutProps) => {
                 </div>
             </header>
             {((props.breadcrumbs ?? true) && showHeader) && <Breadcrumbs />}
-
 
             {props.children}
 

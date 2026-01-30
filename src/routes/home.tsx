@@ -18,8 +18,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     const modalStore = useModalStore();
     const props = loaderData.props
 
-    // return <div className='bg-red-700'>hi</div>
-
     return <ContentLayout header={{ type: 'component', component: <HomeHero /> }}>
         <div className='h-full w-full'>
             {/*<Head>
@@ -61,7 +59,7 @@ const HomeHero = () => (
             padding: '2.2rem',
             backgroundPosition: 'center',
             backgroundSize: 'cover',
-            backgroundImage: `url('/graphics/hero_landscape.jpg');`,
+            backgroundImage: `url('/graphics/hero_landscape.jpg')`,
             display: 'flex',
             flexWrap: 'wrap',
             gap: '2rem',
@@ -110,6 +108,7 @@ const HomeHero = () => (
 )
 
 export const loader = async () => {
+    // throw new Error('ahh')
     const allPosts = await yeet.getAllDetailed()
     const allProducts = await products.getAllDetailed()
     const allContent = [...allPosts, ...allProducts]

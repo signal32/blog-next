@@ -8,8 +8,9 @@ import {
 } from "react-router";
 
 import type { Route } from "./+types/root";
-import "./styles/globals.css";
-import AppBaseLayout from "./components/app/BaseLayout";
+import "./app.css";
+import AppBaseLayout, { ContentLayout } from "./components/app/BaseLayout";
+import { ThemeProvider } from "./components/ThemeProvider";
 
 export const links: Route.LinksFunction = () => [
     { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -22,6 +23,7 @@ export const links: Route.LinksFunction = () => [
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
     },
+
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -34,8 +36,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Links />
             </head>
             <body>
-                {/*{children}*/}
-                <AppBaseLayout>{children}</AppBaseLayout>
+                <ThemeProvider>
+                    <AppBaseLayout>{children}</AppBaseLayout>
+                </ThemeProvider>
                 <ScrollRestoration />
                 <Scripts />
             </body>
@@ -64,7 +67,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     }
 
     return (
-        <main className="pt-16 p-4 container mx-auto">
+        <ContentLayout>
             <h1>{message}</h1>
             <p>{details}</p>
             {stack && (
@@ -72,6 +75,6 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
                     <code>{stack}</code>
                 </pre>
             )}
-        </main>
+        </ContentLayout>
     );
 }

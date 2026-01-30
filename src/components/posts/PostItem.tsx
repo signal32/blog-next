@@ -1,8 +1,8 @@
+import { Link } from "react-router";
 import { Post as Content } from "../../lib/posts";
-import { Button } from "../ui/button";
 import DateDisplay from "../common/DateDisplay";
 import { useModalStore } from '../common/Modal';
-import { Link } from "react-router";
+import { Button } from "../ui/button";
 
 const TEMP_IMAGE = `https://images.pexels.com/photos/4215110/pexels-photo-4215110.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1`;
 
