@@ -1,6 +1,5 @@
 import { join } from "path";
 import fs from 'fs';
-import { Config } from '@react-router/dev/config'
 
 const CONTENT_DIR = join(process.cwd(), 'content');
 const DELIMINATOR = '_';

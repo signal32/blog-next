@@ -30,6 +30,7 @@
         "scss-utils": "git+ssh://git@github.com:signal32/scss-utils.git",
         "tailwind-merge": "^3.4.0",
         "ts-pattern": "^4.0.5",
+        "vite-plugin-node-polyfills": "^0.25.0",
         "zustand": "^4.1.1"
     },
     "devDependencies": {

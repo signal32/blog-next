@@ -1,7 +1,7 @@
 import fs from 'fs'
 import matter from 'gray-matter';
 import { join } from 'path';
-import { Content, ContentDescriptor, defineContent } from './content';
+import { Content, ContentDescriptor, defineContent } from './content.server';
 import { readFile } from 'fs/promises';
 
 const POST_DIR = join(process.cwd(), '/content/posts');
@@ -26,7 +26,7 @@ export function isPost(obj: any): obj is Post {
     );
 }
 
-export const posts = defineContent<Post>('posts', async(descriptor, path) => {
+export const posts = defineContent<Post>('posts', async (descriptor, path) => {
     const fileContents = await readFile(path)
     const { data, content } = matter(fileContents)
 
@@ -58,7 +58,7 @@ export function getPostBySlug(slug: string, fields: string[] = []) {
     const { data, content } = matter(fileContents)
 
     type Items = {
-      [key: string]: string
+        [key: string]: string
     }
 
     const items: Items = {
@@ -95,7 +95,7 @@ const DEFAULT_POST_FIELDS = [
 
 export function getAllPosts(fields: string[] = DEFAULT_POST_FIELDS) {
     const slugs = getPostSlugs();
-    const posts  = slugs
+    const posts = slugs
         .map((slug) => getPostBySlug(slug, fields))
         .sort((post1, post2) => (post1?.created || 0) > (post2?.created || 1) ? -1 : 1);
     return posts;

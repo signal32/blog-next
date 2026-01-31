@@ -1,13 +1,13 @@
-import { FaDownload, FaExternalLinkAlt, FaFileDownload, FaInfoCircle } from 'react-icons/fa';
 import { Link } from 'react-router';
 import { ContentLayout } from "../../components/app/BaseLayout";
 import Drawer from "../../components/common/Drawer";
 import { Markdown } from '../../components/common/Markdown';
 import { useModalStore } from "../../components/common/Modal";
-import { FileDetails, files } from "../../lib/file";
-import { Product, Requirement, products } from "../../lib/products";
+import { type FileDetails, files } from "../../lib/file.server";
+import { type Product, type Requirement, products } from "../../lib/products.server";
 import { Route } from './+types/product';
 import { Button } from 'src/components/ui/button';
+import { ExternalLink, FileDown } from 'lucide-react';
 
 export default function Product({ loaderData }: Route.ComponentProps) {
 
@@ -65,7 +65,7 @@ export default function Product({ loaderData }: Route.ComponentProps) {
                                 {/*<Button text="Download" icon={<FaInfoCircle />} href={props.mainFile.href} target='_blank' />*/}
                                 <Button asChild className='w-full'>
                                     <a href={props.mainFile.href} target='_blank'>
-                                        <FaFileDownload />
+                                        <FileDown />
                                         Download
                                     </a>
                                 </Button>
@@ -137,7 +137,7 @@ const RequirementItem = (props: { requirement: Requirement, products: { product:
             <div key={3} className="flex items-center gap-2">
                 <Button asChild variant={'outline'}>
                     <a href={props.products.find((p) => p.product?.id === props.requirement.id)?.file?.href} target='_blank'>
-                        <FaFileDownload />
+                        <FileDown />
                         Download
                     </a>
                 </Button>
@@ -150,7 +150,7 @@ const RequirementItem = (props: { requirement: Requirement, products: { product:
                 <Button asChild variant={'outline'}>
                     <a
                         href={props.requirement.href[0]} target="_blank">
-                        <FaExternalLinkAlt />
+                        <ExternalLink />
                         {props.requirement.site}
                     </a>
                 </Button>

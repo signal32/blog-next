@@ -1,8 +1,6 @@
 import { join } from "path";
 import fs from 'fs';
-import { FileDetails } from "./file";
-import { Content, ContentDescriptor, defineContent } from "./content";
-import { Post } from './posts';
+import { Content, defineContent } from "./content.server";
 
 export interface Product extends Content {
     published: Date,
@@ -16,7 +14,7 @@ export interface Product extends Content {
         /** Primary file ID */
         primary: string,
         /** Miscellaneous files belonging to the product */
-        other: {slug: string, tag?: FileTag}[]
+        other: { slug: string, tag?: FileTag }[]
     }
 }
 
@@ -43,7 +41,7 @@ export interface ProductMedia {
 
 export type ProductId = string;
 
-export const products = defineContent<Product>('products', async(descriptor, path) => {
+export const products = defineContent<Product>('products', async (descriptor, path) => {
     const metaPath = join(path, 'metadata.json');
     const metaData = fs.readFileSync(metaPath, 'utf8');
 
@@ -59,8 +57,8 @@ export const products = defineContent<Product>('products', async(descriptor, pat
     return {
         ...descriptor,
         ...product,
-        ...(product.media?.banner ? { coverImage: product.media.banner} : {}), // Can't be undefined
-        ...(product.description && !product.excerpt ? { excerpt: product.description.slice(0, 255).trim()} : {}),
+        ...(product.media?.banner ? { coverImage: product.media.banner } : {}), // Can't be undefined
+        ...(product.description && !product.excerpt ? { excerpt: product.description.slice(0, 255).trim() } : {}),
         baseUrl: '/product',
     }
 });

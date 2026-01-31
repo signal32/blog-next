@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { Post } from "../../lib/posts";
+import { type Post } from "../../lib/posts.server";
 import { Card } from "../card";
 import HorizontalScrollList from '../common/HorizontalScrollList';
 import PostItem from "./PostItem";

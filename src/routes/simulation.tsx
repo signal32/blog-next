@@ -1,6 +1,6 @@
 import { ContentLayout, defineLayout } from "../components/app/BaseLayout";
 import PostItem from '../components/posts/PostItem';
-import { Product, products } from '../lib/products';
+import { type Product, products } from '../lib/products.server';
 import { Route } from "./+types/simulation";
 
 const TEXT = [

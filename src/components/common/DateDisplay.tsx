@@ -1,4 +1,4 @@
-import { FaCalendar } from "react-icons/fa"
+import { Calendar } from "lucide-react"
 
 interface DateDisplayProps {
     date: string | Date, //TODO make this a strongly typed date object
@@ -7,8 +7,8 @@ interface DateDisplayProps {
 const DateDisplay = (props: DateDisplayProps) => {
     return (
         <div className="dark:text-slate-400 text-slate-600">
-            <h3 className="inline-block pr-3"><FaCalendar /></h3>
-            <h3 className="inline-block">{ props.date instanceof Date ? props.date.toLocaleDateString() : props.date}</h3>
+            <h3 className="inline-block pr-3"><Calendar /></h3>
+            <h3 className="inline-block">{props.date instanceof Date ? props.date.toLocaleDateString() : props.date}</h3>
         </div>
     )
 }

@@ -1,5 +1,6 @@
 {
     "$schema": "../../../schema.json",
     "id": "test_product",
-    "name": "Test Product"
+    "name": "Test Product",
+    "public": true
 }

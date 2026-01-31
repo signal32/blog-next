@@ -1,6 +1,7 @@
 import { CSSProperties, useRef, useState } from 'react'
 import styles from './styles/horizontalScrollList.module.scss'
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
+import { ArrowLeft, ArrowRight } from "lucide-react"
+
 
 const SCROLL_STEP_SIZE = 200 as const
 const HorizontalScrollList = ({ children }: { children: any }) => {
@@ -59,7 +60,7 @@ const HorizontalScrollList = ({ children }: { children: any }) => {
                 onClick={scrollToRight} className={'dark:bg-ocean/50 bg-gray-400/50 hover:bg-air/50 backdrop-blur-md ' + styles.scrollButtonLeft}
                 style={buttonConditionalStyles(showLeft)}
             >
-                <FaArrowLeft />
+                <ArrowLeft />
             </div>
             <div
                 className={'bg-gradient-to-r dark:from-gray-900 from-gray-300 transition-opacity ' + styles.scrollGradientLeft}
@@ -71,7 +72,7 @@ const HorizontalScrollList = ({ children }: { children: any }) => {
                 onClick={scrollToLeft} className={'dark:bg-ocean/50 bg-gray-400/50 hover:bg-air/50 backdrop-blur-md ' + styles.scrollButtonRight}
                 style={buttonConditionalStyles(showRight)}
             >
-                <FaArrowRight />
+                <ArrowRight />
             </div>
             <div
                 className={'bg-gradient-to-l dark:from-gray-900 from-gray-300 transition-opacity ' + styles.scrollGradientRight}

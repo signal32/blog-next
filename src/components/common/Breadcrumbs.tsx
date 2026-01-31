@@ -1,5 +1,3 @@
-import { Link } from "react-router";
-import { FaHome } from "react-icons/fa";
 import { useNavigation } from "react-router";
 
 const Breadcrumbs = () => {

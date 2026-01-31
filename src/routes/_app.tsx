@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
-import { FaGithub, FaInstagram } from 'react-icons/fa'
 import LayoutApp from '../components/app/LayoutApp'
+import { Github, Instagram } from 'lucide-react'
 
 export default LayoutApp
 
@@ -17,8 +17,8 @@ export const websiteConfig: AppConfig = {
         { name: `Development`, href: `/about` },
     ],
     socialLinks: [
-        { name: `GitHub`, href: 'https://github.com/signal32', icon: <div><FaGithub /></div> },
-        { name: `Instagram`, href: 'https://www.instagram.com/hamishweirphoto/', icon: <div><FaInstagram /></div> }
+        { name: `GitHub`, href: 'https://github.com/signal32', icon: <div><Github /></div> },
+        { name: `Instagram`, href: 'https://www.instagram.com/hamishweirphoto/', icon: <div><Instagram /></div> }
     ],
     siteName: `Hamish Weir Blog`,
 

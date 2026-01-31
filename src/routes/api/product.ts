@@ -1,5 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { Product, products } from '../../lib/products'
+
 
 // export default function handler(
 //   req: NextApiRequest,

@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Post as Content } from "../../lib/posts";
+import { type Post as Content } from "../../lib/posts.server";
 import DateDisplay from "../common/DateDisplay";
 import { useModalStore } from '../common/Modal';
 import { Button } from "../ui/button";

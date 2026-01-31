@@ -4,7 +4,7 @@ import { ContentLayout, LayoutRequestProps } from "../../components/app/BaseLayo
 import DateDisplay from "../../components/common/DateDisplay";
 import { Markdown } from '../../components/common/Markdown';
 import { Text } from '../../components/common/Text';
-import { Post, posts } from "../../lib/posts";
+import { type Post, posts } from "../../lib/posts.server";
 import { Route } from "./+types/post";
 // import markdownStyles from '../../styles/md.module.scss';
 

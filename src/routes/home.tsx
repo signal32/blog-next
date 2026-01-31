@@ -1,8 +1,8 @@
 import { ContentLayout } from '../components/app/BaseLayout'
 import { useModalStore } from '../components/common/Modal'
 import PostList from '../components/posts/PostList'
-import { Post, posts as yeet } from '../lib/posts'
-import { Product, products } from '../lib/products'
+import { type Post, posts as yeet } from '../lib/posts.server'
+import { type Product, products } from '../lib/products.server'
 import type { Route } from './+types/home'
 
 import AboutHamish from '../components/AboutHamish'

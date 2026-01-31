@@ -1,10 +1,10 @@
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useSearchParams } from "react-router";
 import PostItem from "src/components/posts/PostItem";
 import { Button } from "src/components/ui/button";
 import { ContentLayout } from "../../components/app/BaseLayout";
-import { posts as p } from "../../lib/posts";
+import { posts as p } from "../../lib/posts.server";
 import { Route } from "./+types/index";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 function parseParams(params: URLSearchParams) {
     const pageParam = params.get('page')
@@ -44,7 +44,7 @@ export default function ({ loaderData }: Route.ComponentProps) {
                     onClick={() => incrementPage(-1)}
                     disabled={loaderData.page === 0}
                 >
-                    <div className="inline-flex gap-2"><FaArrowLeft /> Newer posts</div>
+                    <div className="inline-flex gap-2"><ArrowLeft /> Newer posts</div>
                 </Button>
                 <p>Page {loaderData.page + 1} of {loaderData.totalPages}</p>
                 <Button
@@ -52,7 +52,7 @@ export default function ({ loaderData }: Route.ComponentProps) {
                     onClick={() => incrementPage(+1)}
                     disabled={loaderData.page === loaderData.totalPages - 1}
                 >
-                    <div className="inline-flex gap-2">Older posts <FaArrowRight /></div>
+                    <div className="inline-flex gap-2">Older posts <ArrowRight /></div>
                 </Button>
             </div>
         </div>
