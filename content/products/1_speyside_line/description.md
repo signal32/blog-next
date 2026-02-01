@@ -18,4 +18,4 @@ In this project my aim is to recreate the line between Craigelachie and Boat of 
 
 The line is single track with loops at most stations, the route also features challenging gradients and tight curves as it negotiates it’s way up the river. There are various options for varied gameplay. Passenger workings range from through trains to the infamous railbus which served the line in it’s latter years. Likewise there are many opportunities for freight workings with the whisky traffic, many of which are served by their own branch lines which will be modelled.
 
-*Last updated January 2025: download link added. Apologies to anyone trying to find this file recently, please to say the route is now available again.*
+*Last updated January 2025: download link added. Apologies to anyone trying to find this file recently, I am pleased to say the route is now available again.*
