@@ -5,9 +5,12 @@ import { cloneElement, ReactElement, ReactNode, useEffect, useRef, useState } fr
 import { websiteConfig } from "../../routes/_app";
 import Breadcrumbs from "../common/Breadcrumbs";
 import ModalContext from "../common/Modal";
-import { useNavigation } from "react-router";
+import { useLocation, useNavigation } from "react-router";
 import { Link } from "react-router";
 import { H1, H2 } from "../common/typography";
+import { Menu, X } from "lucide-react";
+import { Button } from "../ui/button";
+import { cn } from "src/lib/utils";
 
 export function debounce<Args extends unknown[]>(
     fn: (...args: Args) => void,
@@ -44,6 +47,7 @@ export interface LayoutRequestProps {
 //const AppBaseLayout = ({children, header: defaultHeaderImage, headerTitle: defaultHeaderTitle, breadcrumbs}: MainLayoutProps) => {
 const AppBaseLayout = (props: MainLayoutProps) => {
     const router = useNavigation();
+    const location = useLocation();
     const headerRef = useRef<HTMLDivElement>(null);
     const [title, setTitle] = useState(props.headerTitle);
     const [header, setHeader] = useState(props.header);
@@ -83,52 +87,56 @@ const AppBaseLayout = (props: MainLayoutProps) => {
     //     // eslint-disable-next-line react-hooks/exhaustive-deps
     // }, [router.location?.pathname])
 
+    const Navigation = (props: {
+        column?: boolean
+    }) => (
+        <div className={cn('flex gap-2 text-lg', props.column && 'flex-col')}>
+            {
+                websiteConfig.mainMenu.map((item, i) => (
+                    <Link
+                        className={cn(
+                            "grow p-2 rounded-lg text-center ring-air",
+                            location.pathname === item.href
+                                ? 'bg-air'
+                                : cn('hover:ring-2', props.column && 'bg-air/20')
+
+                        )}
+                        key={i}
+                        to={item.href}>
+                        {item.name}
+                    </Link>
+                ))
+            }
+
+            {/* Extra links (i.e. external social media) */}
+            <div className={cn("flex flex-wrap justify-center sm:justify-end items-center border-air sm:pl-4", props.column && "border-t-2")}>
+                {
+                    websiteConfig.socialLinks.map((link, i) => (
+                        <div className="p-2" key={i}>
+                            <a className="text-slate-300 hover:text-white transition-all" href={link.href} target="_blank">{link.icon}</a>
+                        </div>
+                    ))
+                }
+            </div>
+        </div >
+    )
+
+    const [showNav, setShowNav] = useState(false)
 
     return (
         <div className="dark:bg-gray-900 bg-gray-300 bg-repeat flex flex-col min-h-screen h-full md:px-3">
             <header className="mb-5 top-0 sticky bg-gradient-to-t from-transparent dark:to-gray-900 to-gray-300 z-40">
                 <div className="max-w-4xl mx-auto px-2 sm:px-6 mt-0 md:mt-2 rounded-b-lg md:rounded-lg shadow-lg bg-ocean">
-                    <div className="flex flex-wrap gap-2 justify-center items-center pb-1 md:pb-0">
-
-                        {/* Main logo */}
+                    <div className="flex flex-wrap gap-2 justify-between items-center pb-1 px-4">
                         <Link
                             to={'/'}
-                            className="flex-auto basis-full sm:basis-1/8 max-w-xs p-2">
-                            <h1 className='text-white/85 text-3xl py-2 font-black font-handwritten'>Hamish Weir</h1>
+                            className="flex-auto max-w-xs p-2">
+                            <h1 className='text-white/85 hover:text-white text-3xl py-2 font-black font-handwritten sm:text-left'>Hamish Weir</h1>
                         </Link>
-
-                        {/* Main navigation */}
-                        <div className="flex-auto basis-3/4 sm:basis-auto">
-                            <div className="flex grow flex-wrap justify-center sm:justify-end py-0">
-                                {
-                                    websiteConfig.mainMenu.map((item, i) => (
-                                        <div className="flex" key={i}>
-                                            <Link
-                                                to={item.href}
-                                                className={`p-1 mx-1 rounded border-2 border-transparent hover:border-air transition-all text-slate-300 ${router.asPath == item.href ? 'bg-air' : ''}`}>
-
-                                                {item.name}
-
-                                            </Link>
-                                        </div>
-                                    ))
-                                }
-                            </div>
-                        </div>
-
-                        {/* Extra links (i.e. external social media) */}
-                        <div className="flex-none sm:basis-auto">
-                            <div className="flex flex-wrap justify-center sm:justify-end items-center">
-                                {
-                                    websiteConfig.socialLinks.map((link, i) => (
-                                        <div className="flex" key={i}>
-                                            <a className="text-slate-300 hover:text-white transition-all px-2" href={link.href}>{link.icon}</a>
-                                        </div>
-                                    ))
-                                }
-                            </div>
-                        </div>
+                        <Button className="sm:hidden cursor-pointer" variant='outline' onClick={() => setShowNav(!showNav)}>{showNav ? <X /> : <Menu />}</Button>
+                        <div className="not-sm:hidden"><Navigation /></div>
                     </div>
+                    <div className={cn('sm:hidden', !showNav && 'hidden')}><Navigation column /></div>
                 </div>
             </header>
             {((props.breadcrumbs ?? true) && showHeader) && <Breadcrumbs />}
