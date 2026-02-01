@@ -7,18 +7,18 @@
     display: flex;
     gap: 1rem;
     padding-bottom: 1rem;
-    
+
     -ms-overflow-style: none; // IE & Edge
     scrollbar-width: none;  // Firefox
     &::-webkit-scrollbar { // Chrome
-      display: none; 
+      display: none;
     }
 }
 
 .scrollButton {
     position: absolute;
     top: 43%;
-    z-index: 100;
+    z-index: 21;
     //align-content: center;
     display: flex;
     justify-content: center;
@@ -43,7 +43,7 @@
     position: absolute;
     top: 0;
     height: 100%;
-    z-index: 50;
+    z-index: 20;
     width: 50px;
 }
 

@@ -86,7 +86,7 @@ const AppBaseLayout = (props: MainLayoutProps) => {
 
     return (
         <div className="dark:bg-gray-900 bg-gray-300 bg-repeat flex flex-col min-h-screen h-full md:px-3">
-            <header className="mb-5 top-0 sticky bg-gradient-to-t from-transparent dark:to-gray-900 to-gray-300 z-20">
+            <header className="mb-5 top-0 sticky bg-gradient-to-t from-transparent dark:to-gray-900 to-gray-300 z-40">
                 <div className="max-w-4xl mx-auto px-2 sm:px-6 mt-0 md:mt-2 rounded-b-lg md:rounded-lg shadow-lg bg-ocean">
                     <div className="flex flex-wrap gap-2 justify-center items-center pb-1 md:pb-0">
 
