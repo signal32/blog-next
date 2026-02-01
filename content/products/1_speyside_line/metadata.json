@@ -6,9 +6,119 @@
     "created": "10 Jan 2020",
     "excerpt": "Travel back in time to revisit the sights and sounds of Scotland's whisky country by train.",
     "requirements": [
-        {"id": "UKTS Clutter", "site": "UkTrainSim", "href": ["http://uktrainsim.com/"], "type": "external"},
-        {"type": "external", "id": "London to Brighton", "site": "Steam", "href": ["http://uktrainsim.com/"]},
-        {"type": "internal", "id": "test_product"}
+        {
+            "type": "external",
+            "id": "DTG London - Brighton",
+            "href": [
+                "https://store.steampowered.com/app/208280/Train_Simulator_London_to_Brighton_Route_AddOn/"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "DTG Western Lines of Scotland",
+            "href": [
+                "https://store.steampowered.com/app/222554/Train_Simulator_Western_Lines_of_Scotland_Route_AddOn/"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "DTG Wear Valley Railway",
+            "href": [
+                "https://store.steampowered.com/app/277777/Train_Simulator_Weardale__Teesdale_Network_Route_AddOn/"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "RSC Isle of Wight",
+            "href": [
+                "https://store.steampowered.com/app/24021/Train_Simulator_Isle_of_Wight_Route_AddOn/"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "RSC EU Assets Pack (bundled with many routes)",
+            "href": [
+                "https://steamdb.info/app/208300/subs/"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "AP Station Pack (bundled with many routes)",
+            "href": [
+                "https://steamdb.info/app/24086/subs/"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "SAD Assets Pack",
+            "href": [
+                "https://rail-sim.de/forum/filebase/entry/3305-altenburg-wildau-v-3-12/"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "LNWR Signals Pack",
+            "href": [
+                "https://www.uktrainsim.com/filelib-info.php?form_fileid=31866"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "UK Lattice Post Signals",
+            "href": [
+                "https://www.uktrainsim.com/filelib-info.php?form_fileid=32041"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "UKTS Blocks-Lofts-Bridges #1",
+            "href": [
+                "https://www.golden-age-developments.co.uk/ukts-freeware-packs.html"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "UKTS Clutter",
+            "href": [
+                "https://www.golden-age-developments.co.uk/ukts-freeware-packs.html"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "VP Grass Pack",
+            "site": "Steam",
+            "href": [
+                "https://drive.google.com/file/d/1-XaAYJJIpiIWGyI62WmZpTp_jLbSJxxC/view"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "SBS Vegetation",
+            "href": [
+                "https://rail-sim.de/forum/wsif/index.php/Entry/3229-SBS-Vegetation-1-0/?s=cd523d796b3b1630b23a3eb9022f9abb668708d8#files"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "Lanky Track 010",
+            "href": [
+                "https://www.uktrainsim.com/filelib-info.php?form_fileid=33447"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "Lanky Track 014",
+            "href": [
+                "https://www.uktrainsim.com/filelib-info.php?form_fileid=33460"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "Lanky Track 021",
+            "href": [
+                "https://www.uktrainsim.com/filelib-info.php?form_fileid=27800"
+            ]
+        }
     ],
     "media": {
         "banner": "/graphics/speyside_line/Screenshot_SB-The-Speyside-Line_57.24829-3.75247_14-01-56-1920x1080.jpg",
@@ -35,7 +145,11 @@
     "files": {
         "primary": "speyside_line_201",
         "other": [
-            {"name": "Test Product Manual", "file": "speyside_line_201", "tag": "manual"}
+            {
+                "name": "Test Product Manual",
+                "file": "speyside_line_201",
+                "tag": "manual"
+            }
         ]
     },
     "public": true

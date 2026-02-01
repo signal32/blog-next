@@ -2,7 +2,7 @@ import { type RouteConfig, index, prefix, route } from '@react-router/dev/routes
 
 export default [
     index('routes/home.tsx'),
-    route('simulation', 'routes/simulation.tsx'),
+    // route('simulation', 'routes/simulation.tsx'),
     route(':slug', './routes/page.tsx'),
     ...prefix('blog', [
         index('routes/blog/index.tsx'),

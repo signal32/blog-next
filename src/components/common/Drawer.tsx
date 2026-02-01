@@ -10,7 +10,7 @@ const Drawer = (props: {
     useEffect(() => setExpanded(props.expanded || false), [props.expanded]);
     return (
         <div className="w-full rounded-lg overflow-hidden bg-slate-200 dark:bg-slate-700">
-            <div className="w-full p-2 flex justify-between rounded-lg shadow-lg bg-slate-100 dark:bg-slate-600" onClick={() => setExpanded(!expanded)}>
+            <div className="w-full p-2 flex justify-between rounded-lg shadow-lg bg-slate-100 cursor-pointer dark:bg-slate-600" onClick={() => setExpanded(!expanded)}>
                 <div>{props.title}</div>
                 <p className={`transition-all align-middle ${expanded ? 'rotate-90' : ''}`}><ArrowRight /></p>
             </div>

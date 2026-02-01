@@ -7,6 +7,7 @@ import Breadcrumbs from "../common/Breadcrumbs";
 import ModalContext from "../common/Modal";
 import { useNavigation } from "react-router";
 import { Link } from "react-router";
+import { H1, H2 } from "../common/typography";
 
 export function debounce<Args extends unknown[]>(
     fn: (...args: Args) => void,
@@ -212,8 +213,8 @@ export function ContentLayout(props: MainLayoutProps) {
                                     style={{ objectFit: 'cover' }}
                                 />
                                 {title &&
-                                    <div className="absolute bottom-0 left-0 right-0 text-white">
-                                        <p className="text-white text-2xl w-fit bottom-0 z-30 bg-black bg-opacity-50 backdrop-blur-[1px] p-2 rounded-tr-lg">{title}</p>
+                                    <div className="absolute bottom-0 left-0 bg-black/80 backdrop-blur-sm py-1 px-3 rounded-tr-lg">
+                                        <H2 className="text-white">{title}</H2>
                                     </div>
                                 }
                             </div>

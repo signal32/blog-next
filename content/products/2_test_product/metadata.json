@@ -2,5 +2,11 @@
     "$schema": "../../../schema.json",
     "id": "test_product",
     "name": "Test Product",
-    "public": true
+    "public": true,
+    "requirements": [
+        {
+            "type": "internal",
+            "id": "speyside_line"
+        }
+    ]
 }

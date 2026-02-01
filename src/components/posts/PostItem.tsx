@@ -19,7 +19,7 @@ const PostItem = ({ post, showImage = true }: PostItemProps) => {
         content: <>
             {
                 showImage && post.coverImage &&
-                <img className="object-cover h-40 w-full overflow-clip rounded-xl mt-1" src={post.coverImage}
+                <img className="object-cover w-full max-h-40 overflow-clip rounded-xl mt-1" src={post.coverImage}
                     onClick={() => modals.pushModal(<img className="object-cover overflow-clip rounded-xl w-full p-0" src={post.coverImage} />)}
                 />
             }

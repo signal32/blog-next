@@ -27,6 +27,7 @@
         "react-icons": "^4.4.0",
         "react-markdown": "^10.1.0",
         "react-router": "^7.10.1",
+        "rehype-raw": "^7.0.0",
         "scss-utils": "git+ssh://git@github.com:signal32/scss-utils.git",
         "tailwind-merge": "^3.4.0",
         "ts-pattern": "^4.0.5",

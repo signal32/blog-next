@@ -17,7 +17,7 @@ const PostList = (props: PostListProps) => {
                 {
                     props.posts.map((item, i) => {
                         return (
-                            <div key={i} className=' w-72 shrink-0'>
+                            <div key={i} className=' w-72 shrink-0 min-h-80'>
                                 <PostItem post={item} />
                             </div>
                         )

@@ -7,36 +7,13 @@ coverImage: /graphics/stretham_narrow.jpg
 public: true
 ---
 
-I am Hamish, a software engineer and technologist, floating around on the British canals. From developing complex web apps to building detailed rail simulations, I enjoy building all sorts of things. Although many of these never see the light of day, my more polished projects can be found here.
+I’m a software engineer with a strong focus on back-end development, working primarily within the modern JavaScript ecosystem using Node.js and Bun. I use TypeScript and JSDoc to produce safe, maintainable, and correct code at scale, and I also have experience with Java, C#, Rust, and Python. My background includes designing, building, and maintaining relational databases with PostgreSQL and MariaDB, as well as containerising applications with Docker and implementing CI/CD pipelines using GitHub Actions.
 
-Away from the desk I am a keen photographer and publish some of my favourite shots here on this site.
+On the front end, I work with React, React Router v7, and Next.js, styling with CSS, SCSS, and Tailwind, and using component libraries such as shadcn/ui to support accessible, well-structured interfaces. I also have experience with 3D modelling in Blender and game development using Rust and Java, which has strengthened my understanding of performance, graphics, and interactive systems.
 
-# My skill set
+Alongside software development, I am an experienced photographer with strong photo and video editing skills and a keen eye for visual design. I live on and maintain a narrowboat, which has given me practical, hands-on experience across many aspects of marine engineering, particularly electronic systems and their design. This has fostered a pragmatic, problem-solving mindset that I bring to all of my work. I also have a strong commitment to environmental protection, shaped by time spent on Britain’s waterways and a close connection to their natural habitats.
 
-I have significant experience with web based technologies across the entire stack.
 
-My client side expertise is founded in the core pairing HTML, CSS, and JavaScript, with particular emphasis on JavaScript. While I am at home writing and maintaining complex applications with vanilla JS, I also have broad experience with various front end frameworks, including, React, Vue, Solid, and their associated 'meta' frameworks. As a strong proponent of type systems, I am experienced in the use of TypeScript and favour it's usage where appropriate.
-
-On the server I have a wide ranging skill set, such as developing REST APIs for backend services using tools such as Express.JS, Spring, and PHP. I am not tied to one particular technology, and will choose the most effective tool for the job. My database experience is focussed on MySQL and MongoDB.
-
-- Web (JavaScript, CSS, HTML)
-    - Static sites with Zola and TailWindCSS
-    - Progressive Web Apps with VueJS, Ionic, and TypeScript
-    - Unit tests with Jest
-- Python
-    - Data analysis with Numpy, Pandas, SciKit, and Matplotlib
-- Java (8+)
-    - Backend web services with Spring Boot, Data, and Security
-    - Game engine programming with LWJGL and BGFX
-    - Unit tests with Junit
-- SQL
-    - Providing persistence for backend web services with MySQL
-- Git
-    - With CI using GitHub Actions
-- Linux
-    - Web service deployment with Docker and NGINX
-- Photoshop + Affinity Photo/Designer
-    - Graphic design
-    - Texture authoring for 3D games
-- Blender
-    - Architectural 3D modelling for games
+<div>
+<Content type="post" id="explorer.md"></Content>
+</div>
