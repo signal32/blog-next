@@ -1,16 +1,15 @@
 // import Image from "next/image";
 // import Link from "next/link";
 // import { useRouter } from "next/router";
-import { cloneElement, ReactElement, ReactNode, useEffect, useRef, useState } from "react";
+import { CreativeCommons, Menu, X } from "lucide-react";
+import { ReactElement, ReactNode, useRef, useState } from "react";
+import { Link, useLocation, useNavigation } from "react-router";
+import { cn } from "src/lib/utils";
 import { websiteConfig } from "../../routes/_app";
 import Breadcrumbs from "../common/Breadcrumbs";
 import ModalContext from "../common/Modal";
-import { useLocation, useNavigation } from "react-router";
-import { Link } from "react-router";
-import { H1, H2 } from "../common/typography";
-import { Menu, X } from "lucide-react";
+import { A, H2 } from "../common/typography";
 import { Button } from "../ui/button";
-import { cn } from "src/lib/utils";
 
 export function debounce<Args extends unknown[]>(
     fn: (...args: Args) => void,
@@ -147,37 +146,30 @@ const AppBaseLayout = (props: MainLayoutProps) => {
 
             <footer className="align-bottom dark:text-gray-300 text-gray-700">
                 <div className="max-w-4xl mx-auto -z-20">
-                    <div className="px-2 sm:px-6 mb-2 rounded-lg shadow-lg dark:bg-gray-800 bg-gray-200">
-                        <div className="mx-auto flex justify-between items-center">
-
-                            <div className="w-1/5 dark:invert">
-                                {/*<MyLogo />*/}
-                            </div>
-
-                            <div className="w-1/5 hame-markdown">
-                                <p className=" dark:text-gray-300 text-gray-600 text-xs italic">Copyright &#169; Hamish Weir {new Date().getFullYear()}</p>
+                    <div className="p-2 sm:px-6 mb-2 rounded-lg shadow-lg dark:bg-gray-800 bg-gray-200">
+                        <div className="mx-auto flex">
+                            <div className="flex items-center gap-2">
+                                <CreativeCommons />
+                                <p className=" dark:text-gray-300 text-gray-600 text-xs">Unless otherwise stated, this website and its contents are licensed under <A href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</A>.</p>
                             </div>
 
                         </div>
                     </div>
 
-                    <div className="relative -top-3 pt-0 mt-0 left-0 right-0 max-w-4xl sm:px-6 mb-2 rounded-b-lg shadow-lg bg-ocean mx-auto">
+                    {/*<div className="relative -top-3 pt-0 mt-0 left-0 right-0 max-w-4xl sm:px-6 mb-2 rounded-b-lg shadow-lg bg-ocean mx-auto">
 
                         <div className="py-3 mx-auto flex justify-start items-center gap-2">
                             <div className="flex-none basis-1/5 dark:bg-gray-800 bg-gray-200 p-1 rounded-lg text-center shadow-lg">
                                 <h1 className="text-sm"> {"Other sites"} </h1>
                             </div>
 
-                            {/* {% for site in config.extra.other_sites_list %} */}
                             <div className="flex text-sm text-gray-300 hover:text-gray-50 hover:underline text-center">
-                                {/*<a href="{{site.href}}">{"title placeholder"}</a>*/}
                             </div>
                             <div className="flex text-sm text-gray-300 text-center">
                                 <p>|</p>
                             </div>
-                            {/* {% endfor %} */}
                         </div>
-                    </div>
+                    </div>*/}
 
                 </div>
             </footer>
