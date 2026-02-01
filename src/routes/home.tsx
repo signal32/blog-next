@@ -36,7 +36,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                     <AboutHamish encodedEmail={props.encodedEmail} />
 
                     {/* Recent posts */}
-                    <div className={'flex-1'}>
+                    <div className={'flex-1 not-sm:hidden'}>
                         {/*<PostList posts={props.allContent} />*/}
                         <img
                             className='rounded-lg'
@@ -66,17 +66,10 @@ const HomeHero = () => (
         }}
     >
         <div
-            style={{
-                flex: '1 0 40%',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                textAlign: 'center',
-            }}
+            className='flex flex-col sm:flex-row justify-center items-center text-center'
         >
             <img
-                style={{ width: '70%', borderRadius: '1000px', marginBottom: '1.5rem', border: 'solid 2px white' }}
+                className='w-3/4 max-w-sm rounded-full mb-2 border-3 border-white shadow-2xl'
                 // objectFit='contain'
                 src='/graphics/hamish_weir_portrait_square.jpg'
                 width='100'
@@ -96,7 +89,7 @@ const HomeHero = () => (
             }}
         >
             <h1 className=' text-white text-5xl font-black font-handwritten'>Hamish Weir</h1>
-            <h1 className='text-white text-xl font-medium'>Digital content creator</h1>
+            <h1 className='text-white text-xl font-medium'>Software Engineer</h1>
 
             <div style={{ display: 'flex', gap: '1rem', paddingTop: '1.5rem' }}>
                 {/*<Button text='Software' href='/design'></Button>

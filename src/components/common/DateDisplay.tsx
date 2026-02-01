@@ -6,9 +6,9 @@ interface DateDisplayProps {
 
 const DateDisplay = (props: DateDisplayProps) => {
     return (
-        <div className="dark:text-slate-400 text-slate-600">
-            <h3 className="inline-block pr-3"><Calendar /></h3>
-            <h3 className="inline-block">{props.date instanceof Date ? props.date.toLocaleDateString() : props.date}</h3>
+        <div className="dark:text-slate-400 text-slate-600 flex items-center gap-2">
+            <h3><Calendar /></h3>
+            <h3>{props.date instanceof Date ? props.date.toLocaleDateString() : props.date}</h3>
         </div>
     )
 }

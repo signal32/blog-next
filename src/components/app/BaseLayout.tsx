@@ -1,13 +1,15 @@
 // import Image from "next/image";
 // import Link from "next/link";
 // import { useRouter } from "next/router";
-import { cloneElement, ReactElement, ReactNode, useEffect, useRef, useState } from "react";
+import { CreativeCommons, Menu, X } from "lucide-react";
+import { ReactElement, ReactNode, useRef, useState } from "react";
+import { Link, useLocation, useNavigation } from "react-router";
+import { cn } from "src/lib/utils";
 import { websiteConfig } from "../../routes/_app";
 import Breadcrumbs from "../common/Breadcrumbs";
 import ModalContext from "../common/Modal";
-import { useNavigation } from "react-router";
-import { Link } from "react-router";
-import { H1, H2 } from "../common/typography";
+import { A, H2 } from "../common/typography";
+import { Button } from "../ui/button";
 
 export function debounce<Args extends unknown[]>(
     fn: (...args: Args) => void,
@@ -44,6 +46,7 @@ export interface LayoutRequestProps {
 //const AppBaseLayout = ({children, header: defaultHeaderImage, headerTitle: defaultHeaderTitle, breadcrumbs}: MainLayoutProps) => {
 const AppBaseLayout = (props: MainLayoutProps) => {
     const router = useNavigation();
+    const location = useLocation();
     const headerRef = useRef<HTMLDivElement>(null);
     const [title, setTitle] = useState(props.headerTitle);
     const [header, setHeader] = useState(props.header);
@@ -83,52 +86,58 @@ const AppBaseLayout = (props: MainLayoutProps) => {
     //     // eslint-disable-next-line react-hooks/exhaustive-deps
     // }, [router.location?.pathname])
 
+    const Navigation = (props: {
+        column?: boolean
+    }) => (
+        <div className={cn('flex gap-2 text-white text-lg', props.column && 'flex-col')}>
+            {
+                websiteConfig.mainMenu.map((item, i) => (
+                    <Link
+                        className={cn(
+                            "grow p-2 rounded-lg text-center ring-air",
+                            location.pathname === item.href
+                                ? 'bg-air'
+                                : cn('hover:ring-2', props.column && 'bg-air/20')
+
+                        )}
+                        key={i}
+                        to={item.href}
+                        onClick={() => setShowNav(false)}
+                    >
+                        {item.name}
+                    </Link>
+                ))
+            }
+
+            {/* Extra links (i.e. external social media) */}
+            <div className={cn("flex flex-wrap justify-center sm:justify-end items-center border-air sm:pl-4", props.column && "border-t-2")}>
+                {
+                    websiteConfig.socialLinks.map((link, i) => (
+                        <div className="p-2" key={i}>
+                            <a className="text-slate-300 hover:text-white transition-all" href={link.href} target="_blank">{link.icon}</a>
+                        </div>
+                    ))
+                }
+            </div>
+        </div >
+    )
+
+    const [showNav, setShowNav] = useState(false)
 
     return (
         <div className="dark:bg-gray-900 bg-gray-300 bg-repeat flex flex-col min-h-screen h-full md:px-3">
-            <header className="mb-5 top-0 sticky bg-gradient-to-t from-transparent dark:to-gray-900 to-gray-300 z-20">
+            <header className="mb-5 top-0 sticky bg-gradient-to-t from-transparent dark:to-gray-900 to-gray-300 z-40">
                 <div className="max-w-4xl mx-auto px-2 sm:px-6 mt-0 md:mt-2 rounded-b-lg md:rounded-lg shadow-lg bg-ocean">
-                    <div className="flex flex-wrap gap-2 justify-center items-center pb-1 md:pb-0">
-
-                        {/* Main logo */}
+                    <div className="flex flex-wrap gap-2 justify-between items-center pb-1 px-4">
                         <Link
                             to={'/'}
-                            className="flex-auto basis-full sm:basis-1/8 max-w-xs p-2">
-                            <h1 className='text-white/85 text-3xl py-2 font-black font-handwritten'>Hamish Weir</h1>
+                            className="flex-auto max-w-xs p-2">
+                            <h1 className='text-white/85 hover:text-white text-3xl py-2 font-black font-handwritten sm:text-left'>Hamish Weir</h1>
                         </Link>
-
-                        {/* Main navigation */}
-                        <div className="flex-auto basis-3/4 sm:basis-auto">
-                            <div className="flex grow flex-wrap justify-center sm:justify-end py-0">
-                                {
-                                    websiteConfig.mainMenu.map((item, i) => (
-                                        <div className="flex" key={i}>
-                                            <Link
-                                                to={item.href}
-                                                className={`p-1 mx-1 rounded border-2 border-transparent hover:border-air transition-all text-slate-300 ${router.asPath == item.href ? 'bg-air' : ''}`}>
-
-                                                {item.name}
-
-                                            </Link>
-                                        </div>
-                                    ))
-                                }
-                            </div>
-                        </div>
-
-                        {/* Extra links (i.e. external social media) */}
-                        <div className="flex-none sm:basis-auto">
-                            <div className="flex flex-wrap justify-center sm:justify-end items-center">
-                                {
-                                    websiteConfig.socialLinks.map((link, i) => (
-                                        <div className="flex" key={i}>
-                                            <a className="text-slate-300 hover:text-white transition-all px-2" href={link.href}>{link.icon}</a>
-                                        </div>
-                                    ))
-                                }
-                            </div>
-                        </div>
+                        <Button className="sm:hidden cursor-pointer" variant='outline' onClick={() => setShowNav(!showNav)}>{showNav ? <X /> : <Menu />}</Button>
+                        <div className="not-sm:hidden"><Navigation /></div>
                     </div>
+                    <div className={cn('sm:hidden', !showNav && 'hidden')}><Navigation column /></div>
                 </div>
             </header>
             {((props.breadcrumbs ?? true) && showHeader) && <Breadcrumbs />}
@@ -137,37 +146,30 @@ const AppBaseLayout = (props: MainLayoutProps) => {
 
             <footer className="align-bottom dark:text-gray-300 text-gray-700">
                 <div className="max-w-4xl mx-auto -z-20">
-                    <div className="px-2 sm:px-6 mb-2 rounded-lg shadow-lg dark:bg-gray-800 bg-gray-200">
-                        <div className="mx-auto flex justify-between items-center">
-
-                            <div className="w-1/5 dark:invert">
-                                {/*<MyLogo />*/}
-                            </div>
-
-                            <div className="w-1/5 hame-markdown">
-                                <p className=" dark:text-gray-300 text-gray-600 text-xs italic">Copyright &#169; Hamish Weir {new Date().getFullYear()}</p>
+                    <div className="p-2 sm:px-6 sm:mb-2 rounded-lg rounded-t-lg shadow-lg dark:bg-gray-800 bg-gray-200">
+                        <div className="mx-auto flex">
+                            <div className="flex items-center gap-2">
+                                <CreativeCommons />
+                                <p className=" dark:text-gray-300 text-gray-600 text-xs">Unless otherwise stated, this website and its contents are licensed under <A href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</A>.</p>
                             </div>
 
                         </div>
                     </div>
 
-                    <div className="relative -top-3 pt-0 mt-0 left-0 right-0 max-w-4xl sm:px-6 mb-2 rounded-b-lg shadow-lg bg-ocean mx-auto">
+                    {/*<div className="relative -top-3 pt-0 mt-0 left-0 right-0 max-w-4xl sm:px-6 mb-2 rounded-b-lg shadow-lg bg-ocean mx-auto">
 
                         <div className="py-3 mx-auto flex justify-start items-center gap-2">
                             <div className="flex-none basis-1/5 dark:bg-gray-800 bg-gray-200 p-1 rounded-lg text-center shadow-lg">
                                 <h1 className="text-sm"> {"Other sites"} </h1>
                             </div>
 
-                            {/* {% for site in config.extra.other_sites_list %} */}
                             <div className="flex text-sm text-gray-300 hover:text-gray-50 hover:underline text-center">
-                                {/*<a href="{{site.href}}">{"title placeholder"}</a>*/}
                             </div>
                             <div className="flex text-sm text-gray-300 text-center">
                                 <p>|</p>
                             </div>
-                            {/* {% endfor %} */}
                         </div>
-                    </div>
+                    </div>*/}
 
                 </div>
             </footer>
@@ -200,7 +202,7 @@ export function ContentLayout(props: MainLayoutProps) {
     return (
         <>
             <div ref={headerRef} className={header !== undefined ? '-mt-10' : '-mt-5'}>
-                <div className={`p-0 max-w-4xl mx-auto relative transition-all ease-in-out overflow-clip rounded-xl opacity-100`}>
+                <div className={`p-0 max-w-4xl mx-auto relative transition-all ease-in-out overflow-clip rounded-b-xl opacity-100`}>
                     {
                         header?.type === 'image'
                             ? <div className='w-full rounded-b-lg h-64'>

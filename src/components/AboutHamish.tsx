@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { A, H3 } from './common/typography'
 
 const AboutHamish = (props: { encodedEmail: string }) => {
 
@@ -24,14 +25,14 @@ const AboutHamish = (props: { encodedEmail: string }) => {
                     <p className='font-bold font-handwritten text-5xl'>Hello!</p>
                 </div>
                 <p>I am Hamish, a software engineer and technologist, floating around on the British canals. From developing complex web apps to building detailed rail simulations, I enjoy creating all sorts of things. Although many of these never see the light of day, my more polished projects can be found here.</p>
-                <p>Away from the desk I am a keen photographer and publish some of my favourite shots here on this site.</p>
+                <p>Away from the desk I am a keen photographer and publish some of my favorite shots here on this site.</p>
             </div>
 
 
             <div>
-                <h3 className='text-lg font-semibold pt-2'>👋 Get in touch!</h3>
-                <p>If you would like to get in touch with me for any reason, please <span className={emailText.hidden ? 'cursor-pointer' : ''} onClick={revealEmail}>{emailText.text}</span> and I happy to hear from you.</p>
-                <p>You can also find me on <a href='https://github.com/signal32'>Github</a> and <a>Instagram</a></p>
+                <H3 className='text-lg font-semibold pt-2'>👋 Get in touch!</H3>
+                <p>If you would like to get in touch with me, please <span className={emailText.hidden ? 'cursor-pointer underline' : ''} onClick={revealEmail}>{emailText.text}</span> and I shall be happy to hear from you.</p>
+                <p>You can also find me on <A href='https://github.com/signal32'>Github</A> and <A href='https://www.instagram.com/hamishweirphoto/'>Instagram</A>,</p>
             </div>
 
         </div>

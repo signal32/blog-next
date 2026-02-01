@@ -24,13 +24,11 @@ const PostItem = ({ post, showImage = true }: PostItemProps) => {
                 />
             }
 
-            <div className="flex justify-between items-start sm:flex-col">
+            <div className="flex justify-between items-start flex-col">
                 <div className="w-full text-xl font-medium dark:text-slate-100 text-slate-800">{post.name}</div>
                 {
                     post.created &&
-                    <div className="">
-                        <DateDisplay date={new Date(post.created)} />
-                    </div>
+                    <DateDisplay date={new Date(post.created)} />
                 }
 
             </div>
