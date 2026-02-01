@@ -208,7 +208,7 @@ export function ContentLayout(props: MainLayoutProps) {
     return (
         <>
             <div ref={headerRef} className={header !== undefined ? '-mt-10' : '-mt-5'}>
-                <div className={`p-0 max-w-4xl mx-auto relative transition-all ease-in-out overflow-clip rounded-xl opacity-100`}>
+                <div className={`p-0 max-w-4xl mx-auto relative transition-all ease-in-out overflow-clip rounded-b-xl opacity-100`}>
                     {
                         header?.type === 'image'
                             ? <div className='w-full rounded-b-lg h-64'>
