@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { A } from './common/typography'
+import { A, H3 } from './common/typography'
 
 const AboutHamish = (props: { encodedEmail: string }) => {
 
@@ -30,7 +30,7 @@ const AboutHamish = (props: { encodedEmail: string }) => {
 
 
             <div>
-                <h3 className='text-lg font-semibold pt-2'>👋 Get in touch!</h3>
+                <H3 className='text-lg font-semibold pt-2'>👋 Get in touch!</H3>
                 <p>If you would like to get in touch with me, please <span className={emailText.hidden ? 'cursor-pointer underline' : ''} onClick={revealEmail}>{emailText.text}</span> and I shall be happy to hear from you.</p>
                 <p>You can also find me on <A href='https://github.com/signal32'>Github</A> and <A href='https://www.instagram.com/hamishweirphoto/'>Instagram</A>,</p>
             </div>
