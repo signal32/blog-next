@@ -89,7 +89,7 @@ const AppBaseLayout = (props: MainLayoutProps) => {
     const Navigation = (props: {
         column?: boolean
     }) => (
-        <div className={cn('flex gap-2 text-lg', props.column && 'flex-col')}>
+        <div className={cn('flex gap-2 text-white text-lg', props.column && 'flex-col')}>
             {
                 websiteConfig.mainMenu.map((item, i) => (
                     <Link
@@ -146,7 +146,7 @@ const AppBaseLayout = (props: MainLayoutProps) => {
 
             <footer className="align-bottom dark:text-gray-300 text-gray-700">
                 <div className="max-w-4xl mx-auto -z-20">
-                    <div className="p-2 sm:px-6 mb-2 rounded-lg shadow-lg dark:bg-gray-800 bg-gray-200">
+                    <div className="p-2 sm:px-6 sm:mb-2 rounded-lg rounded-t-lg shadow-lg dark:bg-gray-800 bg-gray-200">
                         <div className="mx-auto flex">
                             <div className="flex items-center gap-2">
                                 <CreativeCommons />
