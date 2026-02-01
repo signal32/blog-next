@@ -95,7 +95,7 @@ const HomeHero = () => (
                 textAlign: 'center',
             }}
         >
-            <h1 className='sm:text-air text-white text-5xl font-semibold' style={{ fontFamily: 'caveat' }}>Hamish Weir</h1>
+            <h1 className=' text-white text-5xl font-black font-handwritten'>Hamish Weir</h1>
             <h1 className='text-white text-xl font-medium'>Digital content creator</h1>
 
             <div style={{ display: 'flex', gap: '1rem', paddingTop: '1.5rem' }}>

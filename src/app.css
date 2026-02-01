@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "./fonts.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -13,12 +13,10 @@
     --color-matisse: #3c5f82;
     --color-heather: #88639D;
     --color-htest: #1a0c0e;
-    --font-display: BalooRegular;
-}
-
-@font-face {
-    font-family: "BalooRegular";
-    src: url("/fonts/BalooTammudu2-Regular.ttf");
+    --font-handwritten: Caveat;
+    --font-display: Raleway;
+    --font-serif: Merriweather;
+    --font-sans: Raleway;
 }
 
 html,

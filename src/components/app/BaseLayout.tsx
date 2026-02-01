@@ -94,7 +94,7 @@ const AppBaseLayout = (props: MainLayoutProps) => {
                         <Link
                             to={'/'}
                             className="flex-auto basis-full sm:basis-1/8 max-w-xs p-2">
-                            <h1 className='text-white/85 text-5xl font-semibold' style={{ fontFamily: 'caveat' }}>Hamish Weir</h1>
+                            <h1 className='text-white/85 text-5xl font-black font-handwritten'>Hamish Weir</h1>
                         </Link>
 
                         {/* Main navigation */}
