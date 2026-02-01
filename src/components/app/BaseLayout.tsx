@@ -102,7 +102,9 @@ const AppBaseLayout = (props: MainLayoutProps) => {
 
                         )}
                         key={i}
-                        to={item.href}>
+                        to={item.href}
+                        onClick={() => setShowNav(false)}
+                    >
                         {item.name}
                     </Link>
                 ))
