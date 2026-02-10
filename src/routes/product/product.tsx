@@ -9,6 +9,12 @@ import { useModalStore } from "../../components/common/Modal";
 import { type FileDetails, files } from "../../lib/file.server";
 import { type Product, type Requirement, products } from "../../lib/products.server";
 import { Route } from './+types/product';
+import { Product as x } from 'store'
+
+const x: X = {
+    done: true,
+
+}
 
 export default function Product({ loaderData }: Route.ComponentProps) {
 

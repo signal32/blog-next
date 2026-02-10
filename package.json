@@ -30,6 +30,7 @@
         "react-router": "^7.10.1",
         "rehype-raw": "^7.0.0",
         "scss-utils": "git+ssh://git@github.com:signal32/scss-utils.git",
+        "store": "github:signal32/store",
         "tailwind-merge": "^3.4.0",
         "ts-pattern": "^4.0.5",
         "vite-plugin-node-polyfills": "^0.25.0",
