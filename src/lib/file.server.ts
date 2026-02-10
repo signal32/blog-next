@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { join } from 'path';
-import { Content, ContentDescriptor, defineContent } from './content.server';
+import { Content, ContentDescriptor, defineContent, defineFileSource } from './content.server';
 
 const PUBLIC_FILE_DIR = join(process.cwd(), 'public', 'content', 'files');
 const API_FILE_DIR = join(process.cwd(), 'public', 'content', 'files');
@@ -18,13 +18,13 @@ export interface FileDetails extends Content {
     href: string
 }
 
-export const files = defineContent<FileDetails>('files', async (desc, path) => {
+export const files = defineContent<FileDetails>([defineFileSource('content/files', async (desc, path) => {
     const metadataPath = getMetadataPath(path);
     const details = getDetails(desc, path, metadataPath);
 
     details.href = METHODS[details.method].href(details);
     return details;
-})
+})])
 
 export const getFileDir = (file: FileDetails) => METHODS[file.method].dir;
 

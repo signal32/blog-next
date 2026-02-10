@@ -105,7 +105,7 @@ export const loader = async () => {
     const allPosts = await yeet.getAllDetailed()
     const allProducts = await products.getAllDetailed()
     const allContent = [...allPosts, ...allProducts]
-        .filter(content => !!content.created)
+        .filter(content => !!content.created && content.public)
         .sort((a, b) => {
             if (!a.created || !b.created) return 0
             return new Date(a.created).getTime() - new Date(b.created).getTime()

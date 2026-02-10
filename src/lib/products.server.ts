@@ -1,6 +1,8 @@
 import { join } from "path";
 import fs from 'fs';
-import { Content, defineContent } from "./content.server";
+import { Content, defineContent, defineFileSource } from "./content.server";
+import { createClient } from "store";
+import { createSelect, fromSelect } from "store/src/product";
 
 export interface Product extends Content {
     published: Date,
@@ -41,24 +43,59 @@ export interface ProductMedia {
 
 export type ProductId = string;
 
-export const products = defineContent<Product>('products', async (descriptor, path) => {
-    const metaPath = join(path, 'metadata.json');
-    const metaData = fs.readFileSync(metaPath, 'utf8');
+// export const products = defineContent<Product>('products', async (descriptor, path) => {
+//     const metaPath = join(path, 'metadata.json');
+//     const metaData = fs.readFileSync(metaPath, 'utf8');
 
-    const product = JSON.parse(metaData, (key, value) => {
-        if (key == 'published') return new Date(value);
-        else return value;
-    }) as Product;
+//     const product = JSON.parse(metaData, (key, value) => {
+//         if (key == 'published') return new Date(value);
+//         else return value;
+//     }) as Product;
 
-    const descPath = join(path, 'description.md');
-    const descData = fs.readFileSync(descPath, 'utf8');
-    product.description = descData.toString() || 'No description';
+//     const descPath = join(path, 'description.md');
+//     const descData = fs.readFileSync(descPath, 'utf8');
+//     product.description = descData.toString() || 'No description';
 
-    return {
-        ...descriptor,
-        ...product,
-        ...(product.media?.banner ? { coverImage: product.media.banner } : {}), // Can't be undefined
-        ...(product.description && !product.excerpt ? { excerpt: product.description.slice(0, 255).trim() } : {}),
-        baseUrl: '/product',
-    }
-});
+//     return {
+//         ...descriptor,
+//         ...product,
+//         ...(product.media?.banner ? { coverImage: product.media.banner } : {}), // Can't be undefined
+//         ...(product.description && !product.excerpt ? { excerpt: product.description.slice(0, 255).trim() } : {}),
+//         baseUrl: '/product',
+//     }
+// },);
+
+export const products = defineContent<Product>([
+    defineFileSource('content/products', (descriptor, path) => {
+        const metaPath = join(path, 'metadata.json');
+        const metaData = fs.readFileSync(metaPath, 'utf8');
+
+        const product = JSON.parse(metaData, (key, value) => {
+            if (key == 'published') return new Date(value);
+            else return value;
+        }) as Product;
+
+        const descPath = join(path, 'description.md');
+        const descData = fs.readFileSync(descPath, 'utf8');
+        product.description = descData.toString() || 'No description';
+
+        return {
+            ...descriptor,
+            ...product,
+            ...(product.media?.banner ? { coverImage: product.media.banner } : {}), // Can't be undefined
+            ...(product.description && !product.excerpt ? { excerpt: product.description.slice(0, 255).trim() } : {}),
+            baseUrl: '/product',
+        }
+    })
+])
+
+
+const shopClient = createClient('http://localhost:3000')
+// [
+//     // async () => {
+//     //     const products = await createSelect(shopClient).then(fromSelect)
+//     //     return products.map(product => ({
+
+//     //     }))
+//     // }
+// ]

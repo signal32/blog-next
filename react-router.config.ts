@@ -3,10 +3,9 @@ import { pages } from 'src/lib/pages.server'
 import { posts } from './src/lib/posts.server'
 import { products } from 'src/lib/products.server'
 
-
 const postSlugs = (await posts.getAllDetailed()).map(post => post.slug)
-const productSlugs = products.getAll().map(product => product.slug)
-const pageSlugs = pages.getAll().map(page => page.slug)
+const productSlugs = (await products.getAll()).map(product => product.slug)
+const pageSlugs = (await pages.getAll()).map(page => page.slug)
 
 export default {
     ssr: false,
