@@ -27,20 +27,20 @@ type Pages = {
       "slug": string;
     };
   };
-  "/product": {
-    params: {};
-  };
   "/product/:slug": {
     params: {
       "slug": string;
     };
+  };
+  "/shop": {
+    params: {};
   };
 };
 
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/:slug" | "/blog" | "/blog/:slug" | "/product" | "/product/:slug";
+    page: "/" | "/:slug" | "/blog" | "/blog/:slug" | "/product/:slug" | "/shop";
   };
   "routes/home.tsx": {
     id: "routes/home";
@@ -58,13 +58,13 @@ type RouteFiles = {
     id: "routes/blog/post";
     page: "/blog/:slug";
   };
-  "routes/product/index.tsx": {
-    id: "routes/product/index";
-    page: "/product";
-  };
   "./routes/product/product.tsx": {
     id: "routes/product/product";
     page: "/product/:slug";
+  };
+  "routes/product/index.tsx": {
+    id: "routes/product/index";
+    page: "/shop";
   };
 };
 
@@ -74,6 +74,6 @@ type RouteModules = {
   "routes/page": typeof import("./src/./routes/page.tsx");
   "routes/blog/index": typeof import("./src/routes/blog/index.tsx");
   "routes/blog/post": typeof import("./src/./routes/blog/post.tsx");
-  "routes/product/index": typeof import("./src/routes/product/index.tsx");
   "routes/product/product": typeof import("./src/./routes/product/product.tsx");
+  "routes/product/index": typeof import("./src/routes/product/index.tsx");
 };

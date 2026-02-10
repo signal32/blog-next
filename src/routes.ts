@@ -9,8 +9,10 @@ export default [
         route(':slug', './routes/blog/post.tsx')
     ]),
     ...prefix('product', [
-        index('routes/product/index.tsx'),
         route(':slug', './routes/product/product.tsx')
+    ]),
+    ...prefix('shop', [
+        index('routes/product/index.tsx'),
     ])
     // route('login', './routes/login.tsx'),
     // route('logout', './routes/logout.tsx'),
