@@ -86,7 +86,33 @@ export const products = defineContent<Product>([
             ...(product.description && !product.excerpt ? { excerpt: product.description.slice(0, 255).trim() } : {}),
             baseUrl: '/product',
         }
-    })
+    }),
+    {
+        async descriptors() {
+            const products = await createSelect(shopClient).then(fromSelect)
+            return products.map(product => ({
+                fileName: '',
+                id: product.id,
+                name: product.name,
+                slug: product.name.replaceAll(' ', '-')
+            }))
+        },
+        async loader(descriptor) {
+            const [product] = await createSelect(shopClient).eq('id', descriptor.id).then(fromSelect)
+            return {
+                ...descriptor,
+                published: new Date('10/10/2025'),
+                coverImage: product?.meta.headerImageUrl,
+                media: {
+                    gallery: product?.meta.imageUrls,
+                    banner: product?.meta.headerImageUrl
+                },
+                baseUrl: '/product',
+                created: '10 Jan 2020',
+                public: true
+            }
+        }
+    }
 ])
 
 

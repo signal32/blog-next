@@ -14,6 +14,7 @@ export const websiteConfig: AppConfig = {
     mainMenu: [
         { name: `Blog`, href: `/blog` },
         { name: `Simulation`, href: `/simulation` },
+        { name: `Shop`, href: `/product` },
         { name: `About`, href: `/about` },
     ],
     socialLinks: [
