@@ -1,8 +1,8 @@
-import { join } from "path";
 import fs from 'fs';
-import { Content, defineContent, defineFileSource } from "./content.server";
+import { join } from "path";
 import { createClient } from "store";
 import { createSelect, fromSelect } from "store/src/product";
+import { Content, defineContent, defineFileSource } from "./content.server";
 
 export interface Product extends Content {
     published: Date,
@@ -17,6 +17,10 @@ export interface Product extends Content {
         primary: string,
         /** Miscellaneous files belonging to the product */
         other: { slug: string, tag?: FileTag }[]
+    },
+    purchase?: {
+        singleItemOnly?: boolean,
+        price: number,
     }
 }
 
@@ -109,7 +113,10 @@ export const products = defineContent<Product>([
                 },
                 baseUrl: '/product',
                 created: '10 Jan 2020',
-                public: true
+                public: true,
+                purchase: {
+                    price: product?.price ?? 0.00
+                }
             }
         }
     }

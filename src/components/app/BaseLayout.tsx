@@ -1,9 +1,10 @@
 // import Image from "next/image";
 // import Link from "next/link";
 // import { useRouter } from "next/router";
-import { CreativeCommons, Menu, X } from "lucide-react";
+import { CreativeCommons, Menu, ShoppingCart, X } from "lucide-react";
 import { ReactElement, ReactNode, useRef, useState } from "react";
 import { Link, useLocation, useNavigation } from "react-router";
+import { useCart } from "src/lib/cart";
 import { cn } from "src/lib/utils";
 import { websiteConfig } from "../../routes/_app";
 import Breadcrumbs from "../common/Breadcrumbs";
@@ -85,6 +86,9 @@ const AppBaseLayout = (props: MainLayoutProps) => {
     //     // Will cause infinite loop
     //     // eslint-disable-next-line react-hooks/exhaustive-deps
     // }, [router.location?.pathname])
+    //
+
+    const cart = useCart()
 
     const Navigation = (props: {
         column?: boolean
@@ -117,6 +121,9 @@ const AppBaseLayout = (props: MainLayoutProps) => {
                             <a className="text-slate-300 hover:text-white transition-all" href={link.href} target="_blank">{link.icon}</a>
                         </div>
                     ))
+                }
+                {
+                    cart.products.size ? <Button asChild><Link to="/cart"><ShoppingCart /></Link></Button> : undefined
                 }
             </div>
         </div >

@@ -4,6 +4,7 @@ export default [
     index('routes/home.tsx'),
     // route('simulation', 'routes/simulation.tsx'),
     route(':slug', './routes/page.tsx'),
+    route('cart', './routes/cart.tsx'),
     ...prefix('blog', [
         index('routes/blog/index.tsx'),
         route(':slug', './routes/blog/post.tsx')

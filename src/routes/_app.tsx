@@ -1,6 +1,6 @@
+import { Github, Instagram } from 'lucide-react'
 import { ReactNode } from 'react'
 import LayoutApp from '../components/app/LayoutApp'
-import { Github, Instagram } from 'lucide-react'
 
 export default LayoutApp
 
@@ -22,5 +22,4 @@ export const websiteConfig: AppConfig = {
         { name: `Instagram`, href: 'https://www.instagram.com/hamishweirphoto/', icon: <div><Instagram /></div> }
     ],
     siteName: `Hamish Weir Blog`,
-
 }
