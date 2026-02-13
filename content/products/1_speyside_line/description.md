@@ -22,4 +22,4 @@ The line is single track with loops at most stations, the route also features ch
 
 *__Update February 2026:__ The passing of UKTS means many of the original download links in the route manual no longer work. Please expand the 'Requirements' section below which I have updated where possible.*
 
-*__Update January 2025:__ new Download link added. Apologies to anyone trying to find this file recently, I am pleased to say the route is now available again.*
+*__Update January 2025:__ New download link added. Apologies to anyone trying to find this file recently, I am pleased to say the route is now available again.*
