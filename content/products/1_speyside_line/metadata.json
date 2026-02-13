@@ -59,7 +59,7 @@
             "type": "external",
             "id": "LNWR Signals Pack",
             "href": [
-                "https://www.uktrainsim.com/filelib-info.php?form_fileid=31866"
+                "https://archive.org/download/ukts-archive-files-32001-33000/UKTS_32041_UKTS_Lattice_Signals.zip"
             ]
         },
         {
@@ -86,7 +86,6 @@
         {
             "type": "external",
             "id": "VP Grass Pack",
-            "site": "Steam",
             "href": [
                 "https://drive.google.com/file/d/1-XaAYJJIpiIWGyI62WmZpTp_jLbSJxxC/view"
             ]
@@ -102,21 +101,21 @@
             "type": "external",
             "id": "Lanky Track 010",
             "href": [
-                "https://www.uktrainsim.com/filelib-info.php?form_fileid=33447"
+                "https://archive.org/download/ukts-archive-files-33001-34000/UKTS_33447_Lanky_010_TS15.zip"
             ]
         },
         {
             "type": "external",
             "id": "Lanky Track 014",
             "href": [
-                "https://www.uktrainsim.com/filelib-info.php?form_fileid=33460"
+                "https://archive.org/download/ukts-archive-files-33001-34000/UKTS_33460_Lanky_014_TS15.zip"
             ]
         },
         {
             "type": "external",
             "id": "Lanky Track 021",
             "href": [
-                "https://www.uktrainsim.com/filelib-info.php?form_fileid=27800"
+                "https://archive.org/download/ukts-archive-files-27001-28000/UKTS_27800_Lanky_021RW3.zip"
             ]
         }
     ],

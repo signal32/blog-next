@@ -46,49 +46,11 @@ export interface LayoutRequestProps {
 
 //const AppBaseLayout = ({children, header: defaultHeaderImage, headerTitle: defaultHeaderTitle, breadcrumbs}: MainLayoutProps) => {
 const AppBaseLayout = (props: MainLayoutProps) => {
-    const router = useNavigation();
     const location = useLocation();
-    const headerRef = useRef<HTMLDivElement>(null);
-    const [title, setTitle] = useState(props.headerTitle);
-    const [header, setHeader] = useState(props.header);
-    const [showHeader, setShowHeader] = useState(true);
-    const [showContent, setShowContent] = useState(true);
 
-    // useEffect(() => {
-    //     if (typeof window === 'undefined') return
-
-    //     const hideHeaderWhenScrolled = () => {
-    //         const headerImageHeight = headerRef.current?.scrollHeight ?? 500
-
-    //         if (window.scrollY > headerImageHeight && showHeader) setShowHeader(false)
-    //         else if (window.scrollY <= headerImageHeight && !showHeader) setShowHeader(true)
-    //     }
-
-    //     window.addEventListener('scroll', hideHeaderWhenScrolled, { passive: true })
-    //     return () => void window.removeEventListener('scroll', hideHeaderWhenScrolled)
-    // }, [showHeader])
-
-    // const showAnimatedContent = debounce(() => {
-    //     setTitle(props.headerTitle);
-    //     setHeader(props.header);
-    //     setShowHeader(true);
-    //     setShowContent(true);
-    // }, 300);
-
-    // const hideAnimatedContent = debounce(() => {
-    //     setShowHeader(false);
-    //     setShowContent(false);
-    // }, 0);
-
-    // useEffect(() => {
-    //     hideAnimatedContent()
-    //     setTimeout(showAnimatedContent, 400)
-    //     // Will cause infinite loop
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [router.location?.pathname])
-    //
 
     const basket = useBasket()
+    // const [showHeader, setShowHeader] = useState(true);
 
     const Navigation = (props: {
         column?: boolean
@@ -147,8 +109,7 @@ const AppBaseLayout = (props: MainLayoutProps) => {
                     <div className={cn('sm:hidden', !showNav && 'hidden')}><Navigation column /></div>
                 </div>
             </header>
-            {((props.breadcrumbs ?? true) && showHeader) && <Breadcrumbs />}
-
+            {/*{((props.breadcrumbs ?? true)) && <Breadcrumbs />}*/}
             {props.children}
 
             <footer className="align-bottom dark:text-gray-300 text-gray-700">
@@ -201,42 +162,40 @@ export function defineLayout<P = {}>(
 }
 
 export function ContentLayout(props: MainLayoutProps) {
-    const headerRef = useRef<HTMLDivElement>(null);
-    const [title, setTitle] = useState(props.headerTitle);
-    const [header, setHeader] = useState(props.header);
-
-
     return (
-        <>
-            <div ref={headerRef} className={header !== undefined ? '-mt-10' : '-mt-5'}>
-                <div className={`p-0 max-w-4xl mx-auto relative transition-all ease-in-out overflow-clip rounded-b-xl opacity-100`}>
-                    {
-                        header?.type === 'image'
-                            ? <div className='w-full rounded-b-lg h-64'>
-                                <img
-                                    src={header.href ?? DEMO_IMAGE}
-                                    className='w-full h-64'
-                                    alt=''
-                                    sizes='100vw'
-                                    // fill
-                                    style={{ objectFit: 'cover' }}
-                                />
-                                {title &&
-                                    <div className="absolute bottom-0 left-0 bg-black/80 backdrop-blur-sm py-1 px-3 rounded-tr-lg">
-                                        <H2 className="text-white">{title}</H2>
-                                    </div>
-                                }
-                            </div>
-                            : header?.component
-                    }
-                </div>
+        <div className="max-w-4xl mx-auto w-full">
+            {props.header && <div className={`-mt-10 p-0 relative transition-all ease-in-out overflow-clip rounded-b-xl opacity-100`}>
+                {
+                    props.header?.type === 'image'
+                        ? <div className='w-full rounded-b-lg h-64'>
+                            <img
+                                src={props.header.href ?? DEMO_IMAGE}
+                                className='w-full h-64'
+                                alt=''
+                                sizes='100vw'
+                                // fill
+                                style={{ objectFit: 'cover' }}
+                            />
+                            {props.headerTitle &&
+                                <div className="absolute bottom-0 left-0 bg-black/80 backdrop-blur-sm py-1 px-3 rounded-tr-lg">
+                                    <H2 className="text-white">{props.headerTitle}</H2>
+                                </div>
+                            }
+                        </div>
+                        : props.header?.component
+                }
+            </div>}
+
+            <div className="pt-2">
+                <Breadcrumbs />
+
             </div>
 
-            <main className="p-2 max-w-4xl mx-auto w-full flex-grow">
+            <main className="p-2 flex-grow">
                 <div>
                     {props.children}
                 </div>
             </main>
-        </>
+        </div>
     )
 }
