@@ -5,14 +5,14 @@ interface ProductDetails {
     qty: number
 }
 
-interface Cart {
+interface Basket {
     products: Map<Product, ProductDetails>
     addProduct(product: Product, details: ProductDetails): void,
     updateProduct(product: Product, details: ProductDetails): void,
     removeProduct(product: Product): void,
 }
 
-export const useCart = create<Cart>()((set, get) => ({
+export const useBasket = create<Basket>()((set, get) => ({
     products: new Map(),
 
     addProduct(product, details) {

@@ -1,10 +1,10 @@
 // import Image from "next/image";
 // import Link from "next/link";
 // import { useRouter } from "next/router";
-import { CreativeCommons, Menu, ShoppingCart, X } from "lucide-react";
+import { CreativeCommons, Menu, ShoppingBasket, X } from "lucide-react";
 import { ReactElement, ReactNode, useRef, useState } from "react";
 import { Link, useLocation, useNavigation } from "react-router";
-import { useCart } from "src/lib/cart";
+import { useBasket } from "src/lib/basket";
 import { cn } from "src/lib/utils";
 import { websiteConfig } from "../../routes/_app";
 import Breadcrumbs from "../common/Breadcrumbs";
@@ -88,7 +88,7 @@ const AppBaseLayout = (props: MainLayoutProps) => {
     // }, [router.location?.pathname])
     //
 
-    const cart = useCart()
+    const basket = useBasket()
 
     const Navigation = (props: {
         column?: boolean
@@ -123,7 +123,7 @@ const AppBaseLayout = (props: MainLayoutProps) => {
                     ))
                 }
                 {
-                    cart.products.size ? <Button asChild><Link to="/cart"><ShoppingCart /></Link></Button> : undefined
+                    basket.products.size ? <Button asChild><Link to="/basket"><ShoppingBasket /></Link></Button> : undefined
                 }
             </div>
         </div >

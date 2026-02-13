@@ -2,13 +2,13 @@ import { Minus, Plus, Trash } from 'lucide-react'
 import { Link } from 'react-router'
 import { ContentLayout } from 'src/components/app/BaseLayout'
 import { Button } from 'src/components/ui/button'
-import { useCart } from 'src/lib/cart'
+import { useBasket } from 'src/lib/basket'
 import { cn } from 'src/lib/utils'
-import { Route } from './+types/cart'
+import { Route } from './+types/basket'
 
 
-export default function Cart({ loaderData }: Route.ComponentProps) {
-    const cart = useCart()
+export default function Basket({ loaderData }: Route.ComponentProps) {
+    const basket = useBasket()
     const cellClassName = 'p-2'
 
     return <ContentLayout>
@@ -24,17 +24,17 @@ export default function Cart({ loaderData }: Route.ComponentProps) {
                 </tr>
             </thead>
             <tbody>
-                {cart.products.entries().map(([product, details], i) => (
+                {basket.products.entries().map(([product, details], i) => (
                     <tr>
                         <td className={cellClassName}><Link to={`/product/${product.slug}`} className='hover:underline'>{product.name}</Link></td>
                         <td className={cellClassName}>{product.purchase?.price}</td>
                         <td className={cellClassName}>
-                            <Button variant='link' onClick={() => cart.updateProduct(product, { ...details, qty: Math.max(1, details.qty - 1) })}><Minus /></Button>
+                            <Button variant='link' onClick={() => basket.updateProduct(product, { ...details, qty: Math.max(1, details.qty - 1) })}><Minus /></Button>
                             {details.qty}
-                            <Button variant='link' onClick={() => cart.updateProduct(product, { ...details, qty: details.qty + 1 })}><Plus /></Button>
+                            <Button variant='link' onClick={() => basket.updateProduct(product, { ...details, qty: details.qty + 1 })}><Plus /></Button>
                         </td>
                         <td className={cellClassName}>{((product.purchase?.price ?? 0) * details.qty).toFixed(2)}</td>
-                        <th className={cellClassName}><Button variant='link' onClick={() => cart.removeProduct(product)}><Trash /></Button></th>
+                        <th className={cellClassName}><Button variant='link' onClick={() => basket.removeProduct(product)}><Trash /></Button></th>
 
                     </tr>
                 ))}
@@ -44,7 +44,7 @@ export default function Cart({ loaderData }: Route.ComponentProps) {
                     <td />
                     <td />
                     <td className={cn(cellClassName, 'bg-air/50 rounded-l-lg text-center')}>Total:</td>
-                    <td className={cn(cellClassName, 'bg-air/50 rounded-r-lg')}>{cart.products.entries().reduce((prev, [product, details]) => prev + (product.purchase?.price ?? 0) * details.qty, 0).toFixed(2)}</td>
+                    <td className={cn(cellClassName, 'bg-air/50 rounded-r-lg')}>{basket.products.entries().reduce((prev, [product, details]) => prev + (product.purchase?.price ?? 0) * details.qty, 0).toFixed(2)}</td>
                 </tr>
             </tfoot>
         </table>

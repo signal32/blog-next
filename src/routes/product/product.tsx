@@ -1,7 +1,7 @@
 import { ExternalLink, FileDown } from 'lucide-react';
 import { Link } from 'react-router';
 import { Button } from 'src/components/ui/button';
-import { useCart } from 'src/lib/cart';
+import { useBasket } from 'src/lib/basket';
 import { preRenderCache } from 'src/lib/preRenderCache.server';
 import { ContentLayout } from "../../components/app/BaseLayout";
 import Drawer from "../../components/common/Drawer";
@@ -30,7 +30,7 @@ export default function Product({ loaderData }: Route.ComponentProps) {
         )
     }
 
-    const cart = useCart()
+    const basket = useBasket()
 
     return <ContentLayout
         headerTitle={props.product?.name}
@@ -78,7 +78,7 @@ export default function Product({ loaderData }: Route.ComponentProps) {
                             : <p>Sorry, this file is currently unavailable.</p>
                         }
 
-                        <Button onClick={() => cart.addProduct(loaderData.product, { qty: 1 })}>Add to cart</Button>
+                        <Button onClick={() => basket.addProduct(loaderData.product, { qty: 1 })}>Add to basket</Button>
 
                         {/* <p className="italic text-sm text-right">Details: {JSON.stringify(props.mainFile)}</p> */}
                     </div>
