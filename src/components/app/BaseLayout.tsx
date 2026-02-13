@@ -47,49 +47,52 @@ export interface LayoutRequestProps {
 //const AppBaseLayout = ({children, header: defaultHeaderImage, headerTitle: defaultHeaderTitle, breadcrumbs}: MainLayoutProps) => {
 const AppBaseLayout = (props: MainLayoutProps) => {
     const location = useLocation();
-
-
     const basket = useBasket()
-    // const [showHeader, setShowHeader] = useState(true);
+
+
+
 
     const Navigation = (props: {
         column?: boolean
-    }) => (
-        <div className={cn('flex gap-2 text-white text-lg', props.column && 'flex-col')}>
-            {
-                websiteConfig.mainMenu.map((item, i) => (
-                    <Link
-                        className={cn(
-                            "grow p-2 rounded-lg text-center ring-air",
-                            location.pathname === item.href
-                                ? 'bg-air'
-                                : cn('hover:ring-2', props.column && 'bg-air/20')
+    }) => {
+        const NavigationLink = (linkProps: { to: string, children?: React.ReactElement }) => (
+            <Link
+                className={cn(
+                    "grow p-2 rounded-lg text-center ring-air",
+                    location.pathname === linkProps.to
+                        ? 'bg-air'
+                        : cn('hover:ring-2', props.column && 'bg-air/20')
 
-                        )}
-                        key={i}
-                        to={item.href}
-                        onClick={() => setShowNav(false)}
-                    >
-                        {item.name}
-                    </Link>
-                ))
-            }
+                )}
+                to={linkProps.to}
+                onClick={() => setShowNav(false)}
+            >
+                {linkProps.children}
+            </Link>
+        )
 
-            {/* Extra links (i.e. external social media) */}
-            <div className={cn("flex flex-wrap justify-center sm:justify-end items-center border-air sm:pl-4", props.column && "border-t-2")}>
-                {
-                    websiteConfig.socialLinks.map((link, i) => (
+        return (
+            <div className={cn('flex gap-2 text-white text-lg', props.column && 'flex-col')}>
+                {websiteConfig.mainMenu.map((item, i) => <NavigationLink key={i} to={item.href}><p>{item.name}</p></NavigationLink>)}
+                {basket.products.size > 0 && <NavigationLink to="/basket">
+                    <div className="relative">
+                        <ShoppingBasket />
+                        <div className="absolute bg-red-500 rounded-full -top-2 -right-2 aspect-square text-sm font-bold h-4 w-4 flex justify-center items-center">{basket.products.size}</div>
+
+                    </div>
+                </NavigationLink>}
+
+                {/* Extra links (i.e. external social media) */}
+                <div className={cn("flex flex-wrap justify-center sm:justify-end items-center border-air sm:pl-4", props.column && "border-t-2")}>
+                    {websiteConfig.socialLinks.map((link, i) => (
                         <div className="p-2" key={i}>
                             <a className="text-slate-300 hover:text-white transition-all" href={link.href} target="_blank">{link.icon}</a>
                         </div>
-                    ))
-                }
-                {
-                    basket.products.size ? <Button asChild><Link to="/basket"><ShoppingBasket /></Link></Button> : undefined
-                }
+                    ))}
+                </div>
             </div>
-        </div >
-    )
+        );
+    }
 
     const [showNav, setShowNav] = useState(false)
 
