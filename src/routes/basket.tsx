@@ -24,7 +24,7 @@ export default function Basket({ loaderData }: Route.ComponentProps) {
                 </tr>
             </thead>
             <tbody>
-                {basket.products.entries().map(([product, details], i) => (
+                {basket.products.values().map(({ product, details }, i) => (
                     <tr>
                         <td className={cellClassName}><Link to={`/product/${product.slug}`} className='hover:underline'>{product.name}</Link></td>
                         <td className={cellClassName}>{product.purchase?.price}</td>
@@ -44,7 +44,7 @@ export default function Basket({ loaderData }: Route.ComponentProps) {
                     <td />
                     <td />
                     <td className={cn(cellClassName, 'bg-air/50 rounded-l-lg text-center')}>Total:</td>
-                    <td className={cn(cellClassName, 'bg-air/50 rounded-r-lg')}>{basket.products.entries().reduce((prev, [product, details]) => prev + (product.purchase?.price ?? 0) * details.qty, 0).toFixed(2)}</td>
+                    <td className={cn(cellClassName, 'bg-air/50 rounded-r-lg')}>{basket.products.values().reduce((prev, { product, details }) => prev + (product.purchase?.price ?? 0) * details.qty, 0).toFixed(2)}</td>
                 </tr>
             </tfoot>
         </table>

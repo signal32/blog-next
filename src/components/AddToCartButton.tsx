@@ -11,7 +11,7 @@ export function AddToCartButton(props: { product: Product }) {
     return <>
         <AlertDialog>
 
-            {basket.products.has(props.product)
+            {basket.products.has(props.product.id)
                 ? <div className="flex justify-between items-center bg-green-700/50 p-2 rounded-lg">
                     <P>In your basket!</P>
                     <Link to="/basket"><Button variant='outline'>View</Button></Link>
