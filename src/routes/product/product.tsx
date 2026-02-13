@@ -11,6 +11,7 @@ import { type FileDetails, files } from "../../lib/file.server";
 import { type Product, type Requirement, products } from "../../lib/products.server";
 import { Route } from './+types/product';
 import { AddToCartButton } from 'src/components/AddToCartButton';
+import { H3 } from 'src/components/common/typography';
 
 export default function Product({ loaderData }: Route.ComponentProps) {
 
@@ -65,21 +66,24 @@ export default function Product({ loaderData }: Route.ComponentProps) {
                         {/* TODO basic info */}
                         <ProductDetails product={props.product} />
                         {/* TODO download links */}
-                        {props.mainFile
-                            ? <>
-                                {/*<Button text="Download" icon={<FaInfoCircle />} href={props.mainFile.href} target='_blank' />*/}
-                                <Button asChild className='w-full'>
-                                    <a href={props.mainFile.href} target='_blank'>
-                                        <FileDown />
-                                        Download
-                                    </a>
-                                </Button>
-                                <p className="italic text-sm text-right">{props.mainFile.fileName}</p>
-                            </>
-                            : <p>Sorry, this file is currently unavailable.</p>
+                        {props.mainFile && <>
+                            {/*<Button text="Download" icon={<FaInfoCircle />} href={props.mainFile.href} target='_blank' />*/}
+                            <Button asChild className='w-full'>
+                                <a href={props.mainFile.href} target='_blank'>
+                                    <FileDown />
+                                    Download
+                                </a>
+                            </Button>
+                            <p className="italic text-sm text-right">{props.mainFile.fileName}</p>
+                        </>
                         }
 
-                        <AddToCartButton product={loaderData.product} />
+                        {props.product.purchase &&
+                            <>
+                                <H3>£{props.product.purchase.price.toFixed(2)}</H3>
+                                <AddToCartButton product={loaderData.product} />
+                            </>
+                        }
 
                         {/* <p className="italic text-sm text-right">Details: {JSON.stringify(props.mainFile)}</p> */}
                     </div>
