@@ -35,7 +35,7 @@
         "tailwind-merge": "^3.4.0",
         "ts-pattern": "^4.0.5",
         "vite-plugin-node-polyfills": "^0.25.0",
-        "zustand": "^4.1.1"
+        "zustand": "^4.5.7"
     },
     "devDependencies": {
         "@eslint/js": "^9.30.1",

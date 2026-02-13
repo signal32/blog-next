@@ -1,7 +1,6 @@
 import { ExternalLink, FileDown } from 'lucide-react';
 import { Link } from 'react-router';
 import { Button } from 'src/components/ui/button';
-import { useBasket } from 'src/lib/basket';
 import { preRenderCache } from 'src/lib/preRenderCache.server';
 import { ContentLayout } from "../../components/app/BaseLayout";
 import Drawer from "../../components/common/Drawer";
@@ -31,8 +30,6 @@ export default function Product({ loaderData }: Route.ComponentProps) {
             </div>
         )
     }
-
-    const basket = useBasket()
 
     return <ContentLayout
         headerTitle={props.product?.name}

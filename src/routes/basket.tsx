@@ -8,13 +8,12 @@ import { Route } from './+types/basket'
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from 'src/components/ui/empty'
 import { useMemo } from 'react'
 
-
 export default function Basket({ }: Route.ComponentProps) {
     const basket = useBasket()
 
     return <ContentLayout>
         {
-            basket.products.size > 0
+            Object.keys(basket.products).length > 0
                 ? <>
                     <BasketTable />
                     <Button className='w-full py-5' size='lg'>Proceed to checkout<ArrowRightIcon /></Button>
@@ -50,11 +49,11 @@ function BasketTable() {
     const basket = useBasket()
 
     const calculations = useMemo(() => {
-        const lineItems = basket.products.values().map(({ product, details }) => ({
+        const lineItems = Object.values(basket.products).map(({ product, details }) => ({
             product,
             details,
             total: (product.purchase?.price ?? 0) * details.qty
-        })).toArray()
+        }))
         const totalExTax = lineItems.reduce((prev, { total }) => prev + total, 0)
         const totalTax = (totalExTax / 100) * 20
         const totalIncTax = totalExTax + totalTax
