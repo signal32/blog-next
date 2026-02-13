@@ -5,7 +5,7 @@ interface ProductDetails {
     qty: number
 }
 
-interface Basket {
+export interface Basket {
     products: Map<string, { product: Product, details: ProductDetails }>
     addProduct(product: Product, details: ProductDetails): void,
     updateProduct(product: Product, details: ProductDetails): void,
