@@ -10,6 +10,7 @@ import { useModalStore } from "../../components/common/Modal";
 import { type FileDetails, files } from "../../lib/file.server";
 import { type Product, type Requirement, products } from "../../lib/products.server";
 import { Route } from './+types/product';
+import { AddToCartButton } from 'src/components/AddToCartButton';
 
 export default function Product({ loaderData }: Route.ComponentProps) {
 
@@ -78,7 +79,7 @@ export default function Product({ loaderData }: Route.ComponentProps) {
                             : <p>Sorry, this file is currently unavailable.</p>
                         }
 
-                        <Button onClick={() => basket.addProduct(loaderData.product, { qty: 1 })}>Add to basket</Button>
+                        <AddToCartButton product={loaderData.product} />
 
                         {/* <p className="italic text-sm text-right">Details: {JSON.stringify(props.mainFile)}</p> */}
                     </div>

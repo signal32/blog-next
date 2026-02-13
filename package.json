@@ -23,6 +23,7 @@
         "isbot": "^5",
         "lodash": "^4.17.23",
         "lucide-react": "^0.563.0",
+        "radix-ui": "^1.4.3",
         "react": "^19.1.0",
         "react-dom": "^19.1.0",
         "react-icons": "^4.4.0",
