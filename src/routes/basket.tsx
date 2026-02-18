@@ -1,19 +1,20 @@
-import { ArrowRightIcon, Minus, Plus, ShoppingBasketIcon, Trash } from 'lucide-react'
+import { ArrowRightIcon, LucideClockFading, Minus, Plus, ShoppingBasketIcon, Trash } from 'lucide-react'
 import { Link } from 'react-router'
 import { ContentLayout } from 'src/components/app/BaseLayout'
 import { Button } from 'src/components/ui/button'
 import { Basket, useBasket } from 'src/lib/basket'
-import { cn } from 'src/lib/utils'
+import { cn, useSyncedRef } from 'src/lib/utils'
 import { Route } from './+types/basket'
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from 'src/components/ui/empty'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { ShopClient } from 'store'
 
 export default function Basket({ }: Route.ComponentProps) {
     const basket = useBasket()
 
     return <ContentLayout>
         {
-            Object.keys(basket.products).length > 0
+            Object.keys(basket.order.products).length > 0
                 ? <>
                     <BasketTable />
                     <Button className='w-full py-5' size='lg'>Proceed to checkout<ArrowRightIcon /></Button>
@@ -44,29 +45,22 @@ function formatCurrency(amount: number) {
     return `£${amount.toFixed(2)}`
 }
 
+const shopClient = new ShopClient('http://localhost:3004')
+
+
 function BasketTable() {
     const cellClassName = 'p-1'
     const basket = useBasket()
 
-    const calculations = useMemo(() => {
-        const lineItems = Object.values(basket.products).map(({ product, details }) => ({
-            product,
-            details,
-            total: (product.purchase?.price ?? 0) * details.qty
-        }))
-        const totalExTax = lineItems.reduce((prev, { total }) => prev + total, 0)
-        const totalTax = (totalExTax / 100) * 20
-        const totalIncTax = totalExTax + totalTax
-
-        return {
-            lineItems,
-            totalExTax,
-            totalTax,
-            totalIncTax
-        }
+    const [calculations, setCalculations] = useState<Awaited<ReturnType<ShopClient['calculateOrder']>>>()
+    useEffect(() => {
+        shopClient
+            .calculateOrder({ order: basket.order })
+            .then(setCalculations)
+            .catch(console.log)
     }, [basket])
 
-    return (
+    return calculations ? (
         <table className='table-auto w-full text-lg mb-5'>
             <thead className='text-left'>
                 <tr className='border-b-2 border-air'>
@@ -78,40 +72,66 @@ function BasketTable() {
                 </tr>
             </thead>
             <tbody>
-                {calculations.lineItems.map(({ product, details, total }, i) => (
+                {calculations?.linePrices.map(({ product, quantity, unitPrice, linePrice, optionId, option }, i) => (
                     <tr key={i}>
-                        <td className={cellClassName}><Link to={`/product/${product.slug}`} className='hover:underline'>{product.name}</Link></td>
-                        <td className={cellClassName}>{formatCurrency(product.purchase?.price ?? 0)}</td>
+                        <td className={cellClassName}><Link to={`/product/${product.id}`} className='hover:underline'>{product.name}</Link></td>
+                        <td className={cellClassName}>{formatCurrency(unitPrice)}</td>
                         <td className={cellClassName}>
-                            <Button variant='link' onClick={() => basket.updateProduct(product, { ...details, qty: Math.max(1, details.qty - 1) })}><Minus /></Button>
-                            {details.qty}
-                            <Button variant='link' onClick={() => basket.updateProduct(product, { ...details, qty: details.qty + 1 })}><Plus /></Button>
+                            <Button
+                                variant='link'
+                                onClick={() => basket.updateProduct(
+                                    product.id,
+                                    { ...option, quantity: Math.max(1, quantity - 1) },
+                                    optionId
+                                )}
+                            >
+                                <Minus />
+                            </Button>
+                            {quantity}
+                            <Button
+                                variant='link'
+                                onClick={() => basket.updateProduct(
+                                    product.id,
+                                    { ...option, quantity: quantity + 1 },
+                                    optionId
+                                )}
+                            >
+                                <Plus />
+                            </Button>
                         </td>
-                        <td className={cellClassName}>{formatCurrency(total)}</td>
-                        <th className={cellClassName}><Button variant='link' onClick={() => basket.removeProduct(product)}><Trash /></Button></th>
+                        <td className={cellClassName}>{formatCurrency(linePrice)}</td>
+                        <th className={cellClassName}><Button variant='link' onClick={() => basket.removeProduct(product.id)}><Trash /></Button></th>
                     </tr>
                 ))}
             </tbody>
             <tfoot className='font-bold'>
-                <tr>
+                {/*<tr>
                     <td />
                     <td />
                     <td className={cn(cellClassName, 'text-right')}>Total</td>
                     <td className={cn(cellClassName)}>{formatCurrency(calculations.totalExTax)}</td>
-                </tr>
-                <tr>
+                </tr>*/}
+                {/*<tr>
                     <td />
                     <td />
                     <td className={cn(cellClassName, 'text-right')}>VAT</td>
-                    <td className={cn(cellClassName)}>{formatCurrency(calculations.totalTax)}</td>
-                </tr>
+                    <td className={cn(cellClassName)}>{formatCurrency(calculations?.totalPrice ?? 0)}</td>
+                </tr>*/}
                 <tr>
                     <td />
                     <td />
                     <td className={cn(cellClassName, 'bg-air text-white rounded-l-md text-right')}>Total (incl. VAT)</td>
-                    <td className={cn(cellClassName, 'bg-air text-white rounded-r-md')}>{formatCurrency(calculations.totalIncTax)}</td>
+                    <td className={cn(cellClassName, 'bg-air text-white rounded-r-md')}>{formatCurrency(calculations?.totalPrice ?? 0)}</td>
                 </tr>
             </tfoot>
         </table>
-    )
+    ) :
+        <Empty>
+            <EmptyHeader>
+                <EmptyMedia>
+                    <LucideClockFading />
+                </EmptyMedia>
+                <EmptyTitle>Loading basket...</EmptyTitle>
+            </EmptyHeader>
+        </Empty>
 }

@@ -1,57 +1,74 @@
 import { create } from "zustand"
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { Product } from "./products.server"
-
-interface ProductDetails {
-    qty: number
-}
+import { Option, Order, Product, updateOrderProductOption, DEFAULT_OPTION } from "store"
 
 export interface Basket {
-    products: Record<string, { product: Product, details: ProductDetails }>
-    addProduct(product: Product, details: ProductDetails): void,
-    updateProduct(product: Product, details: ProductDetails): void,
-    removeProduct(product: Product): void,
+    order: Order,
+    addProduct(product: Product, option: Option, optionId?: string): void,
+    updateProduct(productId: string, option: Option | ((current: Option) => Option), optionId?: string): void,
+    removeProduct(productId: string, optionId?: string): void,
 }
 
 export const useBasket = create<Basket>()(
     persist(
         (set, get) => ({
-            products: {},
+            order: {
+                id: '', // TODO: generate a uuid
+                products: {}
+            },
 
-            addProduct(product, details) {
-                const products = get().products
-                const current = products[product.id]
+            addProduct(product, option, optionId = DEFAULT_OPTION) {
+                const { order } = get()
+
+                const current = order.products[product.id]
                 if (current) {
-                    products[product.id] = {
+                    updateOrderProductOption(
+                        prev => ({
+                            ...prev,
+                            quantity: prev.quantity + option.quantity
+                        }),
+                        order,
+                        product.id,
+                        optionId
+                    )
+                }
+                else {
+                    order.products[product.id] = {
                         product,
-                        details: {
-                            qty: current.details.qty + details.qty
-
+                        options: {
+                            [optionId]: option
                         }
                     }
                 }
-                else {
-                    products[product.id] = { product, details }
+                set({ order })
+            },
+
+            updateProduct(productId, details, optionId = DEFAULT_OPTION) {
+                const { order } = get()
+                console.log({ details })
+                updateOrderProductOption(details, order, productId, optionId)
+                set({ order })
+            },
+
+            removeProduct(productId, optionId = DEFAULT_OPTION) {
+                const { order } = get()
+
+                if (optionId) {
+                    const product = order.products[productId]
+                    if (!product) throw new Error('no product')
+
+                    delete product.options[optionId]
+                    if (Object.keys(product.options).length === 0) {
+                        delete order.products[productId]
+                    }
                 }
-                set({ products })
-            },
+                else delete order.products[productId]
 
-            updateProduct(product, details) {
-                const products = get().products
-                products[product.id] = { product, details }
-                set({ products })
-            },
-
-            removeProduct(product) {
-                const products = get().products
-                delete products[product.id]
-                set({ products })
+                set({ order })
             }
-
         }),
         {
             name: 'basket-storage',
             storage: createJSONStorage(() => sessionStorage),
-
         }
     ))

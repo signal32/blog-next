@@ -7,17 +7,19 @@ import { P } from "./common/typography";
 
 export function AddToCartButton(props: { product: Product }) {
     const basket = useBasket()
+    const storeProduct = props.product.storeProduct
 
-    return <>
+
+    return storeProduct !== undefined && <>
         <AlertDialog>
 
-            {basket.products[props.product.id]
+            {basket.order.products[props.product.id]
                 ? <div className="flex justify-between items-center bg-green-700/50 p-2 rounded-lg">
                     <P>In your basket!</P>
                     <Link to="/basket"><Button variant='outline'>View</Button></Link>
                 </div>
                 : <AlertDialogTrigger asChild>
-                    <Button className="w-full" onClick={() => basket.addProduct(props.product, { qty: 1 })}>Add to basket</Button>
+                    <Button className="w-full" onClick={() => basket.addProduct(storeProduct, { quantity: 1 })}>Add to basket</Button>
                 </AlertDialogTrigger>
 
             }

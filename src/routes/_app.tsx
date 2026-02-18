@@ -14,8 +14,8 @@ export const websiteConfig: AppConfig = {
     mainMenu: [
         { name: `Blog`, href: `/blog` },
         { name: `Simulation`, href: `/simulation` },
-        { name: `Shop`, href: `/shop` },
         { name: `About`, href: `/about` },
+        { name: `Shop`, href: `/shop` },
     ],
     socialLinks: [
         { name: `GitHub`, href: 'https://github.com/signal32', icon: <div><Github /></div> },

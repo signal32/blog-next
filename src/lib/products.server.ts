@@ -3,6 +3,7 @@ import { join } from "path";
 import { createClient } from "store";
 import { createSelect, fromSelect } from "store/src/product";
 import { Content, defineContent, defineFileSource } from "./content.server";
+import { Product as StoreProduct } from 'store'
 
 export interface Product extends Content {
     published: Date,
@@ -18,10 +19,7 @@ export interface Product extends Content {
         /** Miscellaneous files belonging to the product */
         other: { slug: string, tag?: FileTag }[]
     },
-    purchase?: {
-        singleItemOnly?: boolean,
-        price: number,
-    }
+    storeProduct?: StoreProduct
 }
 
 export type FileTag = 'manual' | 'misc'
@@ -114,9 +112,7 @@ export const products = defineContent<Product>([
                 baseUrl: '/product',
                 created: '10 Jan 2020',
                 public: true,
-                purchase: {
-                    price: product?.price ?? 0.00
-                }
+                storeProduct: product
             }
         }
     }

@@ -75,9 +75,9 @@ export default function Product({ loaderData }: Route.ComponentProps) {
                         </>
                         }
 
-                        {props.product.purchase &&
+                        {props.product.storeProduct &&
                             <>
-                                <H3>£{props.product.purchase.price.toFixed(2)}</H3>
+                                <H3>£{props.product.storeProduct.price.toFixed(2)}</H3>
                                 <AddToCartButton product={loaderData.product} />
                             </>
                         }
