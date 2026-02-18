@@ -10,7 +10,12 @@ import { type FileDetails, files } from "../../lib/file.server";
 import { type Product, type Requirement, products } from "../../lib/products.server";
 import { Route } from './+types/product';
 import { AddToCartButton } from 'src/components/AddToCartButton';
-import { H3 } from 'src/components/common/typography';
+import { H3, P } from 'src/components/common/typography';
+import { useEffect, useState } from 'react';
+import { SHOP } from 'src/shop';
+import { ShopClient } from 'store';
+import { formatCurrency } from 'src/lib/utils';
+import { Skeleton } from 'src/components/ui/skeleton';
 
 export default function Product({ loaderData }: Route.ComponentProps) {
 
@@ -30,6 +35,14 @@ export default function Product({ loaderData }: Route.ComponentProps) {
             </div>
         )
     }
+
+    const [price, setPrice] = useState<Awaited<ReturnType<ShopClient['productPrice']>>>()
+    useEffect(() => {
+        const { storeProduct } = loaderData.product
+        if (storeProduct) SHOP
+            .productPrice({ productId: storeProduct.id })
+            .then(setPrice)
+    }, [])
 
     return <ContentLayout
         headerTitle={props.product?.name}
@@ -77,7 +90,7 @@ export default function Product({ loaderData }: Route.ComponentProps) {
 
                         {props.product.storeProduct &&
                             <>
-                                <H3>£{props.product.storeProduct.price.toFixed(2)}</H3>
+                                {price?.price ? <H3>{formatCurrency(price?.price)}</H3> : <Skeleton className="h-12 mb-2 w-full" />}
                                 <AddToCartButton product={loaderData.product} />
                             </>
                         }

@@ -3,11 +3,12 @@ import { Link } from 'react-router'
 import { ContentLayout } from 'src/components/app/BaseLayout'
 import { Button } from 'src/components/ui/button'
 import { Basket, useBasket } from 'src/lib/basket'
-import { cn, useSyncedRef } from 'src/lib/utils'
+import { cn, formatCurrency, } from 'src/lib/utils'
 import { Route } from './+types/basket'
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from 'src/components/ui/empty'
 import { useEffect, useMemo, useState } from 'react'
 import { ShopClient } from 'store'
+import { SHOP } from 'src/shop'
 
 export default function Basket({ }: Route.ComponentProps) {
     const basket = useBasket()
@@ -41,12 +42,6 @@ export default function Basket({ }: Route.ComponentProps) {
     </ContentLayout>
 }
 
-function formatCurrency(amount: number) {
-    return `£${amount.toFixed(2)}`
-}
-
-const shopClient = new ShopClient('http://localhost:3004')
-
 
 function BasketTable() {
     const cellClassName = 'p-1'
@@ -54,7 +49,7 @@ function BasketTable() {
 
     const [calculations, setCalculations] = useState<Awaited<ReturnType<ShopClient['calculateOrder']>>>()
     useEffect(() => {
-        shopClient
+        SHOP
             .calculateOrder({ order: basket.order })
             .then(setCalculations)
             .catch(console.log)

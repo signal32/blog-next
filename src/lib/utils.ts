@@ -14,3 +14,7 @@ export function useSyncedRef<T>(value: T) {
     }, [value])
     return ref
 }
+
+export function formatCurrency(amount: number) {
+    return `£${(amount / 100).toFixed(2)}`
+}
