@@ -13,12 +13,23 @@ import { SHOP } from 'src/shop'
 export default function Basket({ }: Route.ComponentProps) {
     const basket = useBasket()
 
+    const goToCheckout = async () => {
+        const { url } = await SHOP.createStripePayment({ order: basket.order })
+        window.location.href = url
+    }
+
     return <ContentLayout>
         {
             Object.keys(basket.order.products).length > 0
                 ? <>
                     <BasketTable />
-                    <Button className='w-full py-5' size='lg'>Proceed to checkout<ArrowRightIcon /></Button>
+                    <Button
+                        className='w-full py-5'
+                        size='lg'
+                        onClick={goToCheckout}
+                    >
+                        Proceed to checkout<ArrowRightIcon />
+                    </Button>
                 </>
                 : <Empty>
                     <EmptyHeader>
