@@ -7,7 +7,7 @@ import { cn, formatCurrency, } from 'src/lib/utils'
 import { Route } from './+types/basket'
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from 'src/components/ui/empty'
 import { useEffect, useMemo, useState } from 'react'
-import { ShopClient } from 'store'
+import { getOrderOption, ShopClient } from 'store'
 import { SHOP } from 'src/shop'
 
 export default function Basket({ }: Route.ComponentProps) {
@@ -78,37 +78,41 @@ function BasketTable() {
                 </tr>
             </thead>
             <tbody>
-                {calculations?.linePrices.map(({ product, quantity, unitPrice, linePrice, optionId, option }, i) => (
-                    <tr key={i}>
-                        <td className={cellClassName}><Link to={`/product/${product.id}`} className='hover:underline'>{product.name}</Link></td>
-                        <td className={cellClassName}>{formatCurrency(unitPrice)}</td>
-                        <td className={cellClassName}>
-                            <Button
-                                variant='link'
-                                onClick={() => basket.updateProduct(
-                                    product.id,
-                                    { ...option, quantity: Math.max(1, quantity - 1) },
-                                    optionId
-                                )}
-                            >
-                                <Minus />
-                            </Button>
-                            {quantity}
-                            <Button
-                                variant='link'
-                                onClick={() => basket.updateProduct(
-                                    product.id,
-                                    { ...option, quantity: quantity + 1 },
-                                    optionId
-                                )}
-                            >
-                                <Plus />
-                            </Button>
-                        </td>
-                        <td className={cellClassName}>{formatCurrency(linePrice)}</td>
-                        <th className={cellClassName}><Button variant='link' onClick={() => basket.removeProduct(product.id)}><Trash /></Button></th>
-                    </tr>
-                ))}
+                {calculations?.linePrices.map(({ productId, unitPrice, linePrice, optionId }, i) => {
+                    const { product, option } = getOrderOption(basket.order, productId, optionId)
+
+                    return (
+                        <tr key={i}>
+                            <td className={cellClassName}><Link to={`/product/${product.id}`} className='hover:underline'>{product.name}</Link></td>
+                            <td className={cellClassName}>{formatCurrency(unitPrice)}</td>
+                            <td className={cellClassName}>
+                                <Button
+                                    variant='link'
+                                    onClick={() => basket.updateProduct(
+                                        product.id,
+                                        { ...option, quantity: Math.max(1, option?.quantity - 1) },
+                                        optionId
+                                    )}
+                                >
+                                    <Minus />
+                                </Button>
+                                {option?.quantity}
+                                <Button
+                                    variant='link'
+                                    onClick={() => basket.updateProduct(
+                                        product.id,
+                                        { ...option, quantity: option?.quantity + 1 },
+                                        optionId
+                                    )}
+                                >
+                                    <Plus />
+                                </Button>
+                            </td>
+                            <td className={cellClassName}>{formatCurrency(linePrice)}</td>
+                            <th className={cellClassName}><Button variant='link' onClick={() => basket.removeProduct(product.id)}><Trash /></Button></th>
+                        </tr>
+                    )
+                })}
             </tbody>
             <tfoot className='font-bold'>
                 {/*<tr>
