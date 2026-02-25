@@ -31,3 +31,22 @@ export function once<T>(fn: () => T): () => T {
         return result;
     };
 }
+
+export function debounce<Args extends unknown[], X>(
+    fn: (...args: Args) => X,
+    delay: number
+): (...args: Args) => Promise<Awaited<X>> {
+    let timer: ReturnType<typeof setTimeout>
+
+    return (...args) => {
+        return new Promise((resolve) => {
+            if (timer !== undefined) {
+                clearTimeout(timer)
+            }
+
+            timer = setTimeout(async () => {
+                resolve(await fn(...args))
+            }, delay)
+        })
+    }
+}

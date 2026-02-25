@@ -11,23 +11,8 @@ import Breadcrumbs from "../common/Breadcrumbs";
 import ModalContext from "../common/Modal";
 import { A, H2 } from "../common/typography";
 import { Button } from "../ui/button";
+import { debounce } from "src/lib/utils";
 
-export function debounce<Args extends unknown[]>(
-    fn: (...args: Args) => void,
-    delay: number
-): (...args: Args) => void {
-    let timer: ReturnType<typeof setTimeout>
-
-    return (...args: Args): void => {
-        if (timer !== undefined) {
-            clearTimeout(timer)
-        }
-
-        timer = setTimeout(() => {
-            fn(...args)
-        }, delay)
-    }
-}
 
 const DEMO_IMAGE = "https://images.pexels.com/photos/4215110/pexels-photo-4215110.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
 
