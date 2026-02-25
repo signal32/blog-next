@@ -45,7 +45,6 @@ export const useBasket = create<Basket>()(
 
             updateProduct(productId, details, optionId = DEFAULT_OPTION) {
                 const { order } = get()
-                console.log({ details })
                 updateOrderProductOption(details, order, productId, optionId)
                 set({ order })
             },

@@ -70,6 +70,15 @@ export type Source<T> = {
     loader: Loader<T>,
     descriptors: () => Promise<ContentDescriptor[]>
 }
+
+export type ContentLibrary<T extends Content> = {
+    getAll: () => Promise<ContentDescriptor[]>
+    getAllDetailed: () => Promise<T[]>
+    getById: (id: string) => Promise<T | undefined>
+    getBySlug: (slug: string) => Promise<T | undefined>
+    getByName: (name: string) => Promise<T | undefined>
+}
+
 /**
  * Defines methods for loading content of type T from a collection of abstract sources.
  * - Local files can be loaded with {@link defineFileSource}
@@ -81,23 +90,13 @@ export type Source<T> = {
  */
 export function defineContent<T extends Content>(
     sources: Source<T>[]
-): {
-    getAll: () => Promise<ContentDescriptor[]>
-    getAllDetailed: () => Promise<T[]>
-    getById: (id: string) => Promise<T | undefined>
-    getBySlug: (slug: string) => Promise<T | undefined>
-    getByName: (name: string) => Promise<T | undefined>
-} {
+): ContentLibrary<T> {
     const cache = {
-        id: new Map<string, { descriptor: ContentDescriptor, source: Source<T> }>(),
+        id: new Map<string, { descriptor: ContentDescriptor, source: Source<T>, content?: T }>(),
         slug: new Map<string, string>(), // slug -> id
         name: new Map<string, string>(), // name -> id
         dir: new Map<string, string[]>(), // dir -> child content ids
     }
-
-    const getById = (id: string) => cache.id.get(id);
-    const getBySlug = (slug: string) => getById(cache.slug.get(slug) || '');
-    const getByName = (name: string) => getById(cache.name.get(name) || '');
 
     async function initCache() {
         if (cache.id.size) return
@@ -114,6 +113,19 @@ export function defineContent<T extends Content>(
         }
     }
 
+    const getById = async (id: string) => {
+        await initCache()
+
+        const data = cache.id.get(id);
+        if (!data) return
+        if (!data?.content) {
+            data.content = await data.source.loader(data.descriptor)
+            cache.id.set(id, data)
+        }
+
+        return data.content
+    };
+
     return {
         async getAll() {
             await initCache()
@@ -121,7 +133,6 @@ export function defineContent<T extends Content>(
         },
 
         async getAllDetailed() {
-            await initCache()
             const items = []
 
             for (const item of await this.getAll()) {
@@ -132,20 +143,12 @@ export function defineContent<T extends Content>(
             return items
         },
 
-        getById: async (id) => {
-            await initCache()
-            const content = getById(id);
-            if (content) return content.source.loader(content.descriptor)
+        getById,
+        getBySlug(slug: string) {
+            return getById(cache.slug.get(slug) || '')
         },
-        getBySlug: async (slug) => {
-            await initCache()
-            const content = getBySlug(slug)
-            if (content) return content.source.loader(content.descriptor)
-        },
-        getByName: async (name) => {
-            await initCache()
-            const content = getByName(name)
-            if (content) return content.source.loader(content.descriptor)
+        getByName(name: string) {
+            return getById(cache.name.get(name) || '')
         }
     }
 }

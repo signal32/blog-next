@@ -2,8 +2,8 @@
 // import Link from "next/link";
 // import { useRouter } from "next/router";
 import { CreativeCommons, Menu, ShoppingBasket, X } from "lucide-react";
-import { ReactElement, ReactNode, useRef, useState } from "react";
-import { Link, useLocation, useNavigation } from "react-router";
+import { ReactElement, ReactNode, useState } from "react";
+import { Link, useLocation } from "react-router";
 import { useBasket } from "src/lib/basket";
 import { cn } from "src/lib/utils";
 import { websiteConfig } from "../../routes/_app";

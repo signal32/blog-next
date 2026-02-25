@@ -10,7 +10,7 @@ I am a developer of Train Simulator Classic addons, focusing on realism and auth
 ## Releases
 
 <div>
-    <Content type="product" id="speyside_line"></Content>
+    <Content library="products" id="1"></Content>
 </div>
 
 ## Freelance Work

@@ -38,12 +38,21 @@ type Pages = {
   "/shop": {
     params: {};
   };
+  "/api/content": {
+    params: {};
+  };
+  "/api/content/:libraryId/:contentId": {
+    params: {
+      "libraryId": string;
+      "contentId": string;
+    };
+  };
 };
 
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/:slug" | "/basket" | "/blog" | "/blog/:slug" | "/product/:slug" | "/shop";
+    page: "/" | "/:slug" | "/basket" | "/blog" | "/blog/:slug" | "/product/:slug" | "/shop" | "/api/content" | "/api/content/:libraryId/:contentId";
   };
   "routes/home.tsx": {
     id: "routes/home";
@@ -73,6 +82,14 @@ type RouteFiles = {
     id: "routes/product/index";
     page: "/shop";
   };
+  "./routes/api/contentList.ts": {
+    id: "routes/api/contentList";
+    page: "/api/content";
+  };
+  "./routes/api/contentDetails.ts": {
+    id: "routes/api/contentDetails";
+    page: "/api/content/:libraryId/:contentId";
+  };
 };
 
 type RouteModules = {
@@ -84,4 +101,6 @@ type RouteModules = {
   "routes/blog/post": typeof import("./src/./routes/blog/post.tsx");
   "routes/product/product": typeof import("./src/./routes/product/product.tsx");
   "routes/product/index": typeof import("./src/routes/product/index.tsx");
+  "routes/api/contentList": typeof import("./src/./routes/api/contentList.ts");
+  "routes/api/contentDetails": typeof import("./src/./routes/api/contentDetails.ts");
 };

@@ -1,8 +1,8 @@
-import fs from 'fs'
+import fs from 'fs';
+import { readFile } from 'fs/promises';
 import matter from 'gray-matter';
 import { join } from 'path';
-import { Content, ContentDescriptor, defineContent, defineFileSource } from './content.server';
-import { readFile } from 'fs/promises';
+import { Content, defineContent, defineFileSource } from './content.server';
 
 const POST_DIR = join(process.cwd(), '/content/posts');
 
@@ -37,7 +37,6 @@ export const posts = defineContent<Post>([
             content,
             baseUrl: '/blog'
         } as Post
-
         if (isPost(post)) return post
         else throw new Error("Invalid post data")
     })

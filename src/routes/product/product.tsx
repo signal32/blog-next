@@ -1,7 +1,13 @@
 import { ExternalLink, FileDown } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
+import { AddToCartButton } from 'src/components/AddToCartButton';
+import { H3 } from 'src/components/common/typography';
 import { Button } from 'src/components/ui/button';
-import { preRenderCache } from 'src/lib/preRenderCache.server';
+import { Skeleton } from 'src/components/ui/skeleton';
+import { formatCurrency } from 'src/lib/utils';
+import { SHOP } from 'src/shop';
+import { ShopClient } from 'store';
 import { ContentLayout } from "../../components/app/BaseLayout";
 import Drawer from "../../components/common/Drawer";
 import { Markdown } from '../../components/common/Markdown';
@@ -9,13 +15,6 @@ import { useModalStore } from "../../components/common/Modal";
 import { type FileDetails, files } from "../../lib/file.server";
 import { type Product, type Requirement, products } from "../../lib/products.server";
 import { Route } from './+types/product';
-import { AddToCartButton } from 'src/components/AddToCartButton';
-import { H3, P } from 'src/components/common/typography';
-import { useEffect, useState } from 'react';
-import { SHOP } from 'src/shop';
-import { ShopClient } from 'store';
-import { formatCurrency } from 'src/lib/utils';
-import { Skeleton } from 'src/components/ui/skeleton';
 
 export default function Product({ loaderData }: Route.ComponentProps) {
 
@@ -57,7 +56,7 @@ export default function Product({ loaderData }: Route.ComponentProps) {
 
                 {/* Main content */}
                 <div className=" flex-grow basis-80">
-                    <Markdown content={props.product.description ?? ''} cache={props.cache} />
+                    <Markdown content={props.product.description ?? ''} />
 
                     <Drawer title="Requirements">
                         {props.product.requirements?.map((item, i) => <RequirementItem key={i} requirement={item} products={props.dependencyProducts ?? []} />)}
@@ -130,7 +129,7 @@ export async function loader({ params }: Route.LoaderArgs) {
         dependencyProducts,
         mainFile,
         otherFiles,
-        cache: await preRenderCache()
+        // cache: await preRenderCache()
     }
 }
 

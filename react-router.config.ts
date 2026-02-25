@@ -6,15 +6,20 @@ import { posts } from './src/lib/posts.server'
 export default {
     ssr: false,
     prerender: async ({ getStaticPaths }) => {
-        const postSlugs = (await posts.getAllDetailed()).map(post => post.slug)
-        const productSlugs = (await products.getAll()).map(product => product.slug)
-        const pageSlugs = (await pages.getAll()).map(page => page.slug)
-
         return [
             ...getStaticPaths(),
-            ...postSlugs.map(slug => `/blog/${slug}`),
-            ...productSlugs.map(slug => `/product/${slug}`),
-            ...pageSlugs.map(slug => `/${slug}`),
+            ...(await posts.getAll()).flatMap(post => [
+                `/blog/${post.slug}`,
+                `/api/content/posts/${post.id}`
+            ]),
+            ...(await products.getAll()).flatMap(product => [
+                `/product/${product.slug}`,
+                `/api/content/products/${product.id}`
+            ]),
+            ...(await pages.getAll()).flatMap(page => [
+                `/${page.slug}`,
+                `/api/content/pages/${page.id}`
+            ])
         ]
     },
     appDirectory: 'src',

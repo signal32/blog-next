@@ -1,0 +1,18 @@
+import { ContentLibrary, Content } from "./lib/content.server"
+import { files } from "./lib/file.server"
+import { pages } from "./lib/pages.server"
+import { posts } from "./lib/posts.server"
+import { products } from "./lib/products.server"
+
+export interface ServerConfig {
+    content: Record<string, ContentLibrary<Content>>
+}
+
+export const SERVER_CONFIG: ServerConfig = {
+    content: {
+        products,
+        posts,
+        pages,
+        files,
+    }
+}

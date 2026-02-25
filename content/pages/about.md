@@ -15,5 +15,5 @@ Alongside software development, I am an experienced photographer with strong pho
 
 
 <div>
-<Content type="post" id="explorer.md"></Content>
+<Content library="posts" id="explorer.md"></Content>
 </div>
