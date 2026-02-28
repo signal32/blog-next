@@ -1,12 +1,12 @@
 import { ExternalLink, FileDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
-import { AddToCartButton } from 'src/components/AddToCartButton';
-import { H3 } from 'src/components/common/typography';
-import { Button } from 'src/components/ui/button';
-import { Skeleton } from 'src/components/ui/skeleton';
-import { formatCurrency } from 'src/lib/utils';
-import { SHOP } from 'src/shop';
+import { AddToCartButton } from '#src/components/AddToCartButton';
+import { H3 } from '#src/components/common/typography';
+import { Button } from '#src/components/ui/button';
+import { Skeleton } from '#src/components/ui/skeleton';
+import { formatCurrency } from '#src/lib/utils';
+import { SHOP } from '#src/shop';
 import { ShopClient } from 'store';
 import { ContentLayout } from "../../components/app/BaseLayout";
 import Drawer from "../../components/common/Drawer";

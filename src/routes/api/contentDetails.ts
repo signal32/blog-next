@@ -1,4 +1,4 @@
-import { SERVER_CONFIG } from "src/config.server"
+import { SERVER_CONFIG } from "#src/config.server"
 import type { Route } from "./+types/contentDetails"
 
 const VALID_LIBRARY_IDS = Object.keys(SERVER_CONFIG.content)

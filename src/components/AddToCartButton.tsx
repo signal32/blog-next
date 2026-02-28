@@ -1,6 +1,6 @@
-import { useBasket } from "src/lib/basket";
+import { useBasket } from "#src/lib/basket";
 import { Button } from "./ui/button";
-import { type Product } from "src/lib/products.server";
+import { type Product } from "#src/lib/products.server";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog";
 import { Link } from "react-router";
 import { P } from "./common/typography";

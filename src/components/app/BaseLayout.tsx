@@ -4,14 +4,14 @@
 import { CreativeCommons, Menu, ShoppingBasket, X } from "lucide-react";
 import { ReactElement, ReactNode, useState } from "react";
 import { Link, useLocation } from "react-router";
-import { useBasket } from "src/lib/basket";
-import { cn } from "src/lib/utils";
+import { useBasket } from "#src/lib/basket";
+import { cn } from "#src/lib/utils";
 import { websiteConfig } from "../../routes/_app";
 import Breadcrumbs from "../common/Breadcrumbs";
 import ModalContext from "../common/Modal";
 import { A, H2 } from "../common/typography";
 import { Button } from "../ui/button";
-import { debounce } from "src/lib/utils";
+import { debounce } from "#src/lib/utils";
 
 
 const DEMO_IMAGE = "https://images.pexels.com/photos/4215110/pexels-photo-4215110.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";

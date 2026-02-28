@@ -4,6 +4,9 @@
     "private": true,
     "type": "module",
     "homepage": "https://hamishweir.uk",
+    "imports": {
+        "#src/*": "./src/*"
+    },
     "scripts": {
         "build": "react-router build",
         "dev": "react-router dev",

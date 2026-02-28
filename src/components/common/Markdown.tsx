@@ -1,11 +1,11 @@
 import ReactMarkdown, { Components } from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
-import { ContentLibrary, type Content } from 'src/lib/content.server'
+import { ContentLibrary, type Content } from '#src/lib/content.server'
 import PostItem from '../posts/PostItem'
 import { useEffect, useState } from 'react'
-import * as typography from 'src/components/common/typography'
-import { Post } from 'src/lib/posts.server'
-import { Product } from 'src/lib/products.server'
+import * as typography from '#src/components/common/typography'
+import { Post } from '#src/lib/posts.server'
+import { Product } from '#src/lib/products.server'
 import { Skeleton } from '../ui/skeleton'
 
 export const Markdown = (props: {

@@ -1,4 +1,4 @@
-import { SERVER_CONFIG } from "src/config.server"
+import { SERVER_CONFIG } from "#src/config.server"
 
 export async function loader() {
     const content = await Promise.all(

@@ -1,6 +1,6 @@
 import { Config } from '@react-router/dev/config'
-import { pages } from 'src/lib/pages.server'
-import { products } from 'src/lib/products.server'
+import { pages } from '#src/lib/pages.server'
+import { products } from '#src/lib/products.server'
 import { posts } from './src/lib/posts.server'
 
 export default {

@@ -1,6 +1,6 @@
-import { ContentLayout } from 'src/components/app/BaseLayout'
-import PostItem from 'src/components/posts/PostItem'
-import { products } from 'src/lib/products.server'
+import { ContentLayout } from '#src/components/app/BaseLayout'
+import PostItem from '#src/components/posts/PostItem'
+import { products } from '#src/lib/products.server'
 import { Route } from './+types/index'
 
 

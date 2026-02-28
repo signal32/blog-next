@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router";
-import PostItem from "src/components/posts/PostItem";
-import { Button } from "src/components/ui/button";
+import PostItem from "#src/components/posts/PostItem";
+import { Button } from "#src/components/ui/button";
 import { ContentLayout } from "../../components/app/BaseLayout";
 import { posts as p } from "../../lib/posts.server";
 import { Route } from "./+types/index";

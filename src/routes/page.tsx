@@ -1,4 +1,4 @@
-import { pages } from 'src/lib/pages.server';
+import { pages } from '#src/lib/pages.server';
 import { ContentLayout } from "../components/app/BaseLayout";
 import DateDisplay from "../components/common/DateDisplay";
 import { Markdown } from '../components/common/Markdown';

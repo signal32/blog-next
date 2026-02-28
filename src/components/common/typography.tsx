@@ -1,6 +1,6 @@
 import { AnchorHTMLAttributes, ClassAttributes, HTMLAttributes } from 'react'
 import { Link } from 'react-router'
-import { cn } from 'src/lib/utils'
+import { cn } from '#src/lib/utils'
 
 type ElementProps<T, K = HTMLAttributes<T>> = ClassAttributes<T> & K
 
