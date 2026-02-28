@@ -1,5 +1,5 @@
 import { ExternalLink, FileDown } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { AddToCartButton } from '#src/components/AddToCartButton';
 import { H3 } from '#src/components/common/typography';
@@ -18,88 +18,20 @@ import { Route } from './+types/product';
 
 export default function Product({ loaderData }: Route.ComponentProps) {
 
-    const modals = useModalStore();
-    const props = loaderData
+    return <ProductLayout product={loaderData.product}>{{
+        main: <>
+            <Markdown content={loaderData.product.description ?? ''} />
 
-    const openGallery = (img: string) => {
-        modals.pushModal(
-            <div className=" h-full">
-                <img
-                    src={img}
-                    alt='product image'
-                    sizes="100vw"
-                    style={{
-                        objectFit: "contain"
-                    }} />
-            </div>
-        )
-    }
-
-    const [price, setPrice] = useState<Awaited<ReturnType<ShopClient['productPrice']>>>()
-    useEffect(() => {
-        const { storeProduct } = loaderData.product
-        if (storeProduct) SHOP
-            .productPrice({ productId: storeProduct.id })
-            .then(setPrice)
-    }, [])
-
-    return <ContentLayout
-        headerTitle={props.product?.name}
-        header={
-            props.product?.media?.banner
-                ? { type: 'image', href: props.product.media.banner }
-                : undefined}
-        breadcrumbs
-    >
-        <div>
-            <div className="flex flex-wrap-reverse gap-5">
-
-                {/* Main content */}
-                <div className=" flex-grow basis-80">
-                    <Markdown content={props.product.description ?? ''} />
-
-                    <Drawer title="Requirements">
-                        {props.product.requirements?.map((item, i) => <RequirementItem key={i} requirement={item} products={props.dependencyProducts ?? []} />)}
-                    </Drawer>
-                </div>
-
-                {/* Sidebar */}
-                <div className="flex-grow basis-20">
-                    <div className='p-2 rounded-lg shadow-lg bg-slate-200 dark:bg-slate-800'>
-                        {/* TODO images */}
-                        <div className="flex gap-3 flex-wrap">
-                            {props.product.media?.gallery?.map((item, i) => (
-                                <div key={i} className="flex-auto w-24 h-24 rounded-lg shadow-md bg-cover hover:shadow-xl hover:scale-105 transition-transform" style={{ backgroundImage: `url(${item})` }} onClick={() => openGallery(item)}></div>
-                            ))}
-                        </div>
-                        {/* TODO basic info */}
-                        <ProductDetails product={props.product} />
-                        {/* TODO download links */}
-                        {props.mainFile && <>
-                            {/*<Button text="Download" icon={<FaInfoCircle />} href={props.mainFile.href} target='_blank' />*/}
-                            <Button asChild className='w-full'>
-                                <a href={props.mainFile.href} target='_blank'>
-                                    <FileDown />
-                                    Download
-                                </a>
-                            </Button>
-                            <p className="italic text-sm text-right">{props.mainFile.fileName}</p>
-                        </>
-                        }
-
-                        {props.product.storeProduct &&
-                            <>
-                                {price?.price ? <H3>{formatCurrency(price?.price)}</H3> : <Skeleton className="h-12 mb-2 w-full" />}
-                                <AddToCartButton product={loaderData.product} />
-                            </>
-                        }
-
-                        {/* <p className="italic text-sm text-right">Details: {JSON.stringify(props.mainFile)}</p> */}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </ContentLayout>
+            <Drawer title="Requirements">
+                {loaderData.product.requirements?.map((item, i) => <RequirementItem
+                    key={i}
+                    requirement={item}
+                    products={loaderData.dependencyProducts ?? []}
+                />)}
+            </Drawer>
+        </>,
+        sidebar: <ProductSidebar product={loaderData.product} file={loaderData.mainFile} />
+    }}</ProductLayout>
 }
 
 export async function loader({ params }: Route.LoaderArgs) {
@@ -118,7 +50,7 @@ export async function loader({ params }: Route.LoaderArgs) {
             else return {}
         }) || []);
 
-    const mainFile = product?.files?.primary ? (await files.getBySlug(product.files.primary)) ?? null : null
+    const mainFile = product?.files?.primary ? (await files.getBySlug(product.files.primary)) ?? undefined : undefined
     const otherFiles = product?.files?.other.map(item => ({
         file: files.getBySlug(item.slug),
         ...item,
@@ -129,8 +61,95 @@ export async function loader({ params }: Route.LoaderArgs) {
         dependencyProducts,
         mainFile,
         otherFiles,
-        // cache: await preRenderCache()
     }
+}
+
+export function ProductLayout(props: {
+    product: Product,
+    children: {
+        main: ReactElement,
+        sidebar: ReactElement,
+    }
+}) {
+    return <ContentLayout
+        headerTitle={props.product?.name}
+        header={props.product?.media?.banner
+            ? { type: 'image', href: props.product.media.banner }
+            : undefined}
+        breadcrumbs
+    >
+        <div>
+            <div className="flex flex-wrap-reverse gap-5">
+                <div className=" grow basis-80">
+                    {props.children.main}
+                </div>
+                <div className="grow basis-20">
+                    {props.children.sidebar}
+                </div>
+            </div>
+        </div>
+    </ContentLayout>
+}
+
+export function ProductSidebar(props: { product: Product, file?: FileDetails }) {
+
+    const [price, setPrice] = useState<Awaited<ReturnType<ShopClient['productPrice']>>>()
+    useEffect(() => {
+        const { storeProduct } = props.product
+        if (storeProduct) SHOP
+            .productPrice({ productId: storeProduct.id })
+            .then(setPrice)
+    }, [])
+
+    const modals = useModalStore();
+    const openGallery = (img: string) => {
+        modals.pushModal(
+            <div className=" h-full">
+                <img
+                    src={img}
+                    alt='product image'
+                    sizes="100vw"
+                    style={{
+                        objectFit: "contain"
+                    }} />
+            </div>
+        )
+    }
+
+    return <>
+        <div className='p-2 rounded-lg shadow-lg bg-slate-200 dark:bg-slate-800'>
+            <div className="flex gap-3 flex-wrap">
+                {props.product.media?.gallery?.map((item, i) => (
+                    <div
+                        key={i}
+                        className="flex-auto w-24 h-24 rounded-lg shadow-md bg-cover hover:shadow-xl hover:scale-105 transition-transform"
+                        style={{ backgroundImage: `url(${item})` }}
+                        onClick={() => openGallery(item)}>
+                    </div>
+                ))}
+            </div>
+            <ProductDetails product={props.product} />
+
+            {props.file &&
+                <>
+                    <Button asChild className='w-full'>
+                        <a href={props.file.href} target='_blank'>
+                            <FileDown />
+                            Download
+                        </a>
+                    </Button>
+                    <p className="italic text-sm text-right">{props.file.fileName}</p>
+                </>
+            }
+
+            {props.product.storeProduct &&
+                <>
+                    {price?.price ? <H3>{formatCurrency(price?.price)}</H3> : <Skeleton className="h-12 mb-2 w-full" />}
+                    <AddToCartButton product={props.product} />
+                </>
+            }
+        </div>
+    </>
 }
 
 const ProductDetails = (props: { product: Product }) => {
