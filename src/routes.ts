@@ -1,4 +1,8 @@
 import { type RouteConfig, index, prefix, route } from '@react-router/dev/routes'
+import { products } from './lib/products.server'
+import { CUSTOM_SIGN_PRODUCT_ID } from './routes/product/signProduct'
+
+export const CUSTOM_SIGN_PRODUCT = await products.getById(CUSTOM_SIGN_PRODUCT_ID)
 
 export default [
     index('routes/home.tsx'),
@@ -10,7 +14,8 @@ export default [
         route(':slug', './routes/blog/post.tsx')
     ]),
     ...prefix('product', [
-        route(':slug', './routes/product/product.tsx')
+        route(':slug', './routes/product/product.tsx'),
+        route(CUSTOM_SIGN_PRODUCT?.slug, './routes/product/signProduct.tsx'),
     ]),
     ...prefix('shop', [
         index('routes/product/index.tsx'),

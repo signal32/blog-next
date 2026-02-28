@@ -35,6 +35,9 @@ type Pages = {
       "slug": string;
     };
   };
+  "/product/Train-sim-custom-signs-and-stuff": {
+    params: {};
+  };
   "/shop": {
     params: {};
   };
@@ -52,7 +55,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/:slug" | "/basket" | "/blog" | "/blog/:slug" | "/product/:slug" | "/shop" | "/api/content" | "/api/content/:libraryId/:contentId";
+    page: "/" | "/:slug" | "/basket" | "/blog" | "/blog/:slug" | "/product/:slug" | "/product/Train-sim-custom-signs-and-stuff" | "/shop" | "/api/content" | "/api/content/:libraryId/:contentId";
   };
   "routes/home.tsx": {
     id: "routes/home";
@@ -78,6 +81,10 @@ type RouteFiles = {
     id: "routes/product/product";
     page: "/product/:slug";
   };
+  "./routes/product/signProduct.tsx": {
+    id: "routes/product/signProduct";
+    page: "/product/Train-sim-custom-signs-and-stuff";
+  };
   "routes/product/index.tsx": {
     id: "routes/product/index";
     page: "/shop";
@@ -100,6 +107,7 @@ type RouteModules = {
   "routes/blog/index": typeof import("./src/routes/blog/index.tsx");
   "routes/blog/post": typeof import("./src/./routes/blog/post.tsx");
   "routes/product/product": typeof import("./src/./routes/product/product.tsx");
+  "routes/product/signProduct": typeof import("./src/./routes/product/signProduct.tsx");
   "routes/product/index": typeof import("./src/routes/product/index.tsx");
   "routes/api/contentList": typeof import("./src/./routes/api/contentList.ts");
   "routes/api/contentDetails": typeof import("./src/./routes/api/contentDetails.ts");
