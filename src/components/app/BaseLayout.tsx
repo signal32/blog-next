@@ -103,9 +103,12 @@ const AppBaseLayout = (props: MainLayoutProps) => {
                 </div>
             </header>
             {/*{((props.breadcrumbs ?? true)) && <Breadcrumbs />}*/}
-            {props.children}
 
-            <footer className="align-bottom dark:text-gray-300 text-gray-700">
+            <div className="h-full grow">
+                {props.children}
+            </div>
+
+            <footer className="w-full dark:text-gray-300 text-gray-700">
                 <div className="max-w-4xl mx-auto -z-20">
                     <div className="p-2 sm:px-6 sm:mb-2 rounded-lg rounded-t-lg shadow-lg dark:bg-gray-800 bg-gray-200">
                         <div className="mx-auto flex">
