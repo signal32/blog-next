@@ -80,7 +80,7 @@ export function ProductLayout(props: {
     >
         <div>
             <div className="flex flex-wrap-reverse gap-5">
-                <div className=" grow basis-80">
+                <div className="grow basis-80">
                     {props.children.main}
                 </div>
                 <div className="grow basis-20">
