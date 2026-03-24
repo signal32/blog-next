@@ -1,4 +1,5 @@
 import { Markdown } from "#src/components/common/Markdown.tsx";
+import { H5 } from "#src/components/common/typography.tsx";
 import { Button } from "#src/components/ui/button.tsx";
 import { Field, FieldDescription, FieldLabel } from "#src/components/ui/field.tsx";
 import { Input } from "#src/components/ui/input.tsx";
@@ -6,18 +7,16 @@ import { Popover, PopoverContent, PopoverTrigger } from "#src/components/ui/popo
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "#src/components/ui/select.tsx";
 import { Switch } from "#src/components/ui/switch.tsx";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "#src/components/ui/tabs.tsx";
-import { products } from "#src/lib/products.server";
-import { Environment, Grid, OrbitControls, SoftShadows, useGLTF } from "@react-three/drei";
+import { CUSTOM_SIGN_PRODUCT_ID, products } from "#src/lib/products.server";
+import { Environment, OrbitControls, useGLTF } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Check, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { HexColorPicker } from 'react-colorful';
 import * as THREE from "three";
 import { Route } from './+types/signProduct';
 import { ProductLayout, ProductSidebar } from "./product";
-import { H5 } from "#src/components/common/typography.tsx";
 
-export const CUSTOM_SIGN_PRODUCT_ID = '5bb0a699-f964-431e-9605-0d896b642108'
 
 type SignConfig = {
     signId: string,
@@ -129,10 +128,13 @@ export default function SignProduct({ loaderData }: Route.ComponentProps) {
 
             <div className="p-2 bg-accent/50 rounded-lg shadow">
                 <div className="h-96 bg-accent rounded-lg shadow">
-                    <Viewer
-                        model={SIGNS[config.signId].model}
-                        texture={texture}
-                    />
+                    <ClientOnly>
+                        {() => <Viewer
+                            model={SIGNS[config.signId].model}
+                            texture={texture}
+                        />}
+                    </ClientOnly>
+
                 </div>
 
                 <form className="pt-2">
@@ -279,17 +281,17 @@ function Viewer(props: {
     }, [props.texture, materials])
 
     return (
-        <Canvas camera={{ position: [0, 1, 5], fov: 50 }}>
-            <ambientLight intensity={0.2} />
+        <Canvas camera={{ position: [-3, 2, -1], fov: 45 }}>
+            <ambientLight intensity={0.6} />
             {/*<directionalLight position={[10, 10, 5]} />*/}
             <primitive object={scene} scale={1} />
-            <OrbitControls />
+            <OrbitControls target={[0, 0.5, 0]} />
             <Environment preset="studio" backgroundIntensity={0.1} environmentIntensity={0.1} />
         </Canvas>
     )
 }
 
-export function SignColourPicker(props: {
+function SignColourPicker(props: {
     default: string,
     onChange?: (colour: string) => void
 }) {
@@ -374,4 +376,24 @@ function TextConfigFields(props: {
         </Field>
 
     </>
+}
+
+function ClientOnly({ children, fallback = null }: {
+    children(): React.ReactNode;
+    fallback?: React.ReactNode;
+}) {
+    return useHydrated() ? children() : fallback;
+}
+
+function useHydrated() {
+    return useSyncExternalStore(
+        subscribe,
+        () => true,
+        () => false,
+    );
+}
+
+function subscribe() {
+    // biome-ignore lint/suspicious/noEmptyBlockStatements: Mock function
+    return () => { };
 }

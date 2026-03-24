@@ -1,6 +1,5 @@
 import { type RouteConfig, index, prefix, route } from '@react-router/dev/routes'
-import { products } from './lib/products.server'
-import { CUSTOM_SIGN_PRODUCT_ID } from './routes/product/signProduct'
+import { CUSTOM_SIGN_PRODUCT_ID, products } from './lib/products.server'
 
 export const CUSTOM_SIGN_PRODUCT = await products.getById(CUSTOM_SIGN_PRODUCT_ID)
 

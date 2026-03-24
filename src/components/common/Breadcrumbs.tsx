@@ -9,7 +9,7 @@ const Breadcrumbs = () => {
 
     return breadcrumbs.length > 2 ? (
         <div className="flex flex-row">
-            {
+            {/*{
                 breadcrumbs.map((breadcrumb, i) => {
                     return (
                         <div className="flex slate-800 dark:text-white" key={i}>
@@ -22,7 +22,7 @@ const Breadcrumbs = () => {
                         </div>
                     );
                 })
-            }
+            }*/}
         </div>
     ) : <></>;
 }
