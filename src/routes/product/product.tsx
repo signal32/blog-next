@@ -7,7 +7,7 @@ import { Button } from '#src/components/ui/button';
 import { Skeleton } from '#src/components/ui/skeleton';
 import { formatCurrency } from '#src/lib/utils';
 import { SHOP } from '#src/shop';
-import { ShopClient } from 'store';
+import { Option, ShopClient } from 'store';
 import { ContentLayout } from "../../components/app/BaseLayout";
 import Drawer from "../../components/common/Drawer";
 import { Markdown } from '../../components/common/Markdown';
@@ -91,7 +91,12 @@ export function ProductLayout(props: {
     </ContentLayout>
 }
 
-export function ProductSidebar(props: { product: Product, file?: FileDetails }) {
+export function ProductSidebar(props: {
+    product: Product,
+    productOptions?: () => Option,
+    file?: FileDetails,
+
+}) {
 
     const [price, setPrice] = useState<Awaited<ReturnType<ShopClient['productPrice']>>>()
     useEffect(() => {
@@ -145,7 +150,7 @@ export function ProductSidebar(props: { product: Product, file?: FileDetails }) 
             {props.product.storeProduct &&
                 <>
                     {price?.price ? <H3>{formatCurrency(price?.price)}</H3> : <Skeleton className="h-12 mb-2 w-full" />}
-                    <AddToCartButton product={props.product} />
+                    <AddToCartButton product={props.product} options={props.productOptions} />
                 </>
             }
         </div>

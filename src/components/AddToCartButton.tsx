@@ -4,8 +4,12 @@ import { type Product } from "#src/lib/products.server";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog";
 import { Link } from "react-router";
 import { P } from "./common/typography";
+import { Options } from "store";
 
-export function AddToCartButton(props: { product: Product }) {
+export function AddToCartButton(props: {
+    product: Product,
+    options?: () => Promise<Options>,
+}) {
     const basket = useBasket()
     const storeProduct = props.product.storeProduct
 
@@ -19,7 +23,13 @@ export function AddToCartButton(props: { product: Product }) {
                     <Link to="/basket"><Button variant='outline'>View</Button></Link>
                 </div>
                 : <AlertDialogTrigger asChild>
-                    <Button className="w-full" onClick={() => basket.addProduct(storeProduct, { quantity: 1 })}>Add to basket</Button>
+                    <Button className="w-full" onClick={async () => basket.addProduct(
+                        storeProduct,
+                        {
+                            quantity: 1,
+                            options: (await props.options?.()) ?? {}
+                        }
+                    )}>Add to basket</Button>
                 </AlertDialogTrigger>
 
             }

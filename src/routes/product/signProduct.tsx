@@ -16,7 +16,8 @@ import { HexColorPicker } from 'react-colorful';
 import * as THREE from "three";
 import { Route } from './+types/signProduct';
 import { ProductLayout, ProductSidebar } from "./product";
-
+import { Options } from "store";
+import { SHOP } from "#src/shop.ts";
 
 type SignConfig = {
     signId: string,
@@ -42,6 +43,11 @@ type Sign = {
     model: string,
 }
 
+type TextureData = {
+    asBlob: () => Promise<Blob>,
+    dataUrl: string
+}
+
 const SIGNS: Record<string, Sign> = {
     test: {
         name: 'Test',
@@ -55,21 +61,15 @@ const FONTS = [
     { name: 'Sans Serif', fontFace: 'sans-serif' }
 ]
 
-function extractTexture() {
-
-}
-
-function createTextureFromConfig(config: SignConfig) {
+function createTextureFromConfig(config: SignConfig): TextureData {
     const canvas = document.createElement('canvas')
     canvas.width = 512
     canvas.height = 512
     const ctx = canvas.getContext("2d")
     if (!ctx) throw new Error('Could not get canvas context')
 
-    // Background
     ctx.fillStyle = config.backgroundColour
     ctx.fillRect(0, 0, canvas.width, canvas.height)
-
 
     const drawText = (config: TextConfig, x: number, y: number, width: number) => {
         ctx.fillStyle = config.textColour
@@ -82,11 +82,12 @@ function createTextureFromConfig(config: SignConfig) {
     drawText(config.primaryText, canvas.width / 2, canvas.height / 2, canvas.width - 40)
     drawText(config.secondaryText, canvas.width / 2, (canvas.height / 2) + config.primaryText.textSize, canvas.width - 40)
 
-    return canvas.toDataURL('image/png')
-}
-
-function updateTexture() {
-
+    return {
+        dataUrl: canvas.toDataURL('image/png'),
+        asBlob: () => new Promise((resolve, reject) => {
+            canvas.toBlob((blob) => blob !== null ? resolve(blob) : reject(), "image/png");
+        })
+    }
 }
 
 export default function SignProduct({ loaderData }: Route.ComponentProps) {
@@ -109,18 +110,38 @@ export default function SignProduct({ loaderData }: Route.ComponentProps) {
         }
     })
 
-    const [texture, setTexture] = useState<string>()
+    const [texture, setTexture] = useState<TextureData>()
+    useEffect(() => setTexture(createTextureFromConfig(config)), [config])
 
-    // Need to extract editable texture size from the gltf
-    // Then either get user to upload suitable replacement, or generate one using the text inputs
-    // Then
-    //  1) set this in the config, for use when rendering
-    //  2) update the preview model
+    const productOptions: () => Promise<Options> = async () => {
+        if (!texture) throw new Error('Texture is required.')
 
-    useEffect(() => {
-        setTexture(createTextureFromConfig(config))
-        // upload and save into the config
-    }, [config])
+        const body = await texture.asBlob()
+        const filename = `${config.provider}-${config.product}-${config.assetName}-${crypto.randomUUID()}`
+        const { url } = await SHOP.generatePreSignedUploadUrl({ filename, type: 'image/png' })
+
+        await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'image/png',
+            },
+            body,
+        });
+
+        return {
+            textureFilename: {
+                value: filename,
+                hidden: true,
+            },
+            signConfig: {
+                value: JSON.stringify(config),
+                hidden: true,
+            },
+            name: {
+                value: config.assetName
+            }
+        }
+    }
 
     return <ProductLayout product={loaderData.product}>{{
         main: <>
@@ -131,10 +152,9 @@ export default function SignProduct({ loaderData }: Route.ComponentProps) {
                     <ClientOnly>
                         {() => <Viewer
                             model={SIGNS[config.signId].model}
-                            texture={texture}
+                            texture={texture?.dataUrl}
                         />}
                     </ClientOnly>
-
                 </div>
 
                 <form className="pt-2">
@@ -240,13 +260,13 @@ export default function SignProduct({ loaderData }: Route.ComponentProps) {
                             }
                         </div>
                         <div className="basis-2/3">
-                            {texture && <img src={texture} className="border-blue-50 border-2" />}
+                            {texture && <img src={texture.dataUrl} className="border-blue-50 border-2" />}
                         </div>
                     </div>
                 </form>
             </div>
         </>,
-        sidebar: <ProductSidebar product={loaderData.product} />
+        sidebar: <ProductSidebar product={loaderData.product} productOptions={productOptions} />
     }}</ProductLayout>
 }
 

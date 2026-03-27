@@ -8,7 +8,7 @@ import { useBasket } from '#src/lib/basket'
 import { products } from '#src/lib/products.server'
 import { cn, formatCurrency, } from '#src/lib/utils'
 import { SHOP } from '#src/shop'
-import { getOrderOption, ShopClient } from 'store'
+import { getOrderConfig, ShopClient } from 'store'
 import { Route } from './+types/basket'
 
 export default function Basket({ loaderData }: Route.ComponentProps) {
@@ -44,7 +44,7 @@ export default function Basket({ loaderData }: Route.ComponentProps) {
                 </thead>
                 <tbody>
                     {calculations?.linePrices.map(({ productId, unitPrice, linePrice, optionId }, i) => {
-                        const { product, option } = getOrderOption(basket.order, productId, optionId)
+                        const { product, config } = getOrderConfig(basket.order, productId, optionId)
 
                         return (
                             <tr key={i}>
@@ -55,18 +55,18 @@ export default function Basket({ loaderData }: Route.ComponentProps) {
                                         variant='link'
                                         onClick={() => basket.updateProduct(
                                             product.id,
-                                            { ...option, quantity: Math.max(1, option?.quantity - 1) },
+                                            { ...config, quantity: Math.max(1, config?.quantity - 1) },
                                             optionId
                                         )}
                                     >
                                         <Minus />
                                     </Button>
-                                    {option?.quantity}
+                                    {config?.quantity}
                                     <Button
                                         variant='link'
                                         onClick={() => basket.updateProduct(
                                             product.id,
-                                            { ...option, quantity: option?.quantity + 1 },
+                                            { ...config, quantity: config?.quantity + 1 },
                                             optionId
                                         )}
                                     >

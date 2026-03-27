@@ -1,11 +1,11 @@
 import { create } from "zustand"
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { Option, Order, Product, updateOrderProductOption, DEFAULT_OPTION } from "store"
+import { Order, Product, updateOrderProductConfig, DEFAULT_CONFIG, Config } from "store"
 
 export interface Basket {
     order: Order,
-    addProduct(product: Product, option: Option, optionId?: string): void,
-    updateProduct(productId: string, option: Option | ((current: Option) => Option), optionId?: string): void,
+    addProduct(product: Product, config: Config, configId?: string): void,
+    updateProduct(productId: string, config: Config | ((current: Config) => Config), configId?: string): void,
     removeProduct(productId: string, optionId?: string): void,
 }
 
@@ -17,12 +17,12 @@ export const useBasket = create<Basket>()(
                 products: {}
             },
 
-            addProduct(product, option, optionId = DEFAULT_OPTION) {
+            addProduct(product, option, optionId = DEFAULT_CONFIG) {
                 const { order } = get()
 
                 const current = order.products[product.id]
                 if (current) {
-                    updateOrderProductOption(
+                    updateOrderProductConfig(
                         prev => ({
                             ...prev,
                             quantity: prev.quantity + option.quantity
@@ -35,7 +35,7 @@ export const useBasket = create<Basket>()(
                 else {
                     order.products[product.id] = {
                         product,
-                        options: {
+                        configs: {
                             [optionId]: option
                         }
                     }
@@ -43,21 +43,21 @@ export const useBasket = create<Basket>()(
                 set({ order })
             },
 
-            updateProduct(productId, details, optionId = DEFAULT_OPTION) {
+            updateProduct(productId, details, optionId = DEFAULT_CONFIG) {
                 const { order } = get()
-                updateOrderProductOption(details, order, productId, optionId)
+                updateOrderProductConfig(details, order, productId, optionId)
                 set({ order })
             },
 
-            removeProduct(productId, optionId = DEFAULT_OPTION) {
+            removeProduct(productId, optionId = DEFAULT_CONFIG) {
                 const { order } = get()
 
                 if (optionId) {
                     const product = order.products[productId]
                     if (!product) throw new Error('no product')
 
-                    delete product.options[optionId]
-                    if (Object.keys(product.options).length === 0) {
+                    delete product.configs[optionId]
+                    if (Object.keys(product.configs).length === 0) {
                         delete order.products[productId]
                     }
                 }
