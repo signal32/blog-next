@@ -7,6 +7,7 @@ export interface Basket {
     addProduct(product: Product, config: Config, configId?: string): void,
     updateProduct(productId: string, config: Config | ((current: Config) => Config), configId?: string): void,
     removeProduct(productId: string, optionId?: string): void,
+    size(): number,
 }
 
 export const useBasket = create<Basket>()(
@@ -66,6 +67,13 @@ export const useBasket = create<Basket>()(
                 else delete order.products[productId]
 
                 set({ order })
+            },
+
+            size() {
+                const { order } = get()
+                console.log(Object.values(order.products).map(product => product.configs).flat())
+                return Object.values(order.products).map(product => Object.keys(product.configs)).flat().length
+
             }
         }),
         {

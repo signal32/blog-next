@@ -56,6 +56,7 @@ const AppBaseLayout = (props: MainLayoutProps) => {
             </Link>
         )
 
+        const basketSize = basket.size()
         return (
             <div className={cn('flex gap-2 text-white text-lg', props.column && 'flex-col')}>
                 {websiteConfig.mainMenu.map((item, i) => <NavigationLink key={i} to={item.href}><p>{item.name}</p></NavigationLink>)}
@@ -63,8 +64,8 @@ const AppBaseLayout = (props: MainLayoutProps) => {
                     <div className="flex justify-center">
                         <div className="relative">
                             <ShoppingBasket />
-                            {Object.keys(basket.order.products).length > 0 &&
-                                <div className="absolute bg-red-500 rounded-full -top-2 -right-2 aspect-square text-sm font-bold h-4 w-4 flex justify-center items-center">{Object.keys(basket.order.products).length}</div>
+                            {basketSize > 0 &&
+                                <div className="absolute bg-red-500 rounded-full -top-2 -right-2 aspect-square text-sm font-bold h-4 w-4 flex justify-center items-center">{basketSize}</div>
                             }
 
                         </div>
