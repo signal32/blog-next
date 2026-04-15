@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { Order, Product, updateOrderProductConfig, DEFAULT_CONFIG, Config } from "store"
+import { Order, Product, updateOrderProductConfig, Config, configId as getConfigId } from "store"
 
 export interface Basket {
     order: Order,
@@ -17,46 +17,48 @@ export const useBasket = create<Basket>()(
                 products: {}
             },
 
-            addProduct(product, option, optionId = DEFAULT_CONFIG) {
+            addProduct(product, config, configId = getConfigId(config)) {
                 const { order } = get()
+                console.log({ configId })
 
-                const current = order.products[product.id]
+                const current = order.products[product.id]?.configs[configId]
                 if (current) {
                     updateOrderProductConfig(
                         prev => ({
                             ...prev,
-                            quantity: prev.quantity + option.quantity
+                            quantity: prev.quantity + config.quantity
                         }),
                         order,
                         product.id,
-                        optionId
+                        configId
                     )
                 }
                 else {
                     order.products[product.id] = {
                         product,
                         configs: {
-                            [optionId]: option
+                            ...order.products[product.id]?.configs,
+                            [configId]: config
                         }
                     }
                 }
                 set({ order })
             },
 
-            updateProduct(productId, details, optionId = DEFAULT_CONFIG) {
+            updateProduct(productId, details, configId) {
                 const { order } = get()
-                updateOrderProductConfig(details, order, productId, optionId)
+                updateOrderProductConfig(details, order, productId, configId)
                 set({ order })
             },
 
-            removeProduct(productId, optionId = DEFAULT_CONFIG) {
+            removeProduct(productId, configId) {
                 const { order } = get()
 
-                if (optionId) {
+                if (configId) {
                     const product = order.products[productId]
                     if (!product) throw new Error('no product')
 
-                    delete product.configs[optionId]
+                    delete product.configs[configId]
                     if (Object.keys(product.configs).length === 0) {
                         delete order.products[productId]
                     }

@@ -1,5 +1,5 @@
 import { Markdown } from "#src/components/common/Markdown.tsx";
-import { H5 } from "#src/components/common/typography.tsx";
+import { H5, P } from "#src/components/common/typography.tsx";
 import { Button } from "#src/components/ui/button.tsx";
 import { Field, FieldDescription, FieldLabel } from "#src/components/ui/field.tsx";
 import { Input } from "#src/components/ui/input.tsx";
@@ -7,17 +7,20 @@ import { Popover, PopoverContent, PopoverTrigger } from "#src/components/ui/popo
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "#src/components/ui/select.tsx";
 import { Switch } from "#src/components/ui/switch.tsx";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "#src/components/ui/tabs.tsx";
+import { useBasket } from "#src/lib/basket.ts";
 import { CUSTOM_SIGN_PRODUCT_ID, products } from "#src/lib/products.server";
+import { SHOP } from "#src/shop.ts";
 import { Environment, OrbitControls, useGLTF } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Check, X } from "lucide-react";
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { HexColorPicker } from 'react-colorful';
+import { useSearchParams } from "react-router";
+import { Config, configId as getConfigId } from "store";
 import * as THREE from "three";
 import { Route } from './+types/signProduct';
 import { ProductLayout, ProductSidebar } from "./product";
-import { Options } from "store";
-import { SHOP } from "#src/shop.ts";
+import { Save, Trash, Info } from "lucide-react"
 
 type SignConfig = {
     signId: string,
@@ -90,7 +93,7 @@ function createTextureFromConfig(config: SignConfig): TextureData {
     }
 }
 
-export default function SignProduct({ loaderData }: Route.ComponentProps) {
+export default function SignProduct({ loaderData, params }: Route.ComponentProps) {
     const [config, setConfig] = useState<SignConfig>({
         signId: 'test',
         provider: 'Rails Developments',
@@ -110,14 +113,76 @@ export default function SignProduct({ loaderData }: Route.ComponentProps) {
         }
     })
 
-    const [texture, setTexture] = useState<TextureData>()
-    useEffect(() => setTexture(createTextureFromConfig(config)), [config])
+    const [searchParams] = useSearchParams()
 
-    const productOptions: () => Promise<Options> = async () => {
+    useEffect(() => {
+        const configId = searchParams.get('configId')
+        if (!configId) return
+
+        const config = basket.order.products[loaderData.product.id]?.configs[configId]
+        setConfig(JSON.parse(config?.meta.signConfig))
+
+    }, [params])
+
+    const [texture, setTexture] = useState<TextureData>()
+    const [productConfig, setProductConfig] = useState<Config>({ quantity: 1, options: {}, meta: {} })
+    useEffect(() => {
+        setTexture(createTextureFromConfig(config))
+        setProductConfig({
+            quantity: 1,
+            options: {
+                name: {
+                    value: config.assetName
+                },
+                provider: {
+                    value: config.provider
+                },
+                product: {
+                    value: config.product
+                }
+            },
+            meta: {
+                textureFilename: `${config.provider}-${config.product}-${config.assetName}`,
+                signConfig: JSON.stringify(config),
+            }
+        })
+    }, [config])
+
+    const basket = useBasket()
+    const updateBasketRequired = useMemo(() => {
+        const config = basket.order.products[loaderData.product.id]?.configs[getConfigId(productConfig)]
+        if (!config) return false
+        return config?.meta.signConfig !== productConfig.meta.signConfig
+    }, [productConfig, basket])
+
+    const updateBasket = () => {
+        const config = basket.order.products[loaderData.product.id]?.configs[getConfigId(productConfig)]
+        if (!config) return
+
+        config.meta = productConfig.meta
+        basket.updateProduct(
+            loaderData.product.id,
+            currentConfig => ({
+                ...currentConfig,
+                meta: { ...currentConfig.meta, signConfig: productConfig.meta.signConfig }
+            }),
+            getConfigId(productConfig),
+        )
+    }
+
+    const restoreFromBasket = () => {
+        const config = basket.order.products[loaderData.product.id]?.configs[getConfigId(productConfig)]
+        if (config) {
+            setProductConfig(config)
+            setConfig(JSON.parse(config.meta.signConfig))
+        }
+    }
+
+    const uploadTexture = async () => {
         if (!texture) throw new Error('Texture is required.')
 
         const body = await texture.asBlob()
-        const filename = `${config.provider}-${config.product}-${config.assetName}-${crypto.randomUUID()}`
+        const filename = productConfig.meta.textureFilename
         const { url } = await SHOP.generatePreSignedUploadUrl({ filename, type: 'image/png' })
 
         await fetch(url, {
@@ -234,7 +299,7 @@ export default function SignProduct({ loaderData }: Route.ComponentProps) {
                                                 <Field className="w-full" orientation="horizontal">
                                                     <FieldLabel>Colour</FieldLabel>
                                                     <SignColourPicker
-                                                        default={config.backgroundColour}
+                                                        currentColour={config.backgroundColour}
                                                         onChange={backgroundColour => setConfig(c => ({ ...c, backgroundColour }))}
                                                     />
                                                 </Field>
@@ -263,10 +328,26 @@ export default function SignProduct({ loaderData }: Route.ComponentProps) {
                             {texture && <img src={texture.dataUrl} className="border-blue-50 border-2" />}
                         </div>
                     </div>
+
+                    {updateBasketRequired && <div className="bg-air/10 p-2 rounded-lg">
+                        <div className="flex gap-3">
+                            <Info scale={10} className="basis-1/8" />
+                            <P className="text-sm">
+                                <b>You have modified a sign which is already in your basket.</b><br />
+                                If you would like to add a new sign, please change either the <i>Provider</i>, <i>Product</i>, or <i>Name</i> fields and then select <i>Add to basket</i>.<br />
+                            </P>
+                        </div>
+
+                        <div className="flex gap-3 pt-2">
+                            <Button className="grow" variant='outline' onClick={updateBasket}><Save /> Update Basket</Button>
+                            <Button className="grow" variant='outline' onClick={restoreFromBasket}><Trash /> Discard changes</Button>
+                        </div>
+
+                    </div>}
                 </form>
             </div>
         </>,
-        sidebar: <ProductSidebar product={loaderData.product} productOptions={productOptions} />
+        sidebar: <ProductSidebar product={loaderData.product} config={productConfig} onAddToBasket={uploadTexture} />
     }}</ProductLayout>
 }
 
@@ -312,16 +393,14 @@ function Viewer(props: {
 }
 
 function SignColourPicker(props: {
-    default: string,
+    currentColour: string,
     onChange?: (colour: string) => void
 }) {
-    const [currentColour, setCurrentColour] = useState<string>(props.default)
-    const [pickerColour, setPickerColour] = useState<string>(props.default)
+    const [pickerColour, setPickerColour] = useState<string>(props.currentColour)
     const [popoverOpen, setPopoverOpen] = useState(false)
 
     const onSelect = () => {
         if (!pickerColour) return
-        setCurrentColour(pickerColour)
         props.onChange?.(pickerColour)
         setPopoverOpen(false)
     }
@@ -333,7 +412,7 @@ function SignColourPicker(props: {
     return (
         <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
             <PopoverTrigger asChild>
-                <Button variant="outline">{currentColour} <div className="w-5 aspect-square" style={{ backgroundColor: currentColour }}></div></Button>
+                <Button variant="outline">{props.currentColour} <div className="w-5 aspect-square" style={{ backgroundColor: props.currentColour }}></div></Button>
             </PopoverTrigger>
             <PopoverContent className="w-59">
                 <HexColorPicker color={pickerColour} onChange={setPickerColour} />
@@ -390,7 +469,7 @@ function TextConfigFields(props: {
         <Field orientation="horizontal">
             <FieldLabel>Colour</FieldLabel>
             <SignColourPicker
-                default={props.config.textColour}
+                currentColour={props.config.textColour}
                 onChange={textColour => props.onChange({ ...props.config, textColour })}
             />
         </Field>

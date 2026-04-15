@@ -1,13 +1,14 @@
-import { ArrowRightIcon, LucideClockFading, Minus, Plus, ShoppingBasketIcon, Trash } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router'
 import { ContentLayout } from '#src/components/app/BaseLayout'
+import { P } from '#src/components/common/typography.tsx'
 import { Button } from '#src/components/ui/button'
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '#src/components/ui/empty'
 import { useBasket } from '#src/lib/basket'
 import { products } from '#src/lib/products.server'
 import { cn, formatCurrency, } from '#src/lib/utils'
 import { SHOP } from '#src/shop'
+import { ArrowRightIcon, LucideClockFading, Minus, Plus, ShoppingBasketIcon, Trash } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router'
 import { getOrderConfig, ShopClient } from 'store'
 import { Route } from './+types/basket'
 
@@ -47,8 +48,23 @@ export default function Basket({ loaderData }: Route.ComponentProps) {
                         const { product, config } = getOrderConfig(basket.order, productId, optionId)
 
                         return (
-                            <tr key={i}>
-                                <td className={cellClassName}><Link to={`/product/${loaderData.productIdsToSlug[product.id]}`} className='hover:underline'>{product.name}</Link></td>
+                            <tr key={i} className={cn(i % 2 === 0 && 'bg-air/10')}>
+                                <td className={cn(cellClassName)}>
+                                    <Link
+                                        to={`/product/${loaderData.productIdsToSlug[product.id]}?configId=${optionId}`}
+                                    >
+                                        <div className='flex flex-col'>
+                                            <P className='hover:underline text-lg font-bold'>{product.name}</P>
+                                            <div className='text-sm'>
+                                                <div className="flex flex-wrap gap-x-2 text-sm text-white/80">{Object
+                                                    .entries(config.options)
+                                                    .filter(([_, option]) => !option.hidden)
+                                                    .map(([id, option]) => <p><b className="capitalize">{id}</b>: {option.value}</p>)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                </td>
                                 <td className={cellClassName}>{formatCurrency(unitPrice)}</td>
                                 <td className={cellClassName}>
                                     <Button
@@ -74,7 +90,7 @@ export default function Basket({ loaderData }: Route.ComponentProps) {
                                     </Button>
                                 </td>
                                 <td className={cellClassName}>{formatCurrency(linePrice)}</td>
-                                <th className={cellClassName}><Button variant='link' onClick={() => basket.removeProduct(product.id)}><Trash /></Button></th>
+                                <th className={cellClassName}><Button variant='link' onClick={() => basket.removeProduct(product.id, optionId)}><Trash /></Button></th>
                             </tr>
                         )
                     })}
@@ -95,8 +111,8 @@ export default function Basket({ loaderData }: Route.ComponentProps) {
                     <tr>
                         <td />
                         <td />
-                        <td className={cn(cellClassName, 'bg-air text-white rounded-l-md text-right')}>Total (incl. VAT)</td>
-                        <td className={cn(cellClassName, 'bg-air text-white rounded-r-md')}>{formatCurrency(calculations?.totalPrice ?? 0)}</td>
+                        <td className={cn(cellClassName, 'bg-air text-white rounded-bl-md text-right')}>Total</td>
+                        <td className={cn(cellClassName, 'bg-air text-white rounded-br-md underline decoration-double')}>{formatCurrency(calculations?.totalPrice ?? 0)}</td>
                     </tr>
                 </tfoot>
             </table>
@@ -116,6 +132,7 @@ export default function Basket({ loaderData }: Route.ComponentProps) {
             Object.keys(basket.order.products).length > 0
                 ? <>
                     <BasketTable />
+                    <P>All prices include VAT.</P>
                     <Button
                         className='w-full py-5'
                         size='lg'

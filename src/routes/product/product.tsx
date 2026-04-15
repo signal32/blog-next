@@ -1,13 +1,13 @@
-import { ExternalLink, FileDown } from 'lucide-react';
-import { ReactElement, useEffect, useState } from 'react';
-import { Link } from 'react-router';
 import { AddToCartButton } from '#src/components/AddToCartButton';
 import { H3 } from '#src/components/common/typography';
 import { Button } from '#src/components/ui/button';
 import { Skeleton } from '#src/components/ui/skeleton';
 import { formatCurrency } from '#src/lib/utils';
 import { SHOP } from '#src/shop';
-import { Option, ShopClient } from 'store';
+import { ExternalLink, FileDown } from 'lucide-react';
+import { ReactElement, useEffect, useState } from 'react';
+import { Link } from 'react-router';
+import { Config, ShopClient } from 'store';
 import { ContentLayout } from "../../components/app/BaseLayout";
 import Drawer from "../../components/common/Drawer";
 import { Markdown } from '../../components/common/Markdown';
@@ -93,9 +93,9 @@ export function ProductLayout(props: {
 
 export function ProductSidebar(props: {
     product: Product,
-    productOptions?: () => Option,
+    config: Config,
+    onAddToBasket?: () => void,
     file?: FileDetails,
-
 }) {
 
     const [price, setPrice] = useState<Awaited<ReturnType<ShopClient['productPrice']>>>()
@@ -150,7 +150,7 @@ export function ProductSidebar(props: {
             {props.product.storeProduct &&
                 <>
                     {price?.price ? <H3>{formatCurrency(price?.price)}</H3> : <Skeleton className="h-12 mb-2 w-full" />}
-                    <AddToCartButton product={props.product} options={props.productOptions} />
+                    <AddToCartButton product={props.product} config={props.config} onAddToBasket={props.onAddToBasket} />
                 </>
             }
         </div>
