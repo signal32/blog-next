@@ -98,7 +98,7 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
         signId: 'test',
         provider: 'Rails Developments',
         product: 'Custom Signs',
-        assetName: 'RD Custom sign {{primaryText}}',
+        assetName: 'RD Custom sign',
         useCustomTexture: false,
         backgroundColour: '#0099ff',
         primaryText: {
@@ -267,10 +267,7 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                             type="text"
                             placeholder="My custom sign"
                             value={config.assetName}
-                            onChange={ev => setConfig(c => ({
-                                ...c,
-                                product: ev.currentTarget?.value.replaceAll('{{primaryText}}', config.primaryText.textValue ?? '')
-                            }))}
+                            onChange={ev => setConfig(c => ({ ...c, assetName: ev.currentTarget?.value }))}
                         />
                     </Field>
 
