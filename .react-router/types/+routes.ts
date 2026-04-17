@@ -22,6 +22,11 @@ type Pages = {
   "/basket": {
     params: {};
   };
+  "/order/:orderId": {
+    params: {
+      "orderId": string;
+    };
+  };
   "/blog": {
     params: {};
   };
@@ -35,7 +40,7 @@ type Pages = {
       "slug": string;
     };
   };
-  "/product/Train-sim-custom-signs-and-stuff": {
+  "/product/Train-Simulator-Classic-Custom-Sign": {
     params: {};
   };
   "/shop": {
@@ -55,7 +60,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/:slug" | "/basket" | "/blog" | "/blog/:slug" | "/product/:slug" | "/product/Train-sim-custom-signs-and-stuff" | "/shop" | "/api/content" | "/api/content/:libraryId/:contentId";
+    page: "/" | "/:slug" | "/basket" | "/order/:orderId" | "/blog" | "/blog/:slug" | "/product/:slug" | "/product/Train-Simulator-Classic-Custom-Sign" | "/shop" | "/api/content" | "/api/content/:libraryId/:contentId";
   };
   "routes/home.tsx": {
     id: "routes/home";
@@ -68,6 +73,10 @@ type RouteFiles = {
   "./routes/basket.tsx": {
     id: "routes/basket";
     page: "/basket";
+  };
+  "./routes/order.tsx": {
+    id: "routes/order";
+    page: "/order/:orderId";
   };
   "routes/blog/index.tsx": {
     id: "routes/blog/index";
@@ -83,7 +92,7 @@ type RouteFiles = {
   };
   "./routes/product/signProduct.tsx": {
     id: "routes/product/signProduct";
-    page: "/product/Train-sim-custom-signs-and-stuff";
+    page: "/product/Train-Simulator-Classic-Custom-Sign";
   };
   "routes/product/index.tsx": {
     id: "routes/product/index";
@@ -104,6 +113,7 @@ type RouteModules = {
   "routes/home": typeof import("./src/routes/home.tsx");
   "routes/page": typeof import("./src/./routes/page.tsx");
   "routes/basket": typeof import("./src/./routes/basket.tsx");
+  "routes/order": typeof import("./src/./routes/order.tsx");
   "routes/blog/index": typeof import("./src/routes/blog/index.tsx");
   "routes/blog/post": typeof import("./src/./routes/blog/post.tsx");
   "routes/product/product": typeof import("./src/./routes/product/product.tsx");

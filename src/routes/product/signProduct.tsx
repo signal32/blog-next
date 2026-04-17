@@ -21,6 +21,7 @@ import * as THREE from "three";
 import { Route } from './+types/signProduct';
 import { ProductLayout, ProductSidebar } from "./product";
 import { Save, Trash, Info } from "lucide-react"
+import { InfoCard } from "#src/components/common/InfoCard.tsx";
 
 type SignConfig = {
     signId: string,
@@ -326,21 +327,17 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                         </div>
                     </div>
 
-                    {updateBasketRequired && <div className="bg-air/10 p-2 rounded-lg">
-                        <div className="flex gap-3">
-                            <Info scale={10} className="basis-1/8" />
-                            <P className="text-sm">
-                                <b>You have modified a sign which is already in your basket.</b><br />
-                                If you would like to add a new sign, please change either the <i>Provider</i>, <i>Product</i>, or <i>Name</i> fields and then select <i>Add to basket</i>.<br />
-                            </P>
-                        </div>
-
-                        <div className="flex gap-3 pt-2">
+                    {updateBasketRequired && <InfoCard>{{
+                        body: <P className="text-sm">
+                            <b>You have modified a sign which is already in your basket.</b><br />
+                            If you would like to add a new sign, please change either the <i>Provider</i>, <i>Product</i>, or <i>Name</i> fields and then select <i>Add to basket</i>.<br />
+                        </P>,
+                        footer: <>
                             <Button className="grow" variant='outline' onClick={updateBasket}><Save /> Update Basket</Button>
                             <Button className="grow" variant='outline' onClick={restoreFromBasket}><Trash /> Discard changes</Button>
-                        </div>
+                        </>
+                    }}</InfoCard>}
 
-                    </div>}
                 </form>
             </div>
         </>,

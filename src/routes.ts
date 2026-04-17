@@ -8,6 +8,7 @@ export default [
     // route('simulation', 'routes/simulation.tsx'),
     route(':slug', './routes/page.tsx'),
     route('basket', './routes/basket.tsx'),
+    route('order/:orderId', './routes/order.tsx'),
     ...prefix('blog', [
         index('routes/blog/index.tsx'),
         route(':slug', './routes/blog/post.tsx')

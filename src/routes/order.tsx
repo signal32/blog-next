@@ -1,0 +1,126 @@
+import { ContentLayout } from '#src/components/app/BaseLayout.tsx'
+import { InfoCard } from '#src/components/common/InfoCard.tsx'
+import { H2, H4, H6, P } from '#src/components/common/typography.tsx'
+import PostItem from '#src/components/posts/PostItem.tsx'
+import { Skeleton } from '#src/components/ui/skeleton.tsx'
+import { useBasket } from '#src/lib/basket.ts'
+import type { Content } from '#src/lib/content.server.ts'
+import { SHOP } from '#src/shop.ts'
+import { FileDownIcon } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate, useSearchParams } from 'react-router'
+import { Route } from './+types/order'
+
+export default function Order({ loaderData: { order, orderId }, params }: Route.ComponentProps) {
+    const navigate = useNavigate()
+    const location = useLocation()
+
+    useEffect(() => {
+        const allFulfilled = order.products.every(product => product.fulfilled)
+        let timeout: ReturnType<typeof setTimeout>
+        if (!allFulfilled) {
+            console.log('will reload')
+            timeout = setTimeout(() => navigate(location.pathname + location.search), 10000)
+        }
+        () => clearTimeout(timeout)
+    }, [order])
+
+    const [searchParams] = useSearchParams()
+    const success = searchParams.has('success')
+
+    const basket = useBasket()
+    useEffect(() => {
+        if (success && basket.size()) {
+            basket.clear();
+        }
+    }, [])
+
+    return <ContentLayout>
+        {success && <>
+            <div className="text-center py-10">
+                <H2>Your order has been placed!</H2>
+                <H6>Thank you for your custom.</H6>
+                <P className="mt-5">Write a thank you message here :)</P>
+            </div>
+        </>}
+
+        <H2>Order Details</H2>
+        <P>ID <span className="bg-background/50 shadow-inner p-1 rounded">{orderId}</span></P>
+
+        <H2>Products</H2>
+        <div className='flex flex-col gap-2'>
+            {order.products.map(product =>
+                <div className='w-full bg-card shadow rounded-md p-2 flex flex-row gap-4'>
+                    <div>
+                        {/* TODO: add option to load product with the purchased config */}
+                        <ContentItem library='products' id={product.productId} />
+
+                    </div>
+                    <div className='flex flex-col gap-2'>
+                        {Object.keys(product.options).length && <div>
+                            <H4>Options:</H4>
+                            {
+                                Object
+                                    .entries(product.options)
+                                    .map(([key, { value }]) =>
+                                        <P><b className='capitalize'>{key}</b>: {value}</P>
+                                    )
+                            }
+                        </div>}
+
+
+                        {
+                            product.fulfilled
+                                ? <div>
+                                    <H4>Files:</H4>
+                                    {product.files.map(file => <div className='flex flex-row gap-2'>
+                                        <FileDownIcon />
+                                        <a className='hover:underline' href={file.url} download>{file.name}</a>
+                                    </div>)
+
+                                    }
+                                </div>
+                                // : <P><Clock /> Waiting for fulfillment to complete. This may take a couple minutes.</P>
+                                : <InfoCard>{{
+                                    body: <P>
+                                        Waiting for fulfillment to complete.
+                                        This usually take a few minutes.
+                                    </P>
+                                }}</InfoCard>
+
+                        }
+                    </div>
+
+
+                </div>)}
+        </div>
+    </ContentLayout>
+
+}
+
+export async function clientLoader({ params }: Route.ClientLoaderArgs) {
+    const orderId = params['orderId']
+    if (!orderId) throw new Error("Order ID required")
+
+    const order = await SHOP.getOrder({ orderId })
+
+    return { order, orderId }
+}
+
+
+function ContentItem(props: {
+    library: string,
+    id: string,
+}) {
+    const [content, setContent] = useState<Content>()
+
+    useEffect(() => {
+        fetch(`/api/content/${props.library}/${props.id}`)
+            .then(res => res.json())
+            .then(setContent)
+    }, [props.id])
+
+    return content
+        ? <PostItem post={content} showImage />
+        : <Skeleton className='w-full h-48' />
+}

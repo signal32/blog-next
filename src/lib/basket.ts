@@ -1,6 +1,7 @@
 import { create } from "zustand"
 import { persist, createJSONStorage } from 'zustand/middleware'
 import { Order, Product, updateOrderProductConfig, Config, configId as getConfigId } from "store"
+import { v4 } from 'uuid'
 
 export interface Basket {
     order: Order,
@@ -8,15 +9,20 @@ export interface Basket {
     updateProduct(productId: string, config: Config | ((current: Config) => Config), configId?: string): void,
     removeProduct(productId: string, optionId?: string): void,
     size(): number,
+    clear(): void,
+}
+
+function newOrder(): Order {
+    return {
+        id: v4(),
+        products: {}
+    }
 }
 
 export const useBasket = create<Basket>()(
     persist(
         (set, get) => ({
-            order: {
-                id: '', // TODO: generate a uuid
-                products: {}
-            },
+            order: newOrder(),
 
             addProduct(product, config, configId = getConfigId(config)) {
                 const { order } = get()
@@ -74,6 +80,10 @@ export const useBasket = create<Basket>()(
                 console.log(Object.values(order.products).map(product => product.configs).flat())
                 return Object.values(order.products).map(product => Object.keys(product.configs)).flat().length
 
+            },
+
+            clear() {
+                set({ order: newOrder() })
             }
         }),
         {

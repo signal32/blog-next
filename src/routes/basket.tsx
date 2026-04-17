@@ -16,7 +16,10 @@ export default function Basket({ loaderData }: Route.ComponentProps) {
     const basket = useBasket()
 
     const goToCheckout = async () => {
-        const { url } = await SHOP.createStripePayment({ order: basket.order })
+        const { url } = await SHOP.createStripePayment({
+            order: basket.order,
+            successUrl: `http://localhost:5173/order/${basket.order.id}?success=true`
+        })
         window.location.href = url
     }
 
@@ -56,7 +59,7 @@ export default function Basket({ loaderData }: Route.ComponentProps) {
                                         <div className='flex flex-col'>
                                             <P className='hover:underline text-lg font-bold'>{product.name}</P>
                                             <div className='text-sm'>
-                                                <div className="flex flex-wrap gap-x-2 text-sm text-white/80">{Object
+                                                <div className="flex flex-wrap gap-x-2 text-sm opacity-80">{Object
                                                     .entries(config.options)
                                                     .filter(([_, option]) => !option.hidden)
                                                     .map(([id, option]) => <p><b className="capitalize">{id}</b>: {option.value}</p>)}
