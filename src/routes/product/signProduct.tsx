@@ -216,10 +216,10 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
             <div className="p-2 bg-accent/50 rounded-lg shadow">
                 <div className="h-96 bg-accent rounded-lg shadow">
                     <ClientOnly>
-                        {() => <Viewer
-                            model={SIGNS[config.signId].model}
+                        {() => loaderData.signs[config.signId] ? <Viewer
+                            model={`${SHOP.url}${loaderData.signs[config.signId]?.previewModelUrl}`}
                             texture={texture?.dataUrl}
-                        />}
+                        /> : <p>no sign :(</p>}
                     </ClientOnly>
                 </div>
 
@@ -233,7 +233,7 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    {Object.entries(SIGNS).map(([id, sign]) => <SelectItem value={id}>{sign.name}</SelectItem>)}
+                                    {Object.entries(loaderData.signs).map(([id, sign]) => <SelectItem value={id}>{sign.name}</SelectItem>)}
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
@@ -348,8 +348,21 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
 export async function loader({ params }: Route.LoaderArgs) {
     const product = await products.getById(CUSTOM_SIGN_PRODUCT_ID);
     if (!product) throw new Response(undefined, { status: 404 })
-    return { product }
+    const { signs } = await SHOP.listSigns({})
+
+    return { product, signs: Object.fromEntries(signs.map(sign => [sign.id, sign])) }
 }
+
+export async function clientLoader({ params, serverLoader }: Route.ClientLoaderArgs) {
+    const { signs } = await SHOP.listSigns({})
+
+    return {
+        ...await serverLoader(),
+        signs: Object.fromEntries(signs.map(sign => [sign.id, sign]))
+    }
+}
+
+clientLoader.hydrate = true as const;
 
 function Viewer(props: {
     model: string,
