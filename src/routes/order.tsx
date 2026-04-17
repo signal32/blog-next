@@ -18,7 +18,7 @@ export default function Order({ loaderData: { order, orderId }, params }: Route.
     useEffect(() => {
         const allFulfilled = order.products.every(product => product.fulfilled)
         let timeout: ReturnType<typeof setTimeout>
-        if (!allFulfilled) {
+        if (order.paid && !allFulfilled) {
             console.log('will reload')
             timeout = setTimeout(() => navigate(location.pathname + location.search), 10000)
         }
@@ -43,6 +43,13 @@ export default function Order({ loaderData: { order, orderId }, params }: Route.
                 <P className="mt-5">Write a thank you message here :)</P>
             </div>
         </>}
+
+        {!order.paid && <InfoCard>{{
+            body: <P>
+                This order has not been processed because no payment has been received.
+                If you think this is an error, please get in touch.
+            </P>
+        }}</InfoCard>}
 
         <H2>Order Details</H2>
         <P>ID <span className="bg-background/50 shadow-inner p-1 rounded">{orderId}</span></P>
@@ -70,7 +77,7 @@ export default function Order({ loaderData: { order, orderId }, params }: Route.
 
 
                         {
-                            product.fulfilled
+                            order.paid && (product.fulfilled
                                 ? <div>
                                     <H4>Files:</H4>
                                     {product.files.map(file => <div className='flex flex-row gap-2'>
@@ -86,7 +93,7 @@ export default function Order({ loaderData: { order, orderId }, params }: Route.
                                         Waiting for fulfillment to complete.
                                         This usually take a few minutes.
                                     </P>
-                                }}</InfoCard>
+                                }}</InfoCard>)
 
                         }
                     </div>
