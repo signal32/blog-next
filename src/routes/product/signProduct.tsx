@@ -1,3 +1,4 @@
+import { InfoCard } from "#src/components/common/InfoCard.tsx";
 import { Markdown } from "#src/components/common/Markdown.tsx";
 import { H5, P } from "#src/components/common/typography.tsx";
 import { Button } from "#src/components/ui/button.tsx";
@@ -12,19 +13,19 @@ import { CUSTOM_SIGN_PRODUCT_ID, products } from "#src/lib/products.server";
 import { SHOP } from "#src/shop.ts";
 import { Environment, OrbitControls, useGLTF } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Check, X } from "lucide-react";
+import { Check, Save, Trash, X } from "lucide-react";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
-import { HexColorPicker } from 'react-colorful';
+import { HexAlphaColorPicker } from 'react-colorful';
 import { useSearchParams } from "react-router";
 import { Config, configId as getConfigId } from "store";
 import * as THREE from "three";
 import { Route } from './+types/signProduct';
 import { ProductLayout, ProductSidebar } from "./product";
-import { Save, Trash, Info } from "lucide-react"
-import { InfoCard } from "#src/components/common/InfoCard.tsx";
 
 type SignConfig = {
     signId: string,
+    textureWidth: number,
+    textureHeight: number,
     useCustomTexture: boolean,
     backgroundColour: string,
     customTextureUrl?: string,
@@ -42,21 +43,9 @@ type TextConfig = {
     textColour: string
 }
 
-type Sign = {
-    name: string,
-    model: string,
-}
-
 type TextureData = {
     asBlob: () => Promise<Blob>,
     dataUrl: string
-}
-
-const SIGNS: Record<string, Sign> = {
-    test: {
-        name: 'Test',
-        model: '/static/signs/test_sign.glb',
-    },
 }
 
 const FONTS = [
@@ -65,15 +54,19 @@ const FONTS = [
     { name: 'Sans Serif', fontFace: 'sans-serif' }
 ]
 
+const SIGN_BOARD_MESH_NAME = '1_0500_board'
+const SIGN_BOARD_MATERIAL_NAME = 'Main'
+
 function createTextureFromConfig(config: SignConfig): TextureData {
     const canvas = document.createElement('canvas')
-    canvas.width = 512
-    canvas.height = 512
+    canvas.width = config.textureWidth //512
+    canvas.height = config.textureHeight// 512
     const ctx = canvas.getContext("2d")
     if (!ctx) throw new Error('Could not get canvas context')
 
     ctx.fillStyle = config.backgroundColour
     ctx.fillRect(0, 0, canvas.width, canvas.height)
+
 
     const drawText = (config: TextConfig, x: number, y: number, width: number) => {
         ctx.fillStyle = config.textColour
@@ -98,8 +91,8 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
     const [config, setConfig] = useState<SignConfig>({
         signId: 'test',
         provider: 'Rails Developments',
-        product: 'Custom Signs',
-        assetName: 'RD Custom sign',
+        product: 'Signs',
+        assetName: '',
         useCustomTexture: false,
         backgroundColour: '#0099ff',
         primaryText: {
@@ -111,19 +104,23 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
             textSize: 24,
             textFont: 'Raleway',
             textColour: '#ffffff'
-        }
+        },
+        textureHeight: 512,
+        textureWidth: 512,
     })
 
     const [searchParams] = useSearchParams()
+    const basket = useBasket()
 
     useEffect(() => {
         const configId = searchParams.get('configId')
         if (!configId) return
 
         const config = basket.order.products[loaderData.product.id]?.configs[configId]
-        setConfig(JSON.parse(config?.meta.signConfig))
+        const signConfig = config?.meta['signConfig']
+        if (signConfig) setConfig(JSON.parse(signConfig))
 
-    }, [params])
+    }, [params, basket])
 
     const [texture, setTexture] = useState<TextureData>()
     const [productConfig, setProductConfig] = useState<Config>({ quantity: 1, options: {}, meta: {} })
@@ -149,23 +146,25 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
         })
     }, [config])
 
-    const basket = useBasket()
     const updateBasketRequired = useMemo(() => {
         const config = basket.order.products[loaderData.product.id]?.configs[getConfigId(productConfig)]
         if (!config) return false
-        return config?.meta.signConfig !== productConfig.meta.signConfig
+        return config?.meta['signConfig'] !== productConfig.meta['signConfig']
     }, [productConfig, basket])
 
     const updateBasket = () => {
+        const signConfig = productConfig.meta['signConfig']
         const config = basket.order.products[loaderData.product.id]?.configs[getConfigId(productConfig)]
-        if (!config) return
+        if (!config || !signConfig) return
 
-        config.meta = productConfig.meta
         basket.updateProduct(
             loaderData.product.id,
             currentConfig => ({
                 ...currentConfig,
-                meta: { ...currentConfig.meta, signConfig: productConfig.meta.signConfig }
+                meta: {
+                    ...currentConfig.meta,
+                    signConfig,
+                }
             }),
             getConfigId(productConfig),
         )
@@ -173,17 +172,18 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
 
     const restoreFromBasket = () => {
         const config = basket.order.products[loaderData.product.id]?.configs[getConfigId(productConfig)]
-        if (config) {
+        const signConfig = config?.meta['signConfig']
+        if (signConfig) {
             setProductConfig(config)
-            setConfig(JSON.parse(config.meta.signConfig))
+            setConfig(JSON.parse(signConfig))
         }
     }
 
     const uploadTexture = async () => {
         if (!texture) throw new Error('Texture is required.')
-
         const body = await texture.asBlob()
-        const filename = productConfig.meta.textureFilename
+        const filename = productConfig.meta['textureFilename']
+        if (!filename) throw new Error('No texture filename')
         const { url } = await SHOP.generatePreSignedUploadUrl({ filename, type: 'image/png' })
 
         await fetch(url, {
@@ -193,20 +193,6 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
             },
             body,
         });
-
-        return {
-            textureFilename: {
-                value: filename,
-                hidden: true,
-            },
-            signConfig: {
-                value: JSON.stringify(config),
-                hidden: true,
-            },
-            name: {
-                value: config.assetName
-            }
-        }
     }
 
     return <ProductLayout product={loaderData.product}>{{
@@ -219,25 +205,15 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                         {() => loaderData.signs[config.signId] ? <Viewer
                             model={`${SHOP.url}${loaderData.signs[config.signId]?.previewModelUrl}`}
                             texture={texture?.dataUrl}
-                        /> : <p>no sign :(</p>}
+                            textureDimensions={(textureWidth, textureHeight) => setConfig(c => ({ ...c, textureWidth, textureHeight }))}
+                        /> : <p>no sign :( {config.signId}</p>}
                     </ClientOnly>
                 </div>
 
                 <form className="pt-2">
-                    <Field className="w-full" orientation="horizontal">
-                        <FieldLabel>Model</FieldLabel>
-                        <FieldDescription>Select a style for the base 3D model.</FieldDescription>
-                        <Select value={config.signId} onValueChange={signId => setConfig(c => ({ ...c, signId }))}>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Choose model" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    {Object.entries(loaderData.signs).map(([id, sign]) => <SelectItem value={id}>{sign.name}</SelectItem>)}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    </Field>
+                    <div className="flex justify-between border-air/50 border-b-2 pt-2">
+                        <H5>Asset Config</H5>
+                    </div>
 
                     <Field className="w-full" orientation="horizontal">
                         <FieldLabel htmlFor="input-field-provider">Provider</FieldLabel>
@@ -273,6 +249,24 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                     </Field>
 
                     <div className="flex justify-between border-air/50 border-b-2 pt-2">
+                        <H5>Sign Style</H5>
+                    </div>
+                    <Field className="w-full" orientation="horizontal">
+                        <FieldLabel>Model</FieldLabel>
+                        <FieldDescription>Select a style for the base 3D model.</FieldDescription>
+                        <Select value={config.signId} onValueChange={signId => setConfig(c => ({ ...c, signId: signId || c.signId }))}>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Choose model" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    {Object.entries(loaderData.signs).map(([id, sign]) => <SelectItem value={id}>{sign.name}</SelectItem>)}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </Field>
+
+                    <div className="flex justify-between border-air/50 border-b-2 pt-2">
                         <H5>Board Design</H5>
                         <Field orientation="horizontal" className="w-fit">
                             <FieldLabel htmlFor="2fa">Use custom texture</FieldLabel>
@@ -284,7 +278,17 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                         <div className="basis-2/3">
                             {
                                 config?.useCustomTexture
-                                    ? <p>working on it...</p>
+                                    ? <>
+                                        <P className="text-sm">
+                                            <b>Warning:</b> Each sign model has a different texture resolution.<br />
+                                            Please chose the model you wish to use before uploading custom textures.
+                                        </P>
+                                        <Button variant="outline" size="sm" className="w-full p-4">
+                                            Upload texture
+                                        </Button>
+                                        <P>Resolution: {config.textureWidth}px x {config.textureHeight}px</P>
+
+                                    </>
                                     : <>
                                         <Tabs defaultValue="background">
                                             <TabsList>
@@ -342,10 +346,10 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
             </div>
         </>,
         sidebar: <ProductSidebar product={loaderData.product} config={productConfig} onAddToBasket={uploadTexture} />
-    }}</ProductLayout>
+    }}</ProductLayout >
 }
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader({ }: Route.LoaderArgs) {
     const product = await products.getById(CUSTOM_SIGN_PRODUCT_ID);
     if (!product) throw new Response(undefined, { status: 404 })
     const { signs } = await SHOP.listSigns({})
@@ -353,7 +357,7 @@ export async function loader({ params }: Route.LoaderArgs) {
     return { product, signs: Object.fromEntries(signs.map(sign => [sign.id, sign])) }
 }
 
-export async function clientLoader({ params, serverLoader }: Route.ClientLoaderArgs) {
+export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
     const { signs } = await SHOP.listSigns({})
 
     return {
@@ -364,29 +368,103 @@ export async function clientLoader({ params, serverLoader }: Route.ClientLoaderA
 
 clientLoader.hydrate = true as const;
 
+const originalMaterials: Record<string, ImageBitmap> = {}
+
 function Viewer(props: {
     model: string,
     texture?: string,
+    textureDimensions?: (width: number, height: number) => void
 }) {
-    const { scene, materials } = useGLTF(props.model)
+    const { scene, materials, meshes } = useGLTF(props.model)
+
+    // TODO: This code isn't good enough. I need to get to the bottom of how THREE manages resources so they can be unloaded at the right time.
+    useEffect(() => {
+        const mainTexMaterial = materials[SIGN_BOARD_MATERIAL_NAME] as THREE.MeshStandardMaterial
+        if (!mainTexMaterial) return
+        if (mainTexMaterial.map?.image instanceof ImageBitmap && !originalMaterials[props.model]) {
+            originalMaterials[props.model] = mainTexMaterial.map.image
+        }
+
+        const baseTexture = originalMaterials[props.model]
+        if (!baseTexture || !props.texture) return
+
+        const canvas = document.createElement('canvas')
+        canvas.width = baseTexture.width
+        canvas.height = baseTexture.height
+
+        const ctx = canvas.getContext('2d')
+        if (!ctx) return
+
+        ctx.drawImage(baseTexture, 0, 0)
+
+        const overlay = new Image()
+        let disposed = false
+        let newTexture: THREE.CanvasTexture | null = null
+        overlay.onload = () => {
+            if (disposed) return
+
+            ctx.drawImage(overlay, 0, 0, overlay.width, overlay.height)
+
+            newTexture = new THREE.CanvasTexture(canvas)
+            newTexture.flipY = false
+
+            mainTexMaterial.map = newTexture
+            mainTexMaterial.needsUpdate = true
+        }
+        overlay.src = props.texture
+
+        return () => {
+            disposed = true
+            // Delay cleanup to avoid flickering
+            // Most cleanup is handled by useGLTF, only need to consider what we created
+            setTimeout(() => {
+                if (newTexture) {
+                    newTexture.dispose()
+                    newTexture.image = null as any
+                    newTexture = null
+                }
+                if (mainTexMaterial?.map) {
+                    mainTexMaterial.map.dispose?.()
+                    mainTexMaterial.map = null
+                }
+            }, 500)
+
+        }
+    }, [props.texture, materials])
 
     useEffect(() => {
-        if (!props.texture) return
+        const signBoardMesh = meshes[SIGN_BOARD_MESH_NAME]
+        const uvAttr = signBoardMesh?.geometry.attributes['uv']
+        if (!uvAttr) {
+            console.log('no uv')
+            return
+        }
 
-        const loader = new THREE.TextureLoader()
-        loader.load(props.texture, (tex) => {
-            tex.flipY = false
+        let minU = Infinity, minV = Infinity
+        let maxU = -Infinity, maxV = -Infinity
 
-            const mat = materials["sign-board-mat"] as THREE.MeshStandardMaterial
-            if (!mat) {
-                console.warn("Material not found")
-                return
-            }
+        for (let i = 0; i < uvAttr.count; i++) {
+            const u = uvAttr.getX(i)
+            const v = uvAttr.getY(i)
 
-            mat.map = tex
-            mat.needsUpdate = true
-        })
-    }, [props.texture, materials])
+            minU = Math.min(minU, u)
+            minV = Math.min(minV, v)
+            maxU = Math.max(maxU, u)
+            maxV = Math.max(maxV, v)
+        }
+
+        const uvWidth = maxU - minU
+        const uvHeight = maxV - minV
+
+        // Convert to pixel dimensions
+        const pixelWidth = Math.round(uvWidth * 1024) //tex.image.width
+        const pixelHeight = Math.round(uvHeight * 1024) //tex.image.height
+
+        console.log("UV bounds:", { minU, minV, maxU, maxV })
+        console.log("Pixel dimensions:", { pixelWidth, pixelHeight })
+
+        props.textureDimensions?.(pixelWidth, pixelHeight)
+    }, [meshes])
 
     return (
         <Canvas camera={{ position: [-3, 2, -1], fov: 45 }}>
@@ -422,7 +500,7 @@ function SignColourPicker(props: {
                 <Button variant="outline">{props.currentColour} <div className="w-5 aspect-square" style={{ backgroundColor: props.currentColour }}></div></Button>
             </PopoverTrigger>
             <PopoverContent className="w-59">
-                <HexColorPicker color={pickerColour} onChange={setPickerColour} />
+                <HexAlphaColorPicker color={pickerColour} onChange={setPickerColour} />
 
                 <Input className="w-50 mt-4" value={pickerColour} onChange={e => setPickerColour(e.target.value)} />
 
@@ -503,3 +581,10 @@ function subscribe() {
     // biome-ignore lint/suspicious/noEmptyBlockStatements: Mock function
     return () => { };
 }
+
+// okay the uv coords are a bit fucked up. solution
+// deal with just one texture - 'maintex'
+// sign board mesh is uv mapped onto this
+// we then load this texture into the background of the canvas
+// and then insert our sign texture above it at the right position
+//
