@@ -8,10 +8,12 @@ import { P } from "./common/typography";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog";
 import { Button } from "./ui/button";
 
+export type OnAddToBasketCb = (config: Config) => Promise<boolean | undefined>
+
 export function AddToCartButton(props: {
     product: Product,
     config: Config
-    onAddToBasket?: () => void,
+    onAddToBasket?: OnAddToBasketCb,
 }) {
     const basket = useBasket()
     const storeProduct = props.product.storeProduct
@@ -27,11 +29,11 @@ export function AddToCartButton(props: {
                 </div>
                 : <AlertDialogTrigger asChild>
                     <Button className="w-full" onClick={async () => {
-                        props.onAddToBasket?.()
-                        basket.addProduct(
-                            storeProduct,
-                            props.config
-                        );
+                        if ((await props.onAddToBasket?.(props.config)) ?? true)
+                            basket.addProduct(
+                                storeProduct,
+                                props.config
+                            );
                     }}>Add to basket</Button>
                 </AlertDialogTrigger>
 

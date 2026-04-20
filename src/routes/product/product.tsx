@@ -1,4 +1,4 @@
-import { AddToCartButton } from '#src/components/AddToCartButton';
+import { AddToCartButton, OnAddToBasketCb } from '#src/components/AddToCartButton';
 import { H3 } from '#src/components/common/typography';
 import { Button } from '#src/components/ui/button';
 import { Skeleton } from '#src/components/ui/skeleton';
@@ -94,7 +94,7 @@ export function ProductLayout(props: {
 export function ProductSidebar(props: {
     product: Product,
     config: Config,
-    onAddToBasket?: () => void,
+    onAddToBasket?: OnAddToBasketCb,
     file?: FileDetails,
 }) {
 

@@ -21,6 +21,7 @@ import { Config, configId as getConfigId } from "store";
 import * as THREE from "three";
 import { Route } from './+types/signProduct';
 import { ProductLayout, ProductSidebar } from "./product";
+import { OnAddToBasketCb } from "#src/components/AddToCartButton.tsx";
 
 type SignConfig = {
     signId: string,
@@ -94,9 +95,9 @@ function createTextureFromConfig(config: SignConfig): TextureData {
 
 export default function SignProduct({ loaderData, params }: Route.ComponentProps) {
     const [config, setConfig] = useState<SignConfig>({
-        signId: 'test',
-        provider: 'Rails Developments',
-        product: 'Signs',
+        signId: Object.keys(loaderData.signs)[0] ?? '',
+        provider: 'HamishWeir',
+        product: 'CustomSigns',
         assetName: '',
         useCustomTexture: false,
         backgroundColour: '#0099ff',
@@ -144,7 +145,7 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                 },
                 product: {
                     value: config.product
-                }
+                },
             },
             meta: {
                 textureFilename: `${config.provider}-${config.product}-${config.assetName}`,
@@ -184,6 +185,23 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
             setProductConfig(config)
             setConfig(JSON.parse(signConfig))
         }
+    }
+
+    const handleAddToBasket: OnAddToBasketCb = async (config: Config) => {
+        if (!config.options['name']?.value.length) {
+            alert('Asset name must be at least 5 characters in length.')
+            return false
+        }
+        if (!config.options['product']?.value.length) {
+            alert('Product name must be at least 5 characters in length.')
+            return false
+        }
+        if (!config.options['provider']?.value.length) {
+            alert('Provider name must be at least 5 characters in length.')
+            return false
+        }
+
+        await uploadTexture()
     }
 
     const uploadTexture = async () => {
@@ -370,7 +388,7 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                 </form>
             </div>
         </>,
-        sidebar: <ProductSidebar product={loaderData.product} config={productConfig} onAddToBasket={uploadTexture} />
+        sidebar: <ProductSidebar product={loaderData.product} config={productConfig} onAddToBasket={handleAddToBasket} />
     }}</ProductLayout >
 }
 
