@@ -28,6 +28,8 @@ type SignConfig = {
     textureHeight: number,
     useCustomTexture: boolean,
     backgroundColour: string,
+    borderColour: string,
+    borderThickness: number,
     customTextureUrl?: string,
     primaryText: TextConfig,
     secondaryText: TextConfig,
@@ -65,7 +67,10 @@ function createTextureFromConfig(config: SignConfig): TextureData {
     if (!ctx) throw new Error('Could not get canvas context')
 
     ctx.fillStyle = config.backgroundColour
+    ctx.lineWidth = config.borderThickness;
+    ctx.strokeStyle = config.borderColour
     ctx.fillRect(0, 0, canvas.width, canvas.height)
+    ctx.strokeRect(0, 0, canvas.width, canvas.height)
 
 
     const drawText = (config: TextConfig, x: number, y: number, width: number) => {
@@ -76,8 +81,8 @@ function createTextureFromConfig(config: SignConfig): TextureData {
         ctx.fillText(config.textValue ?? '', x, y, width);
     }
 
-    drawText(config.primaryText, canvas.width / 2, canvas.height / 2, canvas.width - 40)
-    drawText(config.secondaryText, canvas.width / 2, (canvas.height / 2) + config.primaryText.textSize, canvas.width - 40)
+    drawText(config.primaryText, canvas.width / 2, canvas.height / 2, canvas.width - 10 - (config.borderThickness * 2))
+    drawText(config.secondaryText, canvas.width / 2, (canvas.height / 2) + config.primaryText.textSize, canvas.width - 10 - (config.borderThickness * 2))
 
     return {
         dataUrl: canvas.toDataURL('image/png'),
@@ -107,6 +112,8 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
         },
         textureHeight: 512,
         textureWidth: 512,
+        borderColour: '#ffffff00',
+        borderThickness: 25,
     })
 
     const [searchParams] = useSearchParams()
@@ -303,6 +310,24 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                                                     <SignColourPicker
                                                         currentColour={config.backgroundColour}
                                                         onChange={backgroundColour => setConfig(c => ({ ...c, backgroundColour }))}
+                                                    />
+                                                </Field>
+
+                                                <Field className="w-full" orientation="horizontal">
+                                                    <FieldLabel>Border colour</FieldLabel>
+                                                    <SignColourPicker
+                                                        currentColour={config.borderColour}
+                                                        onChange={borderColour => setConfig(c => ({ ...c, borderColour }))}
+                                                    />
+                                                </Field>
+
+                                                <Field className="w-full" orientation="horizontal">
+                                                    <FieldLabel>Border thickness</FieldLabel>
+                                                    <Input
+                                                        type="number"
+                                                        defaultValue={25}
+                                                        value={config.borderThickness}
+                                                        onChange={e => setConfig(c => ({ ...c, borderThickness: +e.target.value }))}
                                                     />
                                                 </Field>
 
