@@ -13,7 +13,7 @@ import { CUSTOM_SIGN_PRODUCT_ID, products } from "#src/lib/products.server";
 import { SHOP } from "#src/shop.ts";
 import { Environment, OrbitControls, useGLTF } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Check, Save, Trash, X } from "lucide-react";
+import { Check, MoveVertical, Save, Trash, X } from "lucide-react";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { HexAlphaColorPicker } from 'react-colorful';
 import { useSearchParams } from "react-router";
@@ -44,6 +44,7 @@ type TextConfig = {
     textSize: number,
     textFont: string,
     textColour: string
+    verticalOffset: number
 }
 
 type TextureData = {
@@ -79,11 +80,11 @@ function createTextureFromConfig(config: SignConfig): TextureData {
         ctx.font = `bold ${config.textSize}px ${config.textFont}`;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText(config.textValue ?? 'Your text here', x, y, width);
+        ctx.fillText(config.textValue ?? 'Your text here', x, y + config.verticalOffset, width);
     }
 
     drawText(config.primaryText, canvas.width / 2, canvas.height / 2, canvas.width - 10 - (config.borderThickness * 2))
-    drawText(config.secondaryText, canvas.width / 2, (canvas.height / 2) + config.primaryText.textSize, canvas.width - 10 - (config.borderThickness * 2))
+    drawText(config.secondaryText, canvas.width / 2, (canvas.height / 2) + (config.primaryText.textSize / 2), canvas.width - 10 - (config.borderThickness * 2))
 
     return {
         dataUrl: canvas.toDataURL('image/png'),
@@ -102,14 +103,16 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
         useCustomTexture: false,
         backgroundColour: '#0099ff',
         primaryText: {
-            textSize: 48,
+            textSize: 72,
             textFont: 'Raleway',
-            textColour: '#ffffff'
+            textColour: '#ffffff',
+            verticalOffset: 0,
         },
         secondaryText: {
-            textSize: 24,
+            textSize: 36,
             textFont: 'Raleway',
-            textColour: '#ffffff'
+            textColour: '#ffffff',
+            verticalOffset: 15
         },
         textureHeight: 512,
         textureWidth: 512,
@@ -566,7 +569,7 @@ function TextConfigFields(props: {
             <Input
                 id="input-field-primary-text"
                 type="text"
-                placeholder="Primary text"
+                placeholder="Your text here"
                 value={props.config.textValue}
                 onChange={ev => props.onChange({ ...props.config, textValue: ev.currentTarget?.value })}
             />
@@ -599,6 +602,15 @@ function TextConfigFields(props: {
             <SignColourPicker
                 currentColour={props.config.textColour}
                 onChange={textColour => props.onChange({ ...props.config, textColour })}
+            />
+        </Field>
+
+        <Field className="w-full" orientation="horizontal">
+            <FieldLabel>Offset <MoveVertical scale={0.25} /></FieldLabel>
+            <Input
+                type="number"
+                value={props.config.verticalOffset}
+                onChange={e => props.onChange({ ...props.config, verticalOffset: +e.target.value })}
             />
         </Field>
 
