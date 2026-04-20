@@ -79,7 +79,7 @@ function createTextureFromConfig(config: SignConfig): TextureData {
         ctx.font = `bold ${config.textSize}px ${config.textFont}`;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText(config.textValue ?? '', x, y, width);
+        ctx.fillText(config.textValue ?? 'Your text here', x, y, width);
     }
 
     drawText(config.primaryText, canvas.width / 2, canvas.height / 2, canvas.width - 10 - (config.borderThickness * 2))
