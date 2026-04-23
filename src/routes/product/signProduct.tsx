@@ -156,33 +156,52 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
             }
         })
     }, [config])
+    const currentProductConfig = basket.order.products[loaderData.product.id]?.configs[getConfigId(productConfig)]
 
     const updateBasketRequired = useMemo(() => {
-        const config = basket.order.products[loaderData.product.id]?.configs[getConfigId(productConfig)]
+        const config = currentProductConfig
         if (!config) return false
         return config?.meta['signConfig'] !== productConfig.meta['signConfig']
     }, [productConfig, basket])
 
-    const updateBasket = () => {
+
+    const updateBasket = async () => {
         const signConfig = productConfig.meta['signConfig']
         const config = basket.order.products[loaderData.product.id]?.configs[getConfigId(productConfig)]
         if (!config || !signConfig) return
 
+
         basket.updateProduct(
             loaderData.product.id,
-            currentConfig => ({
-                ...currentConfig,
+            {
+                ...config,
                 meta: {
-                    ...currentConfig.meta,
+                    ...config.meta,
                     signConfig,
                 }
-            }),
+            },
             getConfigId(productConfig),
         )
+
+        try {
+            await uploadTexture()
+        }
+        catch (err) {
+            console.error(err)
+            alert('Could not update basket. Texture was not uploaded. Reverting to previous configuration.')
+            basket.updateProduct(
+                loaderData.product.id,
+                {
+                    ...config,
+                    meta: config.meta
+                },
+                getConfigId(productConfig),
+            )
+        }
     }
 
     const restoreFromBasket = () => {
-        const config = basket.order.products[loaderData.product.id]?.configs[getConfigId(productConfig)]
+        const config = currentProductConfig
         const signConfig = config?.meta['signConfig']
         if (signConfig) {
             setProductConfig(config)
@@ -204,7 +223,15 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
             return false
         }
 
-        await uploadTexture()
+        try {
+            await uploadTexture()
+
+        }
+        catch (err) {
+            console.error(err)
+            alert("Could not upload texture")
+            return false
+        }
     }
 
     const uploadTexture = async () => {
