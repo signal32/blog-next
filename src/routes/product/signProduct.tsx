@@ -1,10 +1,11 @@
+import { OnAddToBasketCb } from "#src/components/AddToCartButton.tsx";
 import { InfoCard } from "#src/components/common/InfoCard.tsx";
 import { Markdown } from "#src/components/common/Markdown.tsx";
 import { H5, P } from "#src/components/common/typography.tsx";
 import { Button } from "#src/components/ui/button.tsx";
-import { Field, FieldDescription, FieldLabel } from "#src/components/ui/field.tsx";
+import { Field, FieldLabel } from "#src/components/ui/field.tsx";
 import { Input } from "#src/components/ui/input.tsx";
-import { Popover, PopoverContent, PopoverTrigger } from "#src/components/ui/popover.tsx";
+import { Popover, PopoverContent, PopoverDescription, PopoverHeader, PopoverTitle, PopoverTrigger } from "#src/components/ui/popover.tsx";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "#src/components/ui/select.tsx";
 import { Switch } from "#src/components/ui/switch.tsx";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "#src/components/ui/tabs.tsx";
@@ -13,15 +14,14 @@ import { CUSTOM_SIGN_PRODUCT_ID, products } from "#src/lib/products.server";
 import { SHOP } from "#src/shop.ts";
 import { Environment, OrbitControls, useGLTF } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Check, MoveVertical, Save, Trash, X } from "lucide-react";
-import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { Check, CircleQuestionMark, Info, Palette, Rotate3D, Save, Trash, X } from "lucide-react";
+import { ReactNode, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { HexAlphaColorPicker } from 'react-colorful';
 import { useSearchParams } from "react-router";
 import { Config, configId as getConfigId } from "store";
 import * as THREE from "three";
 import { Route } from './+types/signProduct';
 import { ProductLayout, ProductSidebar } from "./product";
-import { OnAddToBasketCb } from "#src/components/AddToCartButton.tsx";
 
 type SignConfig = {
     signId: string,
@@ -60,6 +60,9 @@ const FONTS = [
 
 const SIGN_BOARD_MESH_NAME = '1_0500_board'
 const SIGN_BOARD_MATERIAL_NAME = 'Main'
+
+const fieldClasses = 'w-full pt-2 flex'
+const fieldInputClasses = 'basis-2/3'
 
 function createTextureFromConfig(config: SignConfig): TextureData {
     const canvas = document.createElement('canvas')
@@ -116,8 +119,8 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
         },
         textureHeight: 512,
         textureWidth: 512,
-        borderColour: '#ffffff00',
-        borderThickness: 25,
+        borderColour: '#dedede',
+        borderThickness: 0,
     })
 
     const [searchParams] = useSearchParams()
@@ -225,7 +228,6 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
 
         try {
             await uploadTexture()
-
         }
         catch (err) {
             console.error(err)
@@ -252,8 +254,6 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
 
     return <ProductLayout product={loaderData.product}>{{
         main: <>
-            <Markdown content={loaderData.product.description ?? ''} />
-
             <div className="p-2 bg-accent/50 rounded-lg shadow">
                 <div className="h-96 bg-accent rounded-lg shadow">
                     <ClientOnly>
@@ -265,157 +265,196 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                     </ClientOnly>
                 </div>
 
-                <form className="pt-2">
-                    <div className="flex justify-between border-air/50 border-b-2 pt-2">
-                        <H5>Asset Config</H5>
-                    </div>
+                <Tabs defaultValue="config" className="pt-2">
+                    <TabsList className="w-full">
+                        <TabsTrigger value="config"><Palette />Editor</TabsTrigger>
+                        <TabsTrigger value="description"><Info />About</TabsTrigger>
+                    </TabsList>
 
-                    <Field className="w-full" orientation="horizontal">
-                        <FieldLabel htmlFor="input-field-provider">Provider</FieldLabel>
-                        <Input
-                            id="input-field-provider"
-                            type="text"
-                            placeholder="Hamish Weir"
-                            value={config.provider}
-                            onChange={ev => setConfig(c => ({ ...c, provider: ev.currentTarget?.value }))}
-                        />
-                    </Field>
+                    <TabsContent value="config">
+                        <form className="">
+                            <div className="flex justify-between border-air/50 border-b-2 pt-2">
+                                <H5>Asset Config</H5>
+                            </div>
 
-                    <Field className="w-full" orientation="horizontal">
-                        <FieldLabel htmlFor="input-field-product">Product</FieldLabel>
-                        <Input
-                            id="input-field-product"
-                            type="text"
-                            placeholder="Signs"
-                            value={config.product}
-                            onChange={ev => setConfig(c => ({ ...c, product: ev.currentTarget?.value }))}
-                        />
-                    </Field>
+                            <Field className={fieldClasses} orientation="horizontal">
+                                <FieldLabel htmlFor="input-field-provider">Provider</FieldLabel>
+                                <Input
+                                    className={fieldInputClasses}
+                                    id="input-field-provider"
+                                    type="text"
+                                    placeholder="Hamish Weir"
+                                    value={config.provider}
+                                    onChange={ev => setConfig(c => ({ ...c, provider: ev.currentTarget?.value }))}
+                                />
+                                <HelpPopover title="Provider">
+                                    The Provider field controls the name under which the asset will appear within the editor.<br /><br />
+                                    This should be unique to you as a developer, for example "JohnSmith", or "MyFancySimulationCo".
+                                </HelpPopover>
+                            </Field>
 
-                    <Field className="w-full" orientation="horizontal">
-                        <FieldLabel htmlFor="input-field-asset-name">Name</FieldLabel>
-                        <Input
-                            id="input-field-asset-name"
-                            type="text"
-                            placeholder="My custom sign"
-                            value={config.assetName}
-                            onChange={ev => setConfig(c => ({ ...c, assetName: ev.currentTarget?.value }))}
-                        />
-                    </Field>
+                            <Field className={fieldClasses} orientation="horizontal">
+                                <FieldLabel htmlFor="input-field-product">Product</FieldLabel>
+                                <Input
+                                    className={fieldInputClasses}
+                                    id="input-field-product"
+                                    type="text"
+                                    placeholder="Signs"
+                                    value={config.product}
+                                    onChange={ev => setConfig(c => ({ ...c, product: ev.currentTarget?.value }))}
+                                />
+                                <HelpPopover title="Product">
+                                    The name of the group under the Provider field which your sign asset be placed.<br /><br />
+                                    This should be something unique to your project, for example "MyFancyRoute".
+                                </HelpPopover>
+                            </Field>
 
-                    <div className="flex justify-between border-air/50 border-b-2 pt-2">
-                        <H5>Sign Style</H5>
-                    </div>
-                    <Field className="w-full" orientation="horizontal">
-                        <FieldLabel>Model</FieldLabel>
-                        <FieldDescription>Select a style for the base 3D model.</FieldDescription>
-                        <Select value={config.signId} onValueChange={signId => setConfig(c => ({ ...c, signId: signId || c.signId }))}>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Choose model" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    {Object.entries(loaderData.signs).map(([id, sign]) => <SelectItem value={id}>{sign.name}</SelectItem>)}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    </Field>
+                            <Field className={fieldClasses} orientation="horizontal">
+                                <FieldLabel htmlFor="input-field-asset-name">Name</FieldLabel>
+                                <Input
+                                    className={fieldInputClasses}
+                                    id="input-field-asset-name"
+                                    type="text"
+                                    placeholder="My custom sign"
+                                    value={config.assetName}
+                                    onChange={ev => setConfig(c => ({ ...c, assetName: ev.currentTarget?.value }))}
+                                />
+                                <HelpPopover title="Name">
+                                    The name of the asset as it will appear in game. To make it easier to find within the editor, I recommend prefixing with your providers initials:<br />
+                                    For example "MFR Station Sign PlaceName"<br /><br />
+                                    Your finished asset will be placed into a directory using the structure <span className="font-mono bg-accent p-1">assets/provider-name/product-name/asset-name</span> within your Train Simulator installation.<br /><br />
+                                    <b>Important:</b> The asset name should be unique within your provider + product combination. No other asset with this name can exist.
+                                </HelpPopover>
+                            </Field>
 
-                    <div className="flex justify-between border-air/50 border-b-2 pt-2">
-                        <H5>Board Design</H5>
-                        <Field orientation="horizontal" className="w-fit">
-                            <FieldLabel htmlFor="2fa">Use custom texture</FieldLabel>
-                            <Switch checked={config.useCustomTexture} onCheckedChange={checked => setConfig(c => ({ ...c, useCustomTexture: checked }))} id="2fa" />
-                        </Field>
-                    </div>
+                            <div className="flex justify-between border-air/50 border-b-2 pt-2">
+                                <H5>Sign Style</H5>
+                            </div>
+                            <Field className={fieldClasses} orientation="horizontal">
+                                <FieldLabel>Model</FieldLabel>
+                                <Select
+                                    value={config.signId} onValueChange={signId => setConfig(c => ({ ...c, signId: signId || c.signId }))}>
+                                    <SelectTrigger className={fieldInputClasses}>
+                                        <SelectValue placeholder="Choose model" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            {Object.entries(loaderData.signs).map(([id, sign]) => <SelectItem value={id}>{sign.name}</SelectItem>)}
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                                <HelpPopover title="Model">
+                                    This is the base 3D model onto which your custom design will be applied.
+                                </HelpPopover>
+                            </Field>
 
-                    <div className="flex gap-2 py-2">
-                        <div className="basis-2/3">
-                            {
-                                config?.useCustomTexture
-                                    ? <>
-                                        <P className="text-sm">
-                                            <b>Warning:</b> Each sign model has a different texture resolution.<br />
-                                            Please chose the model you wish to use before uploading custom textures.
-                                        </P>
-                                        <Button variant="outline" size="sm" className="w-full p-4">
-                                            Upload texture
-                                        </Button>
-                                        <P>Resolution: {config.textureWidth}px x {config.textureHeight}px</P>
+                            {/*<div className="pt-4 flex justify-between">
+                                <P className="text-sm"><b>Try before you buy</b><br />This sample asset can be used in game.</P>
+                                <Button variant={"secondary"}><FileDown />Download sample</Button>
+                            </div>*/}
 
-                                    </>
-                                    : <>
-                                        <Tabs defaultValue="background">
-                                            <TabsList>
-                                                <TabsTrigger value="background">Background</TabsTrigger>
-                                                <TabsTrigger value="primary-text">Primary Text</TabsTrigger>
-                                                <TabsTrigger value="secondary-text">Secondary Text</TabsTrigger>
-                                            </TabsList>
+                            <div className="flex justify-between border-air/50 border-b-2 pt-2">
+                                <H5>Board Design</H5>
+                                <Field orientation="horizontal" className="w-fit">
+                                    <FieldLabel htmlFor="2fa">Use custom texture</FieldLabel>
+                                    <Switch checked={config.useCustomTexture} onCheckedChange={checked => setConfig(c => ({ ...c, useCustomTexture: checked }))} id="2fa" />
+                                </Field>
+                            </div>
 
-                                            <TabsContent value="background">
-                                                <Field className="w-full" orientation="horizontal">
-                                                    <FieldLabel>Colour</FieldLabel>
-                                                    <SignColourPicker
-                                                        currentColour={config.backgroundColour}
-                                                        onChange={backgroundColour => setConfig(c => ({ ...c, backgroundColour }))}
-                                                    />
-                                                </Field>
+                            <div className="flex gap-2 py-2">
+                                <div className="basis-2/3">
+                                    {
+                                        config?.useCustomTexture
+                                            ? <>
+                                                <P className="text-sm">
+                                                    <b>Warning:</b> Each sign model has a different texture resolution.<br />
+                                                    Please chose the model you wish to use before uploading custom textures.
+                                                </P>
+                                                <Button variant="outline" size="sm" className="w-full p-4">
+                                                    Upload texture
+                                                </Button>
+                                                <P>Resolution: {config.textureWidth}px x {config.textureHeight}px</P>
 
-                                                <Field className="w-full" orientation="horizontal">
-                                                    <FieldLabel>Border colour</FieldLabel>
-                                                    <SignColourPicker
-                                                        currentColour={config.borderColour}
-                                                        onChange={borderColour => setConfig(c => ({ ...c, borderColour }))}
-                                                    />
-                                                </Field>
+                                            </>
+                                            : <>
+                                                <Tabs defaultValue="background">
+                                                    <TabsList>
+                                                        <TabsTrigger value="background">Background</TabsTrigger>
+                                                        <TabsTrigger value="primary-text">Primary Text</TabsTrigger>
+                                                        <TabsTrigger value="secondary-text">Secondary Text</TabsTrigger>
+                                                    </TabsList>
 
-                                                <Field className="w-full" orientation="horizontal">
-                                                    <FieldLabel>Border thickness</FieldLabel>
-                                                    <Input
-                                                        type="number"
-                                                        defaultValue={25}
-                                                        value={config.borderThickness}
-                                                        onChange={e => setConfig(c => ({ ...c, borderThickness: +e.target.value }))}
-                                                    />
-                                                </Field>
+                                                    <TabsContent value="background">
+                                                        <Field className={fieldClasses} orientation="horizontal">
+                                                            <FieldLabel>Colour</FieldLabel>
+                                                            <SignColourPicker
+                                                                currentColour={config.backgroundColour}
+                                                                onChange={backgroundColour => setConfig(c => ({ ...c, backgroundColour }))}
+                                                            />
+                                                        </Field>
 
-                                            </TabsContent>
+                                                        <Field className={fieldClasses} orientation="horizontal">
+                                                            <FieldLabel>Border colour</FieldLabel>
+                                                            <SignColourPicker
+                                                                currentColour={config.borderColour}
+                                                                onChange={borderColour => setConfig(c => ({ ...c, borderColour }))}
+                                                            />
+                                                        </Field>
 
-                                            <TabsContent value="primary-text">
-                                                <TextConfigFields
-                                                    config={config.primaryText}
-                                                    onChange={primaryText => setConfig(config => ({ ...config, primaryText }))}
-                                                />
-                                            </TabsContent>
+                                                        <Field className={fieldClasses} orientation="horizontal">
+                                                            <FieldLabel>Border thickness</FieldLabel>
+                                                            <Input
+                                                                className={fieldInputClasses}
+                                                                type="number"
+                                                                defaultValue={25}
+                                                                value={config.borderThickness}
+                                                                onChange={e => setConfig(c => ({ ...c, borderThickness: +e.target.value }))}
+                                                            />
+                                                        </Field>
 
-                                            <TabsContent value="secondary-text">
-                                                <TextConfigFields
-                                                    config={config.secondaryText}
-                                                    onChange={secondaryText => setConfig(config => ({ ...config, secondaryText }))}
-                                                />
-                                            </TabsContent>
+                                                    </TabsContent>
 
-                                        </Tabs>
-                                    </>
-                            }
-                        </div>
-                        <div className="basis-2/3">
-                            {texture && <img src={texture.dataUrl} className="border-blue-50 border-2" />}
-                        </div>
-                    </div>
+                                                    <TabsContent value="primary-text">
+                                                        <TextConfigFields
+                                                            config={config.primaryText}
+                                                            onChange={primaryText => setConfig(config => ({ ...config, primaryText }))}
+                                                        />
+                                                    </TabsContent>
 
-                    {updateBasketRequired && <InfoCard>{{
-                        body: <P className="text-sm">
-                            <b>You have modified a sign which is already in your basket.</b><br />
-                            If you would like to add a new sign, please change either the <i>Provider</i>, <i>Product</i>, or <i>Name</i> fields and then select <i>Add to basket</i>.<br />
-                        </P>,
-                        footer: <>
-                            <Button className="grow" variant='outline' onClick={updateBasket}><Save /> Update Basket</Button>
-                            <Button className="grow" variant='outline' onClick={restoreFromBasket}><Trash /> Discard changes</Button>
-                        </>
-                    }}</InfoCard>}
+                                                    <TabsContent value="secondary-text">
+                                                        <TextConfigFields
+                                                            config={config.secondaryText}
+                                                            onChange={secondaryText => setConfig(config => ({ ...config, secondaryText }))}
+                                                        />
+                                                    </TabsContent>
 
-                </form>
+                                                </Tabs>
+                                            </>
+                                    }
+                                </div>
+                                <div className="basis-2/3">
+                                    {texture && <img src={texture.dataUrl} className="shadow" />}
+                                </div>
+                            </div>
+
+                            {updateBasketRequired && <InfoCard>{{
+                                body: <P className="text-sm">
+                                    <b>You have modified a sign which is already in your basket.</b><br />
+                                    If you would like to add a new sign, please change either the <i>Provider</i>, <i>Product</i>, or <i>Name</i> fields and then select <i>Add to basket</i>.<br />
+                                </P>,
+                                footer: <>
+                                    <Button className="grow" variant='outline' onClick={updateBasket}><Save /> Update Basket</Button>
+                                    <Button className="grow" variant='outline' onClick={restoreFromBasket}><Trash /> Discard changes</Button>
+                                </>
+                            }}</InfoCard>}
+
+                        </form>
+                    </TabsContent>
+
+                    <TabsContent value="description">
+                        <Markdown content={loaderData.product.description ?? ''} />
+                    </TabsContent>
+                </Tabs>
             </div>
         </>,
         sidebar: <ProductSidebar product={loaderData.product} config={productConfig} onAddToBasket={handleAddToBasket} />
@@ -539,14 +578,33 @@ function Viewer(props: {
         props.textureDimensions?.(pixelWidth, pixelHeight)
     }, [meshes])
 
+
+    const Command = (props: { children: ReactNode }) => <span className="bg-gray-500/25 p-1 rounded-md">{props.children}</span>
+
     return (
-        <Canvas camera={{ position: [-3, 2, -1], fov: 45 }}>
-            <ambientLight intensity={0.6} />
-            {/*<directionalLight position={[10, 10, 5]} />*/}
-            <primitive object={scene} scale={1} />
-            <OrbitControls target={[0, 0.5, 0]} />
-            <Environment preset="studio" backgroundIntensity={0.1} environmentIntensity={0.1} />
-        </Canvas>
+        <div className="relative w-full h-full">
+            <Canvas camera={{ position: [-3, 2, -1], fov: 45 }}>
+                <ambientLight intensity={0.6} />
+                {/*<directionalLight position={[10, 10, 5]} />*/}
+                <primitive object={scene} scale={1} />
+                <OrbitControls target={[0, 0.5, 0]} />
+                <Environment preset="studio" backgroundIntensity={0.1} environmentIntensity={0.1} />
+            </Canvas>
+
+            <div className="absolute bottom-2 right-2 flex flex-row gap-2">
+                <Rotate3D className="w-5 h-5" />
+                <P className="text-sm">
+                    Explore in 3D
+                    <span className="border-l-2 border-l-gray-500 pl-2 ml-2"><Command>click</Command> + <Command>drag</Command> rotate</span>
+                    <span className="border-l-2 border-l-gray-500 pl-2 ml-2"><Command>scroll</Command> zoom</span>
+                </P>
+                <div>
+                    <P></P>
+                    <P></P>
+                </div>
+            </div>
+        </div>
+
     )
 }
 
@@ -591,9 +649,10 @@ function TextConfigFields(props: {
     onChange: (config: TextConfig) => void
 }) {
     return <>
-        <Field className="w-full" orientation="horizontal">
+        <Field className={fieldClasses} orientation="horizontal">
             <FieldLabel htmlFor="input-field-primary-text">Text</FieldLabel>
             <Input
+                className={fieldInputClasses}
                 id="input-field-primary-text"
                 type="text"
                 placeholder="Your text here"
@@ -601,10 +660,12 @@ function TextConfigFields(props: {
                 onChange={ev => props.onChange({ ...props.config, textValue: ev.currentTarget?.value })}
             />
         </Field>
-        <Field className="w-full" orientation="horizontal">
+        <Field className={fieldClasses} orientation="horizontal">
             <FieldLabel>Font</FieldLabel>
             <Select value={props.config.textFont} onValueChange={textFont => props.onChange({ ...props.config, textFont })}>
-                <SelectTrigger>
+                <SelectTrigger
+                    className={fieldInputClasses}
+                >
                     <SelectValue placeholder="Choose font" />
                 </SelectTrigger>
                 <SelectContent>
@@ -614,9 +675,10 @@ function TextConfigFields(props: {
                 </SelectContent>
             </Select>
         </Field>
-        <Field orientation="horizontal">
+        <Field className={fieldClasses} orientation="horizontal">
             <FieldLabel>Size</FieldLabel>
             <Input
+                className={fieldInputClasses}
                 type="number"
                 defaultValue={12}
                 value={props.config.textSize}
@@ -624,7 +686,7 @@ function TextConfigFields(props: {
             />
         </Field>
 
-        <Field orientation="horizontal">
+        <Field className={fieldClasses} orientation="horizontal">
             <FieldLabel>Colour</FieldLabel>
             <SignColourPicker
                 currentColour={props.config.textColour}
@@ -632,9 +694,10 @@ function TextConfigFields(props: {
             />
         </Field>
 
-        <Field className="w-full" orientation="horizontal">
-            <FieldLabel>Offset <MoveVertical scale={0.25} /></FieldLabel>
+        <Field className={fieldClasses} orientation="horizontal">
+            <FieldLabel>Vertical offset</FieldLabel>
             <Input
+                className={fieldInputClasses}
                 type="number"
                 value={props.config.verticalOffset}
                 onChange={e => props.onChange({ ...props.config, verticalOffset: +e.target.value })}
@@ -660,7 +723,6 @@ function useHydrated() {
 }
 
 function subscribe() {
-    // biome-ignore lint/suspicious/noEmptyBlockStatements: Mock function
     return () => { };
 }
 
@@ -670,3 +732,21 @@ function subscribe() {
 // we then load this texture into the background of the canvas
 // and then insert our sign texture above it at the right position
 //
+
+function HelpPopover(props: { title?: string, children: ReactNode }) {
+    return (
+        <Popover>
+            <PopoverTrigger asChild>
+                <Button variant="link" size="icon"><CircleQuestionMark /></Button>
+            </PopoverTrigger>
+            <PopoverContent align="start">
+                <PopoverHeader>
+                    {props.title && <PopoverTitle>{props.title}</PopoverTitle>}
+                    <PopoverDescription>
+                        {props.children}
+                    </PopoverDescription>
+                </PopoverHeader>
+            </PopoverContent>
+        </Popover>
+    )
+}

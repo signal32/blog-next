@@ -90,7 +90,8 @@ export const products = defineContent<Product>([
                 baseUrl: '/product',
                 created: '10 Jan 2020',
                 public: true,
-                storeProduct: product
+                storeProduct: product,
+                description: product?.description,
             }
         }
     }
