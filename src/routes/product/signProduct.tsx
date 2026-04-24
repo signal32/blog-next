@@ -357,10 +357,10 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
 
                             <div className="flex justify-between border-air/50 border-b-2 pt-2">
                                 <H5>Board Design</H5>
-                                <Field orientation="horizontal" className="w-fit">
+                                {/*<Field orientation="horizontal" className="w-fit">
                                     <FieldLabel htmlFor="2fa">Use custom texture</FieldLabel>
                                     <Switch checked={config.useCustomTexture} onCheckedChange={checked => setConfig(c => ({ ...c, useCustomTexture: checked }))} id="2fa" />
-                                </Field>
+                                </Field>*/}
                             </div>
 
                             <div className="flex gap-2 py-2">
