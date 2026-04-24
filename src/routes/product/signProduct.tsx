@@ -22,6 +22,8 @@ import { Config, configId as getConfigId } from "store";
 import * as THREE from "three";
 import { Route } from './+types/signProduct';
 import { ProductLayout, ProductSidebar } from "./product";
+import { create, UseBoundStore } from "zustand";
+import { useSyncedRef } from "#src/lib/utils.ts";
 
 type SignConfig = {
     signId: string,
@@ -480,7 +482,26 @@ export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
 
 clientLoader.hydrate = true as const;
 
-const originalMaterials: Record<string, ImageBitmap> = {}
+// const baseTextureCache: Record<string, ImageBitmap> = {}
+
+const baseTextureStore = create<{
+    modelBaseTexture: Record<string, ImageBitmap>,
+    setModelBaseTexture(modelId: string, baseTexture: ImageBitmap): ImageBitmap
+}>()((set, get) => ({
+    modelBaseTexture: {},
+    setModelBaseTexture(modelId, baseTexture) {
+        set({
+            modelBaseTexture: {
+                ...get().modelBaseTexture,
+                [modelId]: baseTexture
+            }
+        })
+        return baseTexture
+
+    }
+}))
+
+zustandHmrFix('baseTextureStore', baseTextureStore)
 
 function Viewer(props: {
     model: string,
@@ -488,17 +509,23 @@ function Viewer(props: {
     textureDimensions?: (width: number, height: number) => void
 }) {
     const { scene, materials, meshes } = useGLTF(props.model)
+    const { modelBaseTexture, setModelBaseTexture } = baseTextureStore()
 
-    // TODO: This code isn't good enough. I need to get to the bottom of how THREE manages resources so they can be unloaded at the right time.
     useEffect(() => {
-        const mainTexMaterial = materials[SIGN_BOARD_MATERIAL_NAME] as THREE.MeshStandardMaterial
-        if (!mainTexMaterial) return
-        if (mainTexMaterial.map?.image instanceof ImageBitmap && !originalMaterials[props.model]) {
-            originalMaterials[props.model] = mainTexMaterial.map.image
-        }
+        if (!props.texture) return
 
-        const baseTexture = originalMaterials[props.model]
-        if (!baseTexture || !props.texture) return
+        const material = (materials[SIGN_BOARD_MATERIAL_NAME] ?? materials['Material'])
+        if (!material || !(material instanceof THREE.MeshStandardMaterial)) return
+
+        const baseTexture = modelBaseTexture[props.model] ?? setModelBaseTexture(props.model, (() => {
+            const image = material.map?.image
+            if (image instanceof ImageBitmap) return image
+            else {
+                console.error({ image, material, modelBaseTexture })
+                throw new Error("Invalid image")
+            }
+        })())
+        if (!baseTexture) return
 
         const canvas = document.createElement('canvas')
         canvas.width = baseTexture.width
@@ -520,37 +547,30 @@ function Viewer(props: {
             newTexture = new THREE.CanvasTexture(canvas)
             newTexture.flipY = false
 
-            mainTexMaterial.map = newTexture
-            mainTexMaterial.needsUpdate = true
+            material.map = newTexture
+            material.needsUpdate = true
         }
         overlay.src = props.texture
 
         return () => {
             disposed = true
+
             // Delay cleanup to avoid flickering
             // Most cleanup is handled by useGLTF, only need to consider what we created
             setTimeout(() => {
-                if (newTexture) {
-                    newTexture.dispose()
-                    newTexture.image = null as any
-                    newTexture = null
-                }
-                if (mainTexMaterial?.map) {
-                    mainTexMaterial.map.dispose?.()
-                    mainTexMaterial.map = null
-                }
-            }, 500)
+                if (!newTexture || !props.texture) return
+                newTexture.dispose()
+                newTexture.image = null as any
+                newTexture = null
+            }, 100)
 
         }
-    }, [props.texture, materials])
+    }, [props.texture, props.model])
 
     useEffect(() => {
         const signBoardMesh = meshes[SIGN_BOARD_MESH_NAME]
         const uvAttr = signBoardMesh?.geometry.attributes['uv']
-        if (!uvAttr) {
-            console.log('no uv')
-            return
-        }
+        if (!uvAttr) throw new Error("No UVs")
 
         let minU = Infinity, minV = Infinity
         let maxU = -Infinity, maxV = -Infinity
@@ -749,4 +769,29 @@ function HelpPopover(props: { title?: string, children: ReactNode }) {
             </PopoverContent>
         </Popover>
     )
+}
+
+export function zustandHmrFix(name: string, useStore: UseBoundStore<any>) {
+    if (import.meta.hot) {
+        const savedState = import.meta.hot!.data[name];
+        if (savedState) {
+            const newState = { ...savedState, actions: useStore.getState().actions };
+            useStore.setState(newState);
+        }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        useStore.subscribe((state: any) => {
+            const stateToSave = { ...state };
+            delete stateToSave.actions;
+            import.meta.hot!.data[name] = stateToSave;
+        });
+        import.meta.hot!.accept((newModule) => {
+            if (newModule) {
+                const savedState = import.meta.hot!.data[name];
+                if (savedState) {
+                    const newState = { ...savedState, actions: useStore.getState().actions };
+                    useStore.setState(newState);
+                }
+            }
+        });
+    }
 }
