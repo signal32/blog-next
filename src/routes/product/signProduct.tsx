@@ -763,20 +763,13 @@ function subscribe() {
     return () => { };
 }
 
-// okay the uv coords are a bit fucked up. solution
-// deal with just one texture - 'maintex'
-// sign board mesh is uv mapped onto this
-// we then load this texture into the background of the canvas
-// and then insert our sign texture above it at the right position
-//
-
 function HelpPopover(props: { title?: string, children: ReactNode }) {
     return (
         <Popover>
             <PopoverTrigger asChild>
                 <Button variant="link" size="icon"><CircleQuestionMark /></Button>
             </PopoverTrigger>
-            <PopoverContent align="start">
+            <PopoverContent align="start" className="w-96 max-h-96 overflow-scroll">
                 <PopoverHeader>
                     {props.title && <PopoverTitle>{props.title}</PopoverTitle>}
                     <PopoverDescription>
