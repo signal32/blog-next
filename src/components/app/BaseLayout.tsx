@@ -161,27 +161,39 @@ export function defineLayout<P = {}>(
 export function ContentLayout(props: MainLayoutProps) {
     return (
         <div className="max-w-4xl mx-auto w-full">
-            {props.header && <div className={`-mt-10 p-0 relative transition-all ease-in-out overflow-clip rounded-b-xl opacity-100`}>
+            <div className={`p-0 relative transition-all ease-in-out overflow-clip rounded-b-xl opacity-100`}>
                 {
-                    props.header?.type === 'image'
-                        ? <div className='w-full rounded-b-lg h-64'>
-                            <img
-                                src={props.header.href ?? DEMO_IMAGE}
-                                className='w-full h-64'
-                                alt=''
-                                sizes='100vw'
-                                // fill
-                                style={{ objectFit: 'cover' }}
-                            />
+                    props.header?.type === 'component'
+                        ? <div className="-mt-10">{props.header.component}</div>
+                        : (props.header?.href || props.headerTitle) && <div
+                            className={cn('w-full rounded-b-lg  -mt-10', props.header?.href ? 'h-64' : 'h-24')}
+                        >
+                            {props.header?.type === 'image' && props.header.href
+                                ? <img
+                                    src={props.header.href ?? DEMO_IMAGE}
+                                    className='w-full h-full'
+                                    alt=''
+                                    sizes='100vw'
+                                    style={{ objectFit: 'cover' }}
+                                />
+                                : <div
+                                    className="w-full h-full bg-ocean/70 rounded-b-xl shadow-lg"
+                                />
+                            }
+
                             {props.headerTitle &&
-                                <div className="absolute bottom-0 left-0 bg-black/80 backdrop-blur-sm py-1 px-3 rounded-tr-lg">
-                                    <H2 className="text-white">{props.headerTitle}</H2>
+                                <div
+                                    className={cn(
+                                        "absolute bottom-0 left-0 backdrop-blur-sm px-3 rounded-tr-lg text-white",
+                                        props.header?.href && "bg-black/80"
+                                    )}
+                                >
+                                    <H2>{props.headerTitle}</H2>
                                 </div>
                             }
                         </div>
-                        : props.header?.component
                 }
-            </div>}
+            </div>
 
             <div className="pt-2">
                 <Breadcrumbs />
