@@ -288,6 +288,16 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                     </TabsList>
 
                     <TabsContent value="config">
+                        {updateBasketRequired && <InfoCard>{{
+                            body: <P className="text-sm">
+                                <b>You have modified a sign which is already in your basket.</b><br />
+                                If you would like to add a new sign, please change either the <i>Provider</i>, <i>Product</i>, or <i>Name</i> fields and then select <i>Add to basket</i>.<br />
+                            </P>,
+                            footer: <>
+                                <Button className="grow" variant='outline' onClick={updateBasket}><Save /> Update Basket</Button>
+                                <Button className="grow" variant='outline' onClick={restoreFromBasket}><Trash /> Discard changes</Button>
+                            </>
+                        }}</InfoCard>}
                         <form className="">
                             <div className="flex justify-between border-air/50 border-b-2 pt-2">
                                 <H5>Asset Config</H5>
@@ -453,18 +463,6 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                                     {texture && <img src={texture.dataUrl} className="shadow" />}
                                 </div>
                             </div>
-
-                            {updateBasketRequired && <InfoCard>{{
-                                body: <P className="text-sm">
-                                    <b>You have modified a sign which is already in your basket.</b><br />
-                                    If you would like to add a new sign, please change either the <i>Provider</i>, <i>Product</i>, or <i>Name</i> fields and then select <i>Add to basket</i>.<br />
-                                </P>,
-                                footer: <>
-                                    <Button className="grow" variant='outline' onClick={updateBasket}><Save /> Update Basket</Button>
-                                    <Button className="grow" variant='outline' onClick={restoreFromBasket}><Trash /> Discard changes</Button>
-                                </>
-                            }}</InfoCard>}
-
                         </form>
                     </TabsContent>
 
