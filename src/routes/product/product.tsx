@@ -1,4 +1,4 @@
-import { AddToCartButton, OnAddToBasketCb } from '#src/components/AddToCartButton';
+import { AddToBasketButton, OnAddToBasketCb } from '#src/components/AddToBasketButton.tsx';
 import { H3 } from '#src/components/common/typography';
 import { Button } from '#src/components/ui/button';
 import { Skeleton } from '#src/components/ui/skeleton';
@@ -150,7 +150,7 @@ export function ProductSidebar(props: {
             {props.product.storeProduct &&
                 <>
                     {price?.price ? <H3>{formatCurrency(price?.price)}</H3> : <Skeleton className="h-12 mb-2 w-full" />}
-                    <AddToCartButton product={props.product} config={props.config} onAddToBasket={props.onAddToBasket} />
+                    <AddToBasketButton product={props.product} config={props.config} onAddToBasket={props.onAddToBasket} />
                 </>
             }
         </div>

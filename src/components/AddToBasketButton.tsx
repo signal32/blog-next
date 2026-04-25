@@ -9,7 +9,7 @@ import { Button } from "./ui/button";
 
 export type OnAddToBasketCb = (config: Config) => Promise<boolean | undefined>
 
-export function AddToCartButton(props: {
+export function AddToBasketButton(props: {
     product: Product,
     config: Config
     onAddToBasket?: OnAddToBasketCb,

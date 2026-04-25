@@ -1,4 +1,4 @@
-import { OnAddToBasketCb } from "#src/components/AddToCartButton.tsx";
+import { OnAddToBasketCb } from "#src/components/AddToBasketButton.tsx";
 import { InfoCard } from "#src/components/common/InfoCard.tsx";
 import { Markdown } from "#src/components/common/Markdown.tsx";
 import { H5, P } from "#src/components/common/typography.tsx";
