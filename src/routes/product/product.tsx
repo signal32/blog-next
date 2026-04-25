@@ -109,7 +109,7 @@ export function ProductSidebar(props: {
     const modals = useModalStore();
     const openGallery = (img: string) => {
         modals.pushModal(
-            <div className=" h-full">
+            <div className="h-full">
                 <img
                     src={img}
                     alt='product image'

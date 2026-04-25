@@ -3,11 +3,10 @@ import { InfoCard } from "#src/components/common/InfoCard.tsx";
 import { Markdown } from "#src/components/common/Markdown.tsx";
 import { H5, P } from "#src/components/common/typography.tsx";
 import { Button } from "#src/components/ui/button.tsx";
-import { Field, FieldLabel } from "#src/components/ui/field.tsx";
+import { Field, FieldError, FieldLabel } from "#src/components/ui/field.tsx";
 import { Input } from "#src/components/ui/input.tsx";
 import { Popover, PopoverContent, PopoverDescription, PopoverHeader, PopoverTitle, PopoverTrigger } from "#src/components/ui/popover.tsx";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "#src/components/ui/select.tsx";
-import { Switch } from "#src/components/ui/switch.tsx";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "#src/components/ui/tabs.tsx";
 import { useBasket } from "#src/lib/basket.ts";
 import { CUSTOM_SIGN_PRODUCT_ID, products } from "#src/lib/products.server";
@@ -20,10 +19,11 @@ import { HexAlphaColorPicker } from 'react-colorful';
 import { useSearchParams } from "react-router";
 import { Config, configId as getConfigId } from "store";
 import * as THREE from "three";
+import { create, UseBoundStore } from "zustand";
 import { Route } from './+types/signProduct';
 import { ProductLayout, ProductSidebar } from "./product";
-import { create, UseBoundStore } from "zustand";
-import { useSyncedRef } from "#src/lib/utils.ts";
+import sanitize from "sanitize-filename";
+
 
 type SignConfig = {
     signId: string,
@@ -63,7 +63,7 @@ const FONTS = [
 const SIGN_BOARD_MESH_NAME = '1_0500_board'
 const SIGN_BOARD_MATERIAL_NAME = 'Main'
 
-const fieldClasses = 'w-full pt-2 flex'
+const fieldClasses = 'w-full pt-2 flex flex-wrap'
 const fieldInputClasses = 'basis-2/3'
 
 function createTextureFromConfig(config: SignConfig): TextureData {
@@ -99,6 +99,23 @@ function createTextureFromConfig(config: SignConfig): TextureData {
     }
 }
 
+function validateConfig(config: SignConfig): {
+    [K in keyof SignConfig]?: { valid: boolean, message?: string }
+} {
+    const isSafeFilePath = (path: string) => path !== sanitize(path)
+        ? { valid: false, message: 'Must contain no spaces or special characters' }
+        : hasLength(path)
+    const hasLength = (name: string, min = 3) => name.length < 3
+        ? { valid: false, message: `Must contain at least ${min} characters` }
+        : { valid: true }
+
+    return {
+        provider: isSafeFilePath(config.provider),
+        product: isSafeFilePath(config.product),
+        assetName: hasLength(config.assetName, 5)
+    }
+}
+
 export default function SignProduct({ loaderData, params }: Route.ComponentProps) {
     const [config, setConfig] = useState<SignConfig>({
         signId: Object.keys(loaderData.signs)[0] ?? '',
@@ -124,6 +141,8 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
         borderColour: '#dedede',
         borderThickness: 0,
     })
+
+    const configValidation = useMemo(() => validateConfig(config), [config])
 
     const [searchParams] = useSearchParams()
     const basket = useBasket()
@@ -215,17 +234,13 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
     }
 
     const handleAddToBasket: OnAddToBasketCb = async (config: Config) => {
-        if (!config.options['name']?.value.length) {
-            alert('Asset name must be at least 5 characters in length.')
-            return false
-        }
-        if (!config.options['product']?.value.length) {
-            alert('Product name must be at least 5 characters in length.')
-            return false
-        }
-        if (!config.options['provider']?.value.length) {
-            alert('Provider name must be at least 5 characters in length.')
-            return false
+        const signConfig = config.meta['signConfig']
+        if (!signConfig) return false
+        for (const [key, { valid, message }] of Object.entries(validateConfig(JSON.parse(signConfig)))) {
+            if (!valid) {
+                alert(`Configuration not valid.\nField: ${key}\nReason: ${message ?? 'None given'}`)
+                return false
+            }
         }
 
         try {
@@ -293,6 +308,8 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                                     The Provider field controls the name under which the asset will appear within the editor.<br /><br />
                                     This should be unique to you as a developer, for example "JohnSmith", or "MyFancySimulationCo".
                                 </HelpPopover>
+                                {configValidation.provider?.valid === false && <FieldError className="text-right basis-full mb-2">{configValidation.provider.message}</FieldError>}
+
                             </Field>
 
                             <Field className={fieldClasses} orientation="horizontal">
@@ -309,6 +326,8 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                                     The name of the group under the Provider field which your sign asset be placed.<br /><br />
                                     This should be something unique to your project, for example "MyFancyRoute".
                                 </HelpPopover>
+                                {configValidation.product?.valid === false && <FieldError className="text-right basis-full mb-2">{configValidation.product.message}</FieldError>}
+
                             </Field>
 
                             <Field className={fieldClasses} orientation="horizontal">
@@ -327,6 +346,8 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                                     Your finished asset will be placed into a directory using the structure <span className="font-mono bg-accent p-1">assets/provider-name/product-name/asset-name</span> within your Train Simulator installation.<br /><br />
                                     <b>Important:</b> The asset name should be unique within your provider + product combination. No other asset with this name can exist.
                                 </HelpPopover>
+                                {configValidation.assetName?.valid === false && <FieldError className="text-right basis-full mb-2">{configValidation.assetName.message}</FieldError>}
+
                             </Field>
 
                             <div className="flex justify-between border-air/50 border-b-2 pt-2">
