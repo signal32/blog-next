@@ -24,7 +24,6 @@ import { Route } from './+types/signProduct';
 import { ProductLayout, ProductSidebar } from "./product";
 import sanitize from "sanitize-filename";
 
-
 type SignConfig = {
     signId: string,
     textureWidth: number,
@@ -305,8 +304,7 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                                     onChange={ev => setConfig(c => ({ ...c, provider: ev.currentTarget?.value }))}
                                 />
                                 <HelpPopover title="Provider">
-                                    The Provider field controls the name under which the asset will appear within the editor.<br /><br />
-                                    This should be unique to you as a developer, for example "JohnSmith", or "MyFancySimulationCo".
+                                    <Markdown content={PROVIDER_MARKDOWN} />
                                 </HelpPopover>
                                 {configValidation.provider?.valid === false && <FieldError className="text-right basis-full mb-2">{configValidation.provider.message}</FieldError>}
 
@@ -323,8 +321,7 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                                     onChange={ev => setConfig(c => ({ ...c, product: ev.currentTarget?.value }))}
                                 />
                                 <HelpPopover title="Product">
-                                    The name of the group under the Provider field which your sign asset be placed.<br /><br />
-                                    This should be something unique to your project, for example "MyFancyRoute".
+                                    <Markdown content={PROVIDER_MARKDOWN} />
                                 </HelpPopover>
                                 {configValidation.product?.valid === false && <FieldError className="text-right basis-full mb-2">{configValidation.product.message}</FieldError>}
 
@@ -341,10 +338,7 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                                     onChange={ev => setConfig(c => ({ ...c, assetName: ev.currentTarget?.value }))}
                                 />
                                 <HelpPopover title="Name">
-                                    The name of the asset as it will appear in game. To make it easier to find within the editor, I recommend prefixing with your providers initials:<br />
-                                    For example "MFR Station Sign PlaceName"<br /><br />
-                                    Your finished asset will be placed into a directory using the structure <span className="font-mono bg-accent p-1">assets/provider-name/product-name/asset-name</span> within your Train Simulator installation.<br /><br />
-                                    <b>Important:</b> The asset name should be unique within your provider + product combination. No other asset with this name can exist.
+                                    <Markdown content={NAME_MARKDOWN} />
                                 </HelpPopover>
                                 {configValidation.assetName?.valid === false && <FieldError className="text-right basis-full mb-2">{configValidation.assetName.message}</FieldError>}
 
@@ -475,6 +469,8 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                     </TabsContent>
 
                     <TabsContent value="description">
+                        <Markdown content={ABOUT_MARKDOWN} />
+
                         <Markdown content={loaderData.product.description ?? ''} />
                     </TabsContent>
                 </Tabs>
@@ -816,3 +812,87 @@ export function zustandHmrFix(name: string, useStore: UseBoundStore<any>) {
         });
     }
 }
+
+const PROVIDER_MARKDOWN = `
+Train Simulator assets are grouped into Products, which are in turn grouped into Providers.
+The Provider should be unique to you as a developer and can be thought of as a profile name.
+
+It is very important that you do not choose a Provider name that is already being used by someone else.
+This can cause a collision between the two developers assets, which the game may not be able to handle.
+Therefore it is best to avoid short or simple Provider names.
+
+I would recommend checking which providers already exist within your Train Simulator installation although, if you plan on distributing the signs with your route, then note that you cannot predict which Providers will exist on other peoples installations!
+`
+
+const PRODUCT_MARKDOWN = `
+Train Simulator assets are grouped into Products, which are in turn grouped into Providers.
+The Product typically groups assets which are related to each other.
+For example, the assets for a particular route.
+
+For this, choose something unique to your project, for example \`MyBeautifulRoute\`.
+`
+
+const NAME_MARKDOWN = `
+The name of the asset as it will appear in game. To make it easier to find within the editor, I recommend prefixing with your providers initials:
+
+For example, for a Product called \`MyBeautifulRoute\`, you may choose \`MBR Station Sign PlaceName\`
+
+Your finished asset will be placed into a directory using the structure <span className="font-mono bg-accent p-1">assets/provider-name/product-name/asset-name</span> within your Train Simulator installation.
+The asset name should be unique within your provider + product combination. No other asset with this name can exist.
+`
+
+const ABOUT_MARKDOWN = `
+### Build Your Own Custom Train Simulator Station Signs!
+---
+Ever wanted station signs for your route, but not sure how to make them?
+
+For many years having custom station signs meant either learning both the tools of the game-art pipeline and perfect your work for use in Train Simulator, or commissioning another developer to make them for you.
+
+Now, you can design your perfect sign online with an easy editor and have them in-game, ready for use within minutes.
+
+Simply choose a name for your station sign, and a style which suits your liking, then tweak the board design to your requirements.
+
+Once added to your basket, your design will be saved. So you can pause and come back as you wish.
+
+When you're ready, proceed through checkout and your sign will be automatically prepared as soon as payment has cleared.
+
+This doesn't take long, so after a few minutes, you will receive a link to download your very own custom Train Simulator sign asset, ready for use in game.
+
+All signs belong to you and you are free to use them however you like, be that in freeware or commercial products.
+
+So what are you waiting for? Start designing your Train Simulator Classic station sign and have it in your route today!
+
+
+---
+### Manual
+#### Using the Editor
+The sign editor makes it easy to configure and design signs for use in Train Simulator.
+
+##### Asset Config Section
+The "Asset Config" section configures how your sign asset will be presented to Train Simulator, and determines how you will use it in game.
+
+**Provider:** ${PROVIDER_MARKDOWN}
+**Product:** ${PRODUCT_MARKDOWN}
+**Name:** ${NAME_MARKDOWN}
+
+##### Sign Style Section
+Here you can chose from a range of different sign styles.
+
+The choice may be a bit limited right now, but I am working to add more.
+Please let me know if you have any particular suggestions.
+
+##### Board Design Section
+Use this section to customise the look and feel of your sign as desired.
+
+#### Adding signs to your basket
+Todo
+
+#### Completing your order
+Todo
+
+#### Using your sign in-game
+Todo
+
+### FAQ
+Todo
+`
