@@ -13,8 +13,10 @@ import Drawer from "../../components/common/Drawer";
 import { Markdown } from '../../components/common/Markdown';
 import { useModalStore } from "../../components/common/Modal";
 import { type FileDetails, files } from "../../lib/file.server";
-import { type Product, type Requirement, products } from "../../lib/products.server";
+import { Product, type Product, type Requirement, products } from "../../lib/products.server";
 import { Route } from './+types/product';
+import { Content } from '#src/lib/content.server.ts';
+import { isProduct as isStoreProduct } from 'store/src/product';
 
 export default function Product({ loaderData }: Route.ComponentProps) {
 
@@ -211,3 +213,19 @@ const RequirementItem = (props: { requirement: Requirement, products: { product?
         }
     </div >
 )
+
+export function useProductPrice(product?: Product) {
+    const [price, setPrice] = useState<Awaited<ReturnType<ShopClient['productPrice']>>>()
+    useEffect(() => {
+        const { storeProduct } = product ?? {}
+        if (storeProduct) SHOP
+            .productPrice({ productId: storeProduct.id })
+            .then(setPrice)
+    }, [])
+
+    return price
+}
+
+export function isProduct(content: Content): content is Product {
+    return 'storeProduct' in content && isStoreProduct(content.storeProduct)
+}
