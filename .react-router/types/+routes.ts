@@ -40,7 +40,7 @@ type Pages = {
       "slug": string;
     };
   };
-  "/product/Train-Simulator-Classic-Custom-Sign": {
+  "/product/Build-your-own-Train-Simulator-Classic-Station-Signs": {
     params: {};
   };
   "/shop": {
@@ -60,7 +60,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/:slug" | "/basket" | "/order/:orderId" | "/blog" | "/blog/:slug" | "/product/:slug" | "/product/Train-Simulator-Classic-Custom-Sign" | "/shop" | "/api/content" | "/api/content/:libraryId/:contentId";
+    page: "/" | "/:slug" | "/basket" | "/order/:orderId" | "/blog" | "/blog/:slug" | "/product/:slug" | "/product/Build-your-own-Train-Simulator-Classic-Station-Signs" | "/shop" | "/api/content" | "/api/content/:libraryId/:contentId";
   };
   "routes/home.tsx": {
     id: "routes/home";
@@ -92,7 +92,7 @@ type RouteFiles = {
   };
   "./routes/product/signProduct.tsx": {
     id: "routes/product/signProduct";
-    page: "/product/Train-Simulator-Classic-Custom-Sign";
+    page: "/product/Build-your-own-Train-Simulator-Classic-Station-Signs";
   };
   "routes/product/index.tsx": {
     id: "routes/product/index";
