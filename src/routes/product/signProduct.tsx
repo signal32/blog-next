@@ -331,7 +331,7 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                                     onChange={ev => setConfig(c => ({ ...c, product: ev.currentTarget?.value }))}
                                 />
                                 <HelpPopover title="Product">
-                                    <Markdown content={PROVIDER_MARKDOWN} />
+                                    <Markdown content={PRODUCT_MARKDOWN} />
                                 </HelpPopover>
                                 {configValidation.product?.valid === false && <FieldError className="text-right basis-full mb-2">{configValidation.product.message}</FieldError>}
 
@@ -805,31 +805,31 @@ export function zustandHmrFix(name: string, useStore: UseBoundStore<any>) {
 }
 
 const PROVIDER_MARKDOWN = `
-Train Simulator assets are grouped into Products, which are in turn grouped into Providers.
-The Provider should be unique to you as a developer and can be thought of as a profile name.
+All Train Simulator assets are owned by a Provider.
+In this case, _you_ are the provider!
 
-It is very important that you do not choose a Provider name that is already being used by someone else.
-This can cause a collision between the two developers assets, which the game may not be able to handle.
-Therefore it is best to avoid short or simple Provider names.
+Treat this field like a profile name - unique to you and safe to show publicly.
 
-I would recommend checking which providers already exist within your Train Simulator installation although, if you plan on distributing the signs with your route, then note that you cannot predict which Providers will exist on other peoples installations!
+It is important not to choose name that has been used by someone else.
+This can cause a collision between their assets and yours, which the game may not be able to handle.
+To prevent this, avoid short or simple Provider names and consider checking which providers already exist in your Train Simulator installation.
 `
 
 const PRODUCT_MARKDOWN = `
-Train Simulator assets are grouped into Products, which are in turn grouped into Providers.
-The Product typically groups assets which are related to each other.
-For example, the assets for a particular route.
+Products are collections of assets produced by a Provider.
+These will typically contain all the assets made for a particular route.
 
 For this, choose something unique to your project, for example \`MyBeautifulRoute\`.
 `
 
 const NAME_MARKDOWN = `
-The name of the asset as it will appear in game. To make it easier to find within the editor, I recommend prefixing with your providers initials:
+This is the name of the asset as it will appear in game.
 
-For example, for a Product called \`MyBeautifulRoute\`, you may choose \`MBR Station Sign PlaceName\`
+To make it easier to find when using the route editor, consider prefixing the name with your Product initials:
 
-Your finished asset will be placed into a directory using the structure <span className="font-mono bg-accent p-1">assets/provider-name/product-name/asset-name</span> within your Train Simulator installation.
-The asset name should be unique within your provider + product combination. No other asset with this name can exist.
+For example, for a Product called \`MyBeautifulRoute\`, you may choose \`MBR Station Sign PlaceName\` as a name.
+
+No other asset with this name can exist within the Product.
 `
 
 const ABOUT_MARKDOWN = `

@@ -1,13 +1,13 @@
 import { useBasket } from "#src/lib/basket";
 import { type Product } from "#src/lib/products.server";
 import { cn } from "#src/lib/utils.ts";
+import { ArrowRight, LucideLoaderCircle, ShoppingBasket } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router";
 import { Config, configId as getConfigId } from "store";
-import { H4, H6, P } from "./common/typography";
+import { P } from "./common/typography";
 import { Button } from "./ui/button";
-import { ArrowRight, Check, LucideLoaderCircle, ShoppingBasket, Trash, X } from "lucide-react";
-import { Popover, PopoverContent, PopoverHeader, PopoverTitle, PopoverTrigger } from "./ui/popover";
+import { RemoveFromBasketButton } from "#src/routes/basket.tsx";
 
 export type OnAddToBasketCb = (config: Config) => Promise<boolean | undefined>
 
@@ -61,7 +61,7 @@ export function AddToBasketButton(props: {
                             .filter(([_, option]) => !option.hidden)
                             .map(([id, option]) => <p key={id}><b className="capitalize">{id}</b>: {option.value}</p>)}
                         </div>
-                        <RemoveFromBasketButton product={props.product} configId={thisConfigId} />
+                        <RemoveFromBasketButton productId={props.product.id} configId={thisConfigId} />
 
                     </div>
                 </Link>;
@@ -70,45 +70,4 @@ export function AddToBasketButton(props: {
         </>}
 
     </>
-}
-
-function RemoveFromBasketButton(props: {
-    product: Product,
-    configId: string,
-}) {
-    const [removePopoverOpen, setRemovePopoverOpen] = useState(false)
-    const basket = useBasket()
-
-    return <Popover open={removePopoverOpen} onOpenChange={setRemovePopoverOpen}>
-        <PopoverTrigger asChild>
-            <Button
-                variant='ghost'
-            >
-                <Trash />
-            </Button>
-        </PopoverTrigger>
-
-        <PopoverContent>
-            <PopoverHeader>
-                <PopoverTitle>Remove from basket?</PopoverTitle>
-                <div className="flex flex-row gap-2">
-                    <Button
-                        variant="destructive"
-                        className="grow"
-                        onClick={() => {
-                            basket.removeProduct(props.product.id, props.configId)
-                            setRemovePopoverOpen(false)
-                        }}
-                    ><Check /> Confirm</Button>
-                    <Button
-                        variant='outline'
-                        className="grow"
-                        onClick={() => {
-                            setRemovePopoverOpen(false)
-                        }}
-                    ><X /> Cancel</Button>
-                </div>
-            </PopoverHeader>
-        </PopoverContent>
-    </Popover>
 }

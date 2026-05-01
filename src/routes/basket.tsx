@@ -9,8 +9,10 @@ import { SHOP } from '#src/shop'
 import { ArrowRightIcon, LucideClockFading, Minus, Plus, ShoppingBasketIcon, Trash } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
-import { getOrderConfig, ShopClient } from 'store'
+import { getOrderConfig, Product, ShopClient } from 'store'
 import { Route } from './+types/basket'
+import { ArrowRight, Check, LucideLoaderCircle, ShoppingBasket, Trash, X } from "lucide-react";
+import { Popover, PopoverContent, PopoverHeader, PopoverTitle, PopoverTrigger } from "src/components/ui/popover";
 
 export default function Basket({ loaderData }: Route.ComponentProps) {
     const basket = useBasket()
@@ -51,7 +53,7 @@ export default function Basket({ loaderData }: Route.ComponentProps) {
                         const { product, config } = getOrderConfig(basket.order, productId, optionId)
 
                         return (
-                            <tr key={i} className={cn(i % 2 === 0 && 'bg-air/10')}>
+                            <tr key={i} className={cn(i % 2 === 0 ? 'bg-air/10' : 'bg-air/5')}>
                                 <td className={cn(cellClassName)}>
                                     <Link
                                         to={`/product/${loaderData.productIdsToSlug[product.id]}?configId=${optionId}`}
@@ -69,9 +71,10 @@ export default function Basket({ loaderData }: Route.ComponentProps) {
                                     </Link>
                                 </td>
                                 <td className={cellClassName}>{formatCurrency(unitPrice)}</td>
-                                <td className={cellClassName}>
+                                <td className={cn(cellClassName, 'flex flex-col-reverse md:flex-row items-center')}>
                                     <Button
                                         variant='link'
+                                        size='xs'
                                         onClick={() => basket.updateProduct(
                                             product.id,
                                             { ...config, quantity: Math.max(1, config?.quantity - 1) },
@@ -80,9 +83,10 @@ export default function Basket({ loaderData }: Route.ComponentProps) {
                                     >
                                         <Minus />
                                     </Button>
-                                    {config?.quantity}
+                                    <P className='rounded-2xl outline-air outline-1 w-10 text-center'>{config?.quantity}</P>
                                     <Button
                                         variant='link'
+                                        size='xs'
                                         onClick={() => basket.updateProduct(
                                             product.id,
                                             { ...config, quantity: config?.quantity + 1 },
@@ -93,7 +97,7 @@ export default function Basket({ loaderData }: Route.ComponentProps) {
                                     </Button>
                                 </td>
                                 <td className={cellClassName}>{formatCurrency(linePrice)}</td>
-                                <th className={cellClassName}><Button variant='link' onClick={() => basket.removeProduct(product.id, optionId)}><Trash /></Button></th>
+                                <th className={cellClassName}><RemoveFromBasketButton productId={productId} configId={optionId} /></th>
                             </tr>
                         )
                     })}
@@ -130,7 +134,7 @@ export default function Basket({ loaderData }: Route.ComponentProps) {
             </Empty>
     }
 
-    return <ContentLayout>
+    return <ContentLayout headerTitle='Your Basket'>
         {
             Object.keys(basket.order.products).length > 0
                 ? <>
@@ -173,4 +177,45 @@ export async function loader({ params }: Route.LoaderArgs) {
     )
 
     return { productIdsToSlug }
+}
+
+export function RemoveFromBasketButton(props: {
+    productId: string,
+    configId: string,
+}) {
+    const [removePopoverOpen, setRemovePopoverOpen] = useState(false)
+    const basket = useBasket()
+
+    return <Popover open={removePopoverOpen} onOpenChange={setRemovePopoverOpen}>
+        <PopoverTrigger asChild>
+            <Button
+                variant='ghost'
+            >
+                <Trash />
+            </Button>
+        </PopoverTrigger>
+
+        <PopoverContent>
+            <PopoverHeader>
+                <PopoverTitle>Remove from basket?</PopoverTitle>
+                <div className="flex flex-row gap-2">
+                    <Button
+                        variant="destructive"
+                        className="grow"
+                        onClick={() => {
+                            basket.removeProduct(props.productId, props.configId)
+                            setRemovePopoverOpen(false)
+                        }}
+                    ><Check /> Confirm</Button>
+                    <Button
+                        variant='outline'
+                        className="grow"
+                        onClick={() => {
+                            setRemovePopoverOpen(false)
+                        }}
+                    ><X /> Cancel</Button>
+                </div>
+            </PopoverHeader>
+        </PopoverContent>
+    </Popover>
 }
