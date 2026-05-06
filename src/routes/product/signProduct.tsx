@@ -60,7 +60,7 @@ const FONTS = [
     { name: 'Sans Serif', fontFace: 'sans-serif' }
 ]
 
-const SIGN_BOARD_MESH_NAME = '1_0500_board'
+const SIGN_BOARD_MESH_NAME = '_board'
 const SIGN_BOARD_MATERIAL_NAME = 'Main'
 
 const fieldClasses = 'w-full pt-2 flex flex-wrap'
@@ -616,7 +616,8 @@ function Viewer(props: {
     }, [props.texture, props.model])
 
     useEffect(() => {
-        const signBoardMesh = meshes[SIGN_BOARD_MESH_NAME]
+        const meshKey = Object.keys(meshes).find(key => key.endsWith(SIGN_BOARD_MESH_NAME))
+        const signBoardMesh = meshes[meshKey]
         const uvAttr = signBoardMesh?.geometry.attributes['uv']
         if (!uvAttr) throw new Error("No UVs")
 
