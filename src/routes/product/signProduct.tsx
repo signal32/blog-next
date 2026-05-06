@@ -63,7 +63,7 @@ const SIGN_BOARD_MESH_NAME = '1_0500_board'
 const SIGN_BOARD_MATERIAL_NAME = 'Main'
 
 const fieldClasses = 'w-full pt-2 flex flex-wrap'
-const fieldInputClasses = 'basis-2/3'
+const fieldInputClasses = 'basis-1/2'
 
 function createTextureFromConfig(config: SignConfig): TextureData {
     const canvas = document.createElement('canvas')
