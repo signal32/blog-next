@@ -26,7 +26,6 @@ export const useBasket = create<Basket>()(
 
             addProduct(product, config, configId = getConfigId(config)) {
                 const { order } = get()
-                console.log({ configId })
 
                 const current = order.products[product.id]?.configs[configId]
                 if (current) {
@@ -77,7 +76,6 @@ export const useBasket = create<Basket>()(
 
             size() {
                 const { order } = get()
-                console.log(Object.values(order.products).map(product => product.configs).flat())
                 return Object.values(order.products).map(product => Object.keys(product.configs)).flat().length
 
             },

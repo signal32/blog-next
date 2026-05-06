@@ -19,7 +19,6 @@ export default function Order({ loaderData: { order, orderId }, params }: Route.
         const allFulfilled = order.products.every(product => product.fulfilled)
         let timeout: ReturnType<typeof setTimeout>
         if (order.paid && !allFulfilled) {
-            console.log('will reload')
             timeout = setTimeout(() => navigate(location.pathname + location.search), 10000)
         }
         () => clearTimeout(timeout)
