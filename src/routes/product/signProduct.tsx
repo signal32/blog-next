@@ -2,6 +2,7 @@ import { OnAddToBasketCb } from "#src/components/AddToBasketButton.tsx";
 import { InfoCard } from "#src/components/common/InfoCard.tsx";
 import { Markdown } from "#src/components/common/Markdown.tsx";
 import { H5, P } from "#src/components/common/typography.tsx";
+import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "#src/components/ui/alert-dialog.tsx";
 import { Button } from "#src/components/ui/button.tsx";
 import { Field, FieldError, FieldLabel } from "#src/components/ui/field.tsx";
 import { Input } from "#src/components/ui/input.tsx";
@@ -17,12 +18,12 @@ import { Check, CircleQuestionMark, Info, Palette, Rotate3D, Save, Trash, X } fr
 import { ReactNode, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { HexAlphaColorPicker } from 'react-colorful';
 import { useSearchParams } from "react-router";
+import sanitize from "sanitize-filename";
 import { Config, configId as getConfigId } from "store";
 import * as THREE from "three";
 import { create, UseBoundStore } from "zustand";
 import { Route } from './+types/signProduct';
 import { ProductLayout, ProductSidebar } from "./product";
-import sanitize from "sanitize-filename";
 
 type SignConfig = {
     signId: string,
@@ -234,21 +235,34 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
     }
 
     const handleAddToBasket: OnAddToBasketCb = async (config: Config) => {
-        const signConfig = config.meta['signConfig']
-        if (!signConfig) return false
-        for (const [key, { valid, message }] of Object.entries(validateConfig(JSON.parse(signConfig)))) {
-            if (!valid) {
-                alert(`Configuration not valid.\nField: ${key}\nReason: ${message ?? 'None given'}`)
-                return false
-            }
-        }
-
         try {
+            const signConfig = config.meta['signConfig']
+            if (!signConfig) return false
+
+            for (const { valid } of Object.values(validateConfig(JSON.parse(signConfig)))) {
+                if (!valid) {
+                    setShowAlertDialog({
+                        title: 'Invalid configuration',
+                        message: <p>
+                            <b>The sign could not be added to your basket due to an invalid field.</b><br />
+                            Please return and correct before proceeding.<br /><br />
+                        </p>
+                    })
+                    return false
+                }
+            }
+
             await uploadTexture()
         }
         catch (err) {
             console.error(err)
-            alert("Could not upload texture")
+            setShowAlertDialog({
+                title: 'Something went wrong',
+                message: <p>
+                    An error occurred while adding the sign to your basket.<br />
+                    Please try again and get in touch if this continues.
+                </p>
+            })
             return false
         }
     }
@@ -268,6 +282,8 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
             body,
         });
     }
+
+    const [showAlertDialog, setShowAlertDialog] = useState<{ title: string, message: ReactNode }>()
 
     return <ProductLayout product={loaderData.product}>{{
         main: <>
@@ -474,6 +490,22 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                     </TabsContent>
                 </Tabs>
             </div>
+            <AlertDialog
+                open={showAlertDialog !== undefined}
+                onOpenChange={open => open ? undefined : setShowAlertDialog(undefined)}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{showAlertDialog?.title}</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {showAlertDialog?.message}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogAction onClick={() => setShowAlertDialog(undefined)}>Okay</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </>,
         sidebar: <ProductSidebar product={loaderData.product} config={productConfig} onAddToBasket={handleAddToBasket} />
     }}</ProductLayout >
