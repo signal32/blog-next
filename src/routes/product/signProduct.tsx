@@ -604,14 +604,13 @@ function Viewer(props: {
         const uvHeight = maxV - minV
 
         // Convert to pixel dimensions
-        const pixelWidth = Math.round(uvWidth * 1024) //tex.image.width
-        const pixelHeight = Math.round(uvHeight * 1024) //tex.image.height
-
-        console.log("UV bounds:", { minU, minV, maxU, maxV })
-        console.log("Pixel dimensions:", { pixelWidth, pixelHeight })
+        const t = modelBaseTexture[props.model]
+        if (!t) return
+        const pixelWidth = Math.min(Math.round(uvWidth * t.width), t.width)
+        const pixelHeight = Math.min(Math.round(uvHeight * t.height), t.height)
 
         props.textureDimensions?.(pixelWidth, pixelHeight)
-    }, [meshes])
+    }, [meshes, modelBaseTexture])
 
 
     const Command = (props: { children: ReactNode }) => <span className="bg-gray-500/25 p-1 rounded-md">{props.children}</span>
