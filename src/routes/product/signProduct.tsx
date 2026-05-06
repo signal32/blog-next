@@ -133,7 +133,8 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
             textSize: 36,
             textFont: 'Raleway',
             textColour: '#ffffff',
-            verticalOffset: 15
+            verticalOffset: 15,
+            textValue: '', // Prevents 'your text here' being rendered on sign at load
         },
         textureHeight: 512,
         textureWidth: 512,
