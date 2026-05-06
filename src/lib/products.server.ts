@@ -1,9 +1,8 @@
+import { SHOP } from '#src/shop.ts';
 import fs from 'fs';
 import { join } from "path";
-import { createClient } from "store";
-import { createSelect, fromSelect } from "store/src/product";
+import { Product as StoreProduct } from "store";
 import { Content, defineContent, defineFileSource } from "./content.server";
-import { Product as StoreProduct } from 'store'
 
 export interface Product extends Content {
     published: Date,
@@ -69,7 +68,7 @@ export const products = defineContent<Product>([
     }),
     {
         async descriptors() {
-            const products = await createSelect(shopClient).then(fromSelect)
+            const products = await SHOP.findProducts({})
             return products.map(product => ({
                 fileName: '',
                 id: product.id,
@@ -78,7 +77,7 @@ export const products = defineContent<Product>([
             }))
         },
         async loader(descriptor) {
-            const [product] = await createSelect(shopClient).eq('id', descriptor.id).then(fromSelect)
+            const [product] = await SHOP.findProducts({ productIds: [descriptor.id] })
             return {
                 ...descriptor,
                 published: new Date('10/10/2025'),
@@ -96,8 +95,5 @@ export const products = defineContent<Product>([
         }
     }
 ])
-
-
-const shopClient = createClient('http://localhost:3000')
 
 export const CUSTOM_SIGN_PRODUCT_ID = '5bb0a699-f964-431e-9605-0d896b642108'
