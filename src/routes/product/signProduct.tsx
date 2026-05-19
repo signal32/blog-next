@@ -24,6 +24,7 @@ import * as THREE from "three";
 import { create, UseBoundStore } from "zustand";
 import { Route } from './+types/signProduct';
 import { ProductLayout, ProductSidebar } from "./product";
+import merge from 'deepmerge'
 
 type SignConfig = {
     signId: string,
@@ -377,7 +378,12 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                             <Field className={fieldClasses} orientation="horizontal">
                                 <FieldLabel>Model</FieldLabel>
                                 <Select
-                                    value={config.signId} onValueChange={signId => setConfig(c => ({ ...c, signId: signId || c.signId }))}>
+                                    value={config.signId}
+                                    onValueChange={signId => setConfig(
+                                        c => ({
+                                            ...merge(c, (loaderData.signs[signId]?.defaultConfig as SignConfig) ?? {}),
+                                            signId: signId || c.signId,
+                                        }))}>
                                     <SelectTrigger className={fieldInputClasses}>
                                         <SelectValue placeholder="Choose model" />
                                     </SelectTrigger>
@@ -529,8 +535,6 @@ export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
 }
 
 clientLoader.hydrate = true as const;
-
-// const baseTextureCache: Record<string, ImageBitmap> = {}
 
 const baseTextureStore = create<{
     modelBaseTexture: Record<string, ImageBitmap>,
