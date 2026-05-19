@@ -13,9 +13,9 @@ import { useBasket } from "#src/lib/basket.ts";
 import { CUSTOM_SIGN_PRODUCT_ID, products } from "#src/lib/products.server";
 import { SHOP } from "#src/shop.ts";
 import { Environment, OrbitControls, useGLTF } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { Check, CircleQuestionMark, Info, Palette, Rotate3D, Save, Trash, X } from "lucide-react";
-import { ReactNode, useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { ReactNode, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { HexAlphaColorPicker } from 'react-colorful';
 import { useSearchParams } from "react-router";
 import sanitize from "sanitize-filename";
@@ -63,6 +63,7 @@ const FONTS = [
 
 const SIGN_BOARD_MESH_NAME = '_board'
 const SIGN_BOARD_MATERIAL_NAME = 'Main'
+const CAMERA_TARGET_MESH_NAME = '_camera_target'
 
 const fieldClasses = 'w-full pt-2 flex flex-wrap'
 const fieldInputClasses = 'basis-1/2'
@@ -621,9 +622,11 @@ function Viewer(props: {
 
     useEffect(() => {
         const meshKey = Object.keys(meshes).find(key => key.endsWith(SIGN_BOARD_MESH_NAME))
+        if (!meshKey) throw new Error(`Could not find sign board mesh.`)
+
         const signBoardMesh = meshes[meshKey]
         const uvAttr = signBoardMesh?.geometry.attributes['uv']
-        if (!uvAttr) throw new Error("No UVs")
+        if (!uvAttr) throw new Error("Sign board mesh has no UVs")
 
         let minU = Infinity, minV = Infinity
         let maxU = -Infinity, maxV = -Infinity
@@ -650,17 +653,40 @@ function Viewer(props: {
         props.textureDimensions?.(pixelWidth, pixelHeight)
     }, [meshes, modelBaseTexture])
 
+    const modelRef = useRef<THREE.Group>(null)
+    const controlsRef = useRef<any>(null)
+
+    useEffect(() => {
+        const meshKey = Object.keys(meshes)
+            .find(key =>
+                key.endsWith(CAMERA_TARGET_MESH_NAME) ||
+                key.endsWith(SIGN_BOARD_MESH_NAME)
+            )
+
+        if (!meshKey) return
+
+        const mesh = meshes[meshKey]
+        if (!mesh) return
+
+        const worldPos = new THREE.Vector3()
+        mesh.getWorldPosition(worldPos)
+
+        controlsRef.current?.target.copy(worldPos)
+        controlsRef.current?.update()
+
+    }, [meshes, props.model])
+
 
     const Command = (props: { children: ReactNode }) => <span className="bg-gray-500/25 p-1 rounded-md">{props.children}</span>
 
     return (
         <div className="relative w-full h-full">
-            <Canvas camera={{ position: [-3, 2, -1], fov: 45 }}>
+            <Canvas camera={{ position: [-3, 3, -2], fov: 45 }}>
                 <ambientLight intensity={0.6} />
-                {/*<directionalLight position={[10, 10, 5]} />*/}
                 <primitive object={scene} scale={1} />
-                <OrbitControls target={[0, 0.5, 0]} />
+                <OrbitControls ref={controlsRef} target={[0, 0.5, 0]} />
                 <Environment preset="studio" backgroundIntensity={0.1} environmentIntensity={0.1} />
+
             </Canvas>
 
             <div className="absolute bottom-2 right-2 flex flex-row gap-2">
