@@ -13,7 +13,8 @@ import { useBasket } from "#src/lib/basket.ts";
 import { CUSTOM_SIGN_PRODUCT_ID, products } from "#src/lib/products.server";
 import { SHOP } from "#src/shop.ts";
 import { Environment, OrbitControls, useGLTF } from "@react-three/drei";
-import { Canvas, useThree } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
+import merge from 'deepmerge';
 import { Check, CircleQuestionMark, Info, Palette, Rotate3D, Save, Trash, X } from "lucide-react";
 import { ReactNode, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { HexAlphaColorPicker } from 'react-colorful';
@@ -24,7 +25,6 @@ import * as THREE from "three";
 import { create, UseBoundStore } from "zustand";
 import { Route } from './+types/signProduct';
 import { ProductLayout, ProductSidebar } from "./product";
-import merge from 'deepmerge'
 
 type SignConfig = {
     signId: string,
@@ -653,7 +653,6 @@ function Viewer(props: {
         props.textureDimensions?.(pixelWidth, pixelHeight)
     }, [meshes, modelBaseTexture])
 
-    const modelRef = useRef<THREE.Group>(null)
     const controlsRef = useRef<any>(null)
 
     useEffect(() => {

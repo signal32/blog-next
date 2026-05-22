@@ -16,7 +16,7 @@ export default function Order({ loaderData: { order, orderId }, params }: Route.
     const location = useLocation()
 
     useEffect(() => {
-        const allFulfilled = order.products.every(product => product.fulfilled)
+        const allFulfilled = order.products.every(product => product.fulfillmentStatus !== 'pending')
         let timeout: ReturnType<typeof setTimeout>
         if (order.paid && !allFulfilled) {
             timeout = setTimeout(() => navigate(location.pathname + location.search), 10000)
@@ -74,9 +74,8 @@ export default function Order({ loaderData: { order, orderId }, params }: Route.
                             }
                         </div>}
 
-
                         {
-                            order.paid && (product.fulfilled
+                            product.fulfillmentStatus === 'fulfilled'
                                 ? <div>
                                     <H4>Files:</H4>
                                     {product.files.map(file => <div className='flex flex-row gap-2'>
@@ -86,15 +85,21 @@ export default function Order({ loaderData: { order, orderId }, params }: Route.
 
                                     }
                                 </div>
-                                // : <P><Clock /> Waiting for fulfillment to complete. This may take a couple minutes.</P>
-                                : <InfoCard>{{
-                                    body: <P>
-                                        Waiting for fulfillment to complete.
-                                        This usually take a few minutes.
-                                    </P>
-                                }}</InfoCard>)
+                                : product.fulfillmentStatus === 'failed'
+                                    ? <InfoCard>{{
+                                        body: <P>
+                                            Something went wrong while processing your order.
+                                        </P>
+                                    }}</InfoCard>
+                                    : <InfoCard>{{
+                                        body: <P>
+                                            Waiting for fulfillment to complete.
+                                            This usually take a few minutes.
+                                        </P>
+                                    }}</InfoCard>
 
                         }
+
                     </div>
 
 
