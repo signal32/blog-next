@@ -13,13 +13,17 @@ import Drawer from "../../components/common/Drawer";
 import { Markdown } from '../../components/common/Markdown';
 import { useModalStore } from "../../components/common/Modal";
 import { type FileDetails, files } from "../../lib/file.server";
-import { Product, type Product, type Requirement, products } from "../../lib/products.server";
+import { type Requirement, products } from "../../lib/products.server";
 import { Route } from './+types/product';
 import { Content } from '#src/lib/content.server.ts';
 import { isProduct as isStoreProduct } from 'store/src/product';
 
 export default function Product({ loaderData }: Route.ComponentProps) {
-
+    const config: Config = {
+        quantity: 1,
+        meta: {},
+        options: {}
+    }
     return <ProductLayout product={loaderData.product}>{{
         main: <>
             <Markdown content={loaderData.product.description ?? ''} />
@@ -32,7 +36,7 @@ export default function Product({ loaderData }: Route.ComponentProps) {
                 />)}
             </Drawer>
         </>,
-        sidebar: <ProductSidebar product={loaderData.product} file={loaderData.mainFile} />
+        sidebar: <ProductSidebar product={loaderData.product} file={loaderData.mainFile} config={config} />
     }}</ProductLayout>
 }
 

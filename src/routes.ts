@@ -8,7 +8,7 @@ export default [
     // route('simulation', 'routes/simulation.tsx'),
     route(':slug', './routes/page.tsx'),
     route('basket', './routes/basket.tsx'),
-    route('order/:orderId', './routes/order.tsx'),
+    route('order', './routes/order.tsx'),
     ...prefix('blog', [
         index('routes/blog/index.tsx'),
         route(':slug', './routes/blog/post.tsx')
@@ -20,6 +20,6 @@ export default [
     ...prefix('shop', [
         index('routes/product/index.tsx'),
     ]),
-    route('api/content', './routes/api/contentList.ts'),
-    route('api/content/:libraryId/:contentId', './routes/api/contentDetails.ts')
+    route('api/content-list', './routes/api/contentList.ts'),
+    route('api/content/:libraryId/:contentId', './routes/api/contentDetails.ts'),
 ] satisfies RouteConfig

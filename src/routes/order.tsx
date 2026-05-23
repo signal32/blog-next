@@ -120,8 +120,8 @@ export default function Order({ loaderData: { order, orderId }, params }: Route.
 
 }
 
-export async function clientLoader({ params }: Route.ClientLoaderArgs) {
-    const orderId = params['orderId']
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
+    const orderId = new URL(request.url).searchParams.get('id')
     if (!orderId) throw new Error("Order ID required")
 
     const order = await SHOP.getOrder({ orderId })
