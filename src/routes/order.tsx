@@ -38,8 +38,8 @@ export default function Order({ loaderData: { order, orderId }, params }: Route.
         {success && <>
             <div className="text-center py-10">
                 <H2>Your order has been placed!</H2>
-                <H6>Thank you for your custom.</H6>
-                <P className="mt-5">Write a thank you message here :)</P>
+                <H6>Thank you for your custom ❤️</H6>
+                {/*<P className="mt-5">Write a thank you message here :)</P>*/}
             </div>
         </>}
 
@@ -51,7 +51,18 @@ export default function Order({ loaderData: { order, orderId }, params }: Route.
         }}</InfoCard>}
 
         <H2>Order Details</H2>
-        <P>ID <span className="bg-background/50 shadow-inner p-1 rounded">{orderId}</span></P>
+        <table className='table-auto w-full text-sm mb-5 '>
+            <tbody>
+                <tr>
+                    <td>Order ID</td>
+                    <td>{orderId}</td>
+                </tr>
+                <tr>
+                    <td>Paid</td>
+                    <td>{order.paid.toString()}</td>
+                </tr>
+            </tbody>
+        </table>
 
         <H2>Products</H2>
         <div className='flex flex-col gap-2'>
