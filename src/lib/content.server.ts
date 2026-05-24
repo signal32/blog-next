@@ -19,6 +19,7 @@ export interface Content extends ContentDescriptor {
     coverImage?: string,
     public?: boolean,
     price?: number,
+    customRouteFile?: string,
 }
 
 export interface ContentLocation {
@@ -124,7 +125,8 @@ export function defineContent<T extends Content>(
             cache.id.set(id, data)
         }
 
-        return data.content
+        if (data.content?.public)
+            return data.content
     };
 
     return {

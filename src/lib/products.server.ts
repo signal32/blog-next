@@ -45,6 +45,7 @@ export interface ProductMedia {
 export type ProductId = string;
 
 export const products = defineContent<Product>([
+    // Load products from local static files
     defineFileSource('content/products', (descriptor, path) => {
         const metaPath = join(path, 'metadata.json');
         const metaData = fs.readFileSync(metaPath, 'utf8');
@@ -66,6 +67,7 @@ export const products = defineContent<Product>([
             baseUrl: '/product',
         }
     }),
+    // Load products from Shop web service
     {
         async descriptors() {
             const products = await SHOP.findProducts({})
@@ -88,9 +90,10 @@ export const products = defineContent<Product>([
                 },
                 baseUrl: '/product',
                 created: '10 Jan 2020',
-                public: true,
+                public: product?.available,
                 storeProduct: product,
                 description: product?.description,
+                customRouteFile: product?.meta.customRouteFile
             }
         }
     }

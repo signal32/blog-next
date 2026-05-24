@@ -519,10 +519,11 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
     }}</ProductLayout >
 }
 
-export async function loader({ }: Route.LoaderArgs) {
-    const { customSignProductId } = SERVER_CONFIG
-    if (!customSignProductId) throw new Error("Custom sign product ID is not set.")
-    const product = await products.getById(customSignProductId);
+export async function loader({ request }: Route.LoaderArgs) {
+    const url = new URL(request.url)
+    const slug = url.pathname.split('/').at((-1))
+
+    const product = (await products.getAllDetailed()).find(product => product.customRouteFile && product.slug === slug)
     if (!product) throw new Response(undefined, { status: 404 })
     const { signs } = await SHOP.listSigns({})
 

@@ -9,7 +9,6 @@ process.loadEnvFile()
 
 export interface ServerConfig {
     content: Record<string, ContentLibrary<Content>>,
-    customSignProductId?: string,
 }
 
 export const SERVER_CONFIG: ServerConfig = {
@@ -19,5 +18,4 @@ export const SERVER_CONFIG: ServerConfig = {
         pages,
         files,
     },
-    customSignProductId: process.env['BLOG_CUSTOM_SIGN_PRODUCT_ID']
 }

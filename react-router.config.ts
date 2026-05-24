@@ -8,15 +8,15 @@ export default {
     prerender: async ({ getStaticPaths }) => {
         return [
             ...getStaticPaths(),
-            ...(await posts.getAll()).flatMap(post => [
+            ...(await posts.getAllDetailed()).flatMap(post => [
                 `/blog/${post.slug}`,
                 `/api/content/posts/${post.id}`
             ]),
-            ...(await products.getAll()).flatMap(product => [
+            ...(await products.getAllDetailed()).flatMap(product => [
                 `/product/${product.slug}`,
                 `/api/content/products/${product.id}`
             ]),
-            ...(await pages.getAll()).flatMap(page => [
+            ...(await pages.getAllDetailed()).flatMap(page => [
                 `/${page.slug}`,
                 `/api/content/pages/${page.id}`
             ])

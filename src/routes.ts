@@ -1,8 +1,16 @@
-import { type RouteConfig, index, prefix, route } from '@react-router/dev/routes'
+import { type RouteConfig, RouteConfigEntry, index, prefix, route } from '@react-router/dev/routes'
 import { products } from './lib/products.server'
-import { SERVER_CONFIG } from './config.server'
+import { Content } from './lib/content.server'
 
-const customSignProduct = SERVER_CONFIG.customSignProductId ? await products.getById(SERVER_CONFIG.customSignProductId) : undefined
+
+function contentCustomFileRoutes(contents: Content[]) {
+    const routes: RouteConfigEntry[] = []
+    for (const content of contents) {
+        if (!content.customRouteFile) continue
+        routes.push(route(content.slug, content.customRouteFile))
+    }
+    return routes
+}
 
 export default [
     index('routes/home.tsx'),
@@ -15,7 +23,7 @@ export default [
     ]),
     ...prefix('product', [
         route(':slug', './routes/product/product.tsx'),
-        route(customSignProduct?.slug, './routes/product/signProduct.tsx'),
+        ...contentCustomFileRoutes(await products.getAllDetailed())
     ]),
     ...prefix('shop', [
         index('routes/product/index.tsx'),
