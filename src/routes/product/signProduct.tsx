@@ -522,8 +522,9 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
 export async function loader({ request }: Route.LoaderArgs) {
     const url = new URL(request.url)
     const slug = url.pathname.split('/').at((-1))
+    if (!slug) throw new Response(undefined, { status: 404 })
 
-    const product = (await products.getAllDetailed()).find(product => product.customRouteFile && product.slug === slug)
+    const product = await products.getBySlug(slug)
     if (!product) throw new Response(undefined, { status: 404 })
     const { signs } = await SHOP.listSigns({})
 
