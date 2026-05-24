@@ -1,6 +1,5 @@
 {
     "$schema": "../../../schema.json",
-    "id": "speyside_line",
     "name": "The Speyside Line",
     "title": "The Speyside Line",
     "created": "10 Jan 2020",

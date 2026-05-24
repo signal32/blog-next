@@ -60,11 +60,11 @@ export const products = defineContent<Product>([
         product.description = descData.toString() || 'No description';
 
         return {
-            ...descriptor,
             ...product,
             ...(product.media?.banner ? { coverImage: product.media.banner } : {}), // Can't be undefined
             ...(product.description && !product.excerpt ? { excerpt: product.description.slice(0, 255).trim() } : {}),
             baseUrl: '/product',
+            ...descriptor,
         }
     }),
     // Load products from Shop web service
