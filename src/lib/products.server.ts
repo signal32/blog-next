@@ -95,5 +95,3 @@ export const products = defineContent<Product>([
         }
     }
 ])
-
-export const CUSTOM_SIGN_PRODUCT_ID = '5bb0a699-f964-431e-9605-0d896b642108'

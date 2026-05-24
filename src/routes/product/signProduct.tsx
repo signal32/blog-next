@@ -10,7 +10,7 @@ import { Popover, PopoverContent, PopoverDescription, PopoverHeader, PopoverTitl
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "#src/components/ui/select.tsx";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "#src/components/ui/tabs.tsx";
 import { useBasket } from "#src/lib/basket.ts";
-import { CUSTOM_SIGN_PRODUCT_ID, products } from "#src/lib/products.server";
+import { products } from "#src/lib/products.server";
 import { SHOP } from "#src/shop.ts";
 import { Environment, OrbitControls, useGLTF } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
@@ -25,6 +25,7 @@ import * as THREE from "three";
 import { create, UseBoundStore } from "zustand";
 import { Route } from './+types/signProduct';
 import { ProductLayout, ProductSidebar } from "./product";
+import { SERVER_CONFIG } from "#src/config.server.ts";
 
 type SignConfig = {
     signId: string,
@@ -519,7 +520,9 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
 }
 
 export async function loader({ }: Route.LoaderArgs) {
-    const product = await products.getById(CUSTOM_SIGN_PRODUCT_ID);
+    const { customSignProductId } = SERVER_CONFIG
+    if (!customSignProductId) throw new Error("Custom sign product ID is not set.")
+    const product = await products.getById(customSignProductId);
     if (!product) throw new Response(undefined, { status: 404 })
     const { signs } = await SHOP.listSigns({})
 

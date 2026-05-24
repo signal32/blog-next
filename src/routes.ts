@@ -1,11 +1,11 @@
 import { type RouteConfig, index, prefix, route } from '@react-router/dev/routes'
-import { CUSTOM_SIGN_PRODUCT_ID, products } from './lib/products.server'
+import { products } from './lib/products.server'
+import { SERVER_CONFIG } from './config.server'
 
-export const CUSTOM_SIGN_PRODUCT = await products.getById(CUSTOM_SIGN_PRODUCT_ID)
+const customSignProduct = SERVER_CONFIG.customSignProductId ? await products.getById(SERVER_CONFIG.customSignProductId) : undefined
 
 export default [
     index('routes/home.tsx'),
-    // route('simulation', 'routes/simulation.tsx'),
     route(':slug', './routes/page.tsx'),
     route('basket', './routes/basket.tsx'),
     route('order', './routes/order.tsx'),
@@ -15,7 +15,7 @@ export default [
     ]),
     ...prefix('product', [
         route(':slug', './routes/product/product.tsx'),
-        route(CUSTOM_SIGN_PRODUCT?.slug, './routes/product/signProduct.tsx'),
+        route(customSignProduct?.slug, './routes/product/signProduct.tsx'),
     ]),
     ...prefix('shop', [
         index('routes/product/index.tsx'),
