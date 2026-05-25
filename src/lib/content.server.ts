@@ -61,7 +61,10 @@ export function defineFileSource<T extends Content>(dir: string, loader: (descri
 
     return {
         descriptors: async () => fs.readdirSync(dir).map(fileNameToDescriptor),
-        loader: async (descriptor) => loader(descriptor, join(dir, descriptor.fileName))
+        loader: async (descriptor) => ({
+            ...await loader(descriptor, join(dir, descriptor.fileName)),
+            id: descriptor.id
+        })
     }
 
 }
