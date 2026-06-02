@@ -50,3 +50,14 @@ export function debounce<Args extends unknown[], X>(
         })
     }
 }
+
+export function env(name: string) {
+    if (typeof window !== 'undefined') {
+        return import.meta.env[name]
+    }
+    else {
+        //@ts-expect-error
+        process.loadEnvFile()
+        return process.env[name]
+    }
+}

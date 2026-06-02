@@ -4,15 +4,16 @@ import { Button } from '#src/components/ui/button'
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '#src/components/ui/empty'
 import { useBasket } from '#src/lib/basket'
 import { products } from '#src/lib/products.server'
-import { cn, formatCurrency, } from '#src/lib/utils'
+import { cn, env, formatCurrency, } from '#src/lib/utils'
 import { SHOP } from '#src/shop'
-import { ArrowRightIcon, LucideClockFading, Minus, Plus, ShoppingBasketIcon, Trash } from 'lucide-react'
+import { ArrowRightIcon, Check, LucideClockFading, Minus, Plus, ShoppingBasketIcon, Trash, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
-import { getOrderConfig, Product, ShopClient } from 'store'
+import { Popover, PopoverContent, PopoverHeader, PopoverTitle, PopoverTrigger } from "src/components/ui/popover"
+import { getOrderConfig, ShopClient } from 'store'
 import { Route } from './+types/basket'
-import { ArrowRight, Check, LucideLoaderCircle, ShoppingBasket, Trash, X } from "lucide-react";
-import { Popover, PopoverContent, PopoverHeader, PopoverTitle, PopoverTrigger } from "src/components/ui/popover";
+
+const PUBLIC_URL = env('VITE_BLOG_PUBLIC_URL')
 
 export default function Basket({ loaderData }: Route.ComponentProps) {
     const basket = useBasket()
@@ -20,7 +21,8 @@ export default function Basket({ loaderData }: Route.ComponentProps) {
     const goToCheckout = async () => {
         const { url } = await SHOP.createStripePayment({
             order: basket.order,
-            successUrl: `http://localhost:5173/order/${basket.order.id}?success=true`
+            successUrl: `${PUBLIC_URL}/order?id=${basket.order.id}&success=true`,
+            url: `${PUBLIC_URL}/order?id=${basket.order.id}`
         })
         window.location.href = url
     }
