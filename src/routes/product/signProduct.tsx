@@ -25,7 +25,6 @@ import * as THREE from "three";
 import { create, UseBoundStore } from "zustand";
 import { Route } from './+types/signProduct';
 import { ProductLayout, ProductSidebar } from "./product";
-import { SERVER_CONFIG } from "#src/config.server.ts";
 
 type SignConfig = {
     signId: string,
@@ -872,8 +871,7 @@ export function zustandHmrFix(name: string, useStore: UseBoundStore<any>) {
 }
 
 const PROVIDER_MARKDOWN = `
-All Train Simulator assets are owned by a Provider.
-In this case, _you_ are the provider!
+All Train Simulator assets are owned by a Provider, which in this case, is _you!_
 
 Treat this field like a profile name - unique to you and safe to show publicly.
 
@@ -883,74 +881,101 @@ To prevent this, avoid short or simple Provider names and consider checking whic
 `
 
 const PRODUCT_MARKDOWN = `
-Products are collections of assets produced by a Provider.
-These will typically contain all the assets made for a particular route.
+Products are collections of assets owned by a Provider.
+These typically contain all the assets made for a particular project.
 
-For this, choose something unique to your project, for example \`MyBeautifulRoute\`.
+For this, choose something unique to your project, for example \`MyWonderfulRoute\`.
 `
 
 const NAME_MARKDOWN = `
-This is the name of the asset as it will appear in game.
+This is the name of the asset as it appears in game.
 
-To make it easier to find when using the route editor, consider prefixing the name with your Product initials:
+To keep assets organised inside the route editor, consider prefixing the name with your "Product" initials:
 
-For example, for a Product called \`MyBeautifulRoute\`, you may choose \`MBR Station Sign PlaceName\` as a name.
+For example, for a Product called \`MyWonderfulRoute\`, you may choose \`MWR Station Sign PlaceName\` as a name.
 
-No other asset with this name can exist within the Product.
+Please note that no other asset with this name can exist within the Product.
 `
 
 const ABOUT_MARKDOWN = `
-### Build Your Own Custom Train Simulator Station Signs!
+### Made-to-order Station Signs for Train Simulator Classic
 ---
-Ever wanted station signs for your route, but not sure how to make them?
+_Ever wanted station signs for your route, but not sure how to make them?_
 
-For many years having custom station signs meant either learning both the tools of the game-art pipeline and perfect your work for use in Train Simulator, or commissioning another developer to make them for you.
+Design your perfect sign online and have them in-game, ready for use, within minutes.
 
-Now, you can design your perfect sign online with an easy editor and have them in-game, ready for use within minutes.
+Your sign will be prepared automatically straight after checkout.
+This doesn't take long so, within a few minutes, you will be able to download your very own custom custom asset to add the finishing touches to your route.
 
-Simply choose a name for your station sign, and a style which suits your liking, then tweak the board design to your requirements.
+All purchased signs belong to you and you are free to use them however you like, be that in freeware or commercial products.
 
-Once added to your basket, your design will be saved. So you can pause and come back as you wish.
+So, what are you waiting for? Start designing your Train Simulator Classic station sign and have it in your route today!
 
-When you're ready, proceed through checkout and your sign will be automatically prepared as soon as payment has cleared.
-
-This doesn't take long, so after a few minutes, you will receive a link to download your very own custom Train Simulator sign asset, ready for use in game.
-
-All signs belong to you and you are free to use them however you like, be that in freeware or commercial products.
-
-So what are you waiting for? Start designing your Train Simulator Classic station sign and have it in your route today!
-
-
+### Instructions
 ---
-### Manual
 #### Using the Editor
-The sign editor makes it easy to configure and design signs for use in Train Simulator.
+Use the editor to configure and design your sign.
 
 ##### Asset Config Section
-The "Asset Config" section configures how your sign asset will be presented to Train Simulator, and determines how you will use it in game.
+The "Asset Config" section configures how the sign asset will be presented to Train Simulator, and determines how it will be used in game.
 
 **Provider:** ${PROVIDER_MARKDOWN}
 **Product:** ${PRODUCT_MARKDOWN}
 **Name:** ${NAME_MARKDOWN}
 
 ##### Sign Style Section
-Here you can chose from a range of different sign styles.
+A variety of different base styles can be chosen from.
 
-The choice may be a bit limited right now, but I am working to add more.
+The choice is a bit limited right now, but I am working to add more.
 Please let me know if you have any particular suggestions.
 
 ##### Board Design Section
-Use this section to customise the look and feel of your sign as desired.
+Use this section to customise the sign boards look and feel.
+
+**Background:**
+This section configured the background and border.
+
+**Text:**
+Both primary and secondary text fields operate in the same way.
+Their properties can be set independently of each other.
+Use the "Vertical Offset" option to set their position relative to each other.
 
 #### Adding signs to your basket
-Todo
+Signs can be added to the basket once the "Asset Config" section is complete.
+The "Add to basket" button will change to show that this sign has already been added.
+When changes are made to the design, a popup will ask whether the basket should be updated.
+
+To create another sign, simply change the "Asset Config".
+For example, by setting the name to that of the new sign.
+The new sign can then be added to the basket.
 
 #### Completing your order
-Todo
+Once satisfied with your signs, view the basket and select "Proceed to checkout".
+This will take you through the payment process.
+
+Once payment has cleared your signs shall be generated automatically.
+This may take a few minutes for each sign and progress can be tracked on the orders page.
 
 #### Using your sign in-game
-Todo
+Generated signs can be downloaded as .zip archives.
 
-### FAQ
-Todo
+To use these in game, simply unzip the contents of the archive into your Train Simulator (aka Railworks) \`Assets\` folder.
+
+**To find the location of your Train Simulator folder:**
+1. Open steam and go to the \`Library\` view
+2. Find Train Simulator and select \`Properties\` from the right click menu
+3. Go to \`Installed Files\` and select \`Browse\`
+4. Locate the \`Assets\` folder.
+
+**To extract each sign into this folder:**
+1. In another File Explorer window, open the sign asset zip file.
+2. Drag the contents to the Assets folder. Alternatively, choose the \"Extract"\ option in the top ribbon bar and provide the path to the Assets folder located above.
+
+**To find your sign in the route editor:**
+1. In the route editor, open the Object Set Filter flyout.
+![Enable the object filter flyout](https://s3.finch.hamishweir.uk/shop-public/sign_instructions/1_object_filter_flyout.png)
+2. Choose your "Provider" from the dropdown at the top of the flyout and enable your "Product"(s).
+![Enable the object filter flyout](https://s3.finch.hamishweir.uk/shop-public/sign_instructions/2_enable_product.png)
+1. Your sign asset can now be located in the asset explorer on the right hand side!
+![Enable the object filter flyout](https://s3.finch.hamishweir.uk/shop-public/sign_instructions/3_select_asset.png)
 `
