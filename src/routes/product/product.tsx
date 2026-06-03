@@ -166,8 +166,6 @@ export function ProductSidebar(props: {
 const ProductDetails = (props: { product: Product }) => {
     const details = [
         { name: 'Published', value: props.product.published?.toDateString() },
-        { name: 'Product ID', value: props.product.id },
-        { name: 'Product name', value: props.product.name },
         { name: 'Has requirements', value: !props.product.requirements == undefined }
     ];
     return (

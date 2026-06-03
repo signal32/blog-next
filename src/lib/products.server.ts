@@ -5,7 +5,7 @@ import { Product as StoreProduct } from "store";
 import { Content, defineContent, defineFileSource } from "./content.server";
 
 export interface Product extends Content {
-    published: Date,
+    published?: Date,
     similar?: [ProductId],
     children?: [ProductId],
     parent?: ProductId,
@@ -82,18 +82,16 @@ export const products = defineContent<Product>([
             const [product] = await SHOP.findProducts({ productIds: [descriptor.id] })
             return {
                 ...descriptor,
-                published: new Date('10/10/2025'),
                 coverImage: product?.meta.headerImageUrl,
                 media: {
                     gallery: product?.meta.imageUrls,
                     banner: product?.meta.headerImageUrl
                 },
                 baseUrl: '/product',
-                created: '10 Jan 2020',
                 public: product?.available,
                 storeProduct: product,
                 description: product?.description,
-                customRouteFile: product?.meta.customRouteFile
+                customRouteFile: product?.meta.customRouteFile,
             }
         }
     }
