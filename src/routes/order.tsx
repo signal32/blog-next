@@ -92,9 +92,11 @@ export default function Order({ loaderData: { order, orderId }, params }: Route.
                                     {product.files.map(file => <div className='flex flex-row gap-2'>
                                         <FileDownIcon />
                                         <a className='hover:underline' href={file.url} download>{file.name}</a>
-                                    </div>)
-
-                                    }
+                                    </div>)}
+                                    <p className='text-sm pt-2'>
+                                        <b>Please note: </b>Files are kept on our servers for 1 year after which they may become unavailable.
+                                        Please make sure you download and keep your files safe.
+                                    </p>
                                 </div>
                                 : product.fulfillmentStatus === 'failed'
                                     ? <InfoCard>{{
