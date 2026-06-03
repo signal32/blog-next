@@ -86,6 +86,6 @@ export const useBasket = create<Basket>()(
         }),
         {
             name: 'basket-storage',
-            storage: createJSONStorage(() => sessionStorage),
+            storage: createJSONStorage(() => localStorage),
         }
     ))
