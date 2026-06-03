@@ -1,37 +1,40 @@
 import ReactMarkdown, { Components } from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
-// import styles from './styles/markdown.module.css'
+import { ContentLibrary, type Content } from '#src/lib/content.server'
 import PostItem from '../posts/PostItem'
-import { type Content } from 'src/lib/content.server'
-import { PreRenderCache } from 'src/lib/preRenderCache.server'
-import * as typography from 'src/components/common/typography'
+import { useEffect, useState } from 'react'
+import * as typography from '#src/components/common/typography'
+import { Post } from '#src/lib/posts.server'
+import { Product } from '#src/lib/products.server'
+import { Skeleton } from '../ui/skeleton'
 
 export const Markdown = (props: {
     content: string,
-    cache?: PreRenderCache
+    contentLibraries?: { posts: ContentLibrary<Post>, products: ContentLibrary<Product> }
 }) => (
+
 
     <ReactMarkdown
         rehypePlugins={[rehypeRaw]}
         disallowedElements={[]}
         components={{
             content: (attrs: Record<string, string>) => {
-                const contentType = attrs['type']
-                if (!contentType) throw new Error('Wrong content type')
+                const library = attrs['library']
+                if (!library) throw new Error('No library specified')
                 const contentId = attrs['id']
                 if (!contentId) throw new Error('No content ID')
 
-                let content: Content | undefined
-                if (contentType === 'post') {
-                    content = props.cache?.allPosts.find(post => post.id === contentId)
-                }
-                if (contentType === 'product') {
-                    content = props.cache?.allProducts.find(product => product.id === contentId)
-                }
+                const [content, setContent] = useState<Content>()
+
+                useEffect(() => {
+                    fetch(`/api/content/${library}/${contentId}`)
+                        .then(res => res.json())
+                        .then(setContent)
+                }, [attrs['id']])
 
                 return content
                     ? <div className='no-markdown'><PostItem post={content} showImage /></div>
-                    : <p>Could not find thing</p>
+                    : <Skeleton className='w-full h-48' />
             },
             h1: typography.H1,
             h2: typography.H2,

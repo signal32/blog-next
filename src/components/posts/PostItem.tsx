@@ -1,11 +1,12 @@
 import { Link } from "react-router";
-import { type Post as Content } from "../../lib/posts.server";
 import DateDisplay from "../common/DateDisplay";
 import { useModalStore } from '../common/Modal';
 import { Button } from "../ui/button";
 import { Card } from "../card";
-
-const TEMP_IMAGE = `https://images.pexels.com/photos/4215110/pexels-photo-4215110.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1`;
+import { Content } from "#src/lib/content.server.ts";
+import { formatCurrency } from "#src/lib/utils.ts";
+import { isProduct, useProductPrice } from "#src/routes/product/product.tsx";
+import { Loader2 } from "lucide-react";
 
 interface PostItemProps {
     post: Content,
@@ -13,7 +14,9 @@ interface PostItemProps {
 }
 
 const PostItem = ({ post, showImage = true }: PostItemProps) => {
+    const postIsProduct = isProduct(post)
     const modals = useModalStore()
+    const productPrice = useProductPrice(postIsProduct ? post : undefined)
 
     return <Card>{{
         content: <>
@@ -40,7 +43,11 @@ const PostItem = ({ post, showImage = true }: PostItemProps) => {
         </>,
         footer: <Button asChild className="w-full">
             <Link to={`${post.baseUrl}/${post.slug}`}>
-                Read more
+                {postIsProduct
+                    ? productPrice?.price
+                        ? formatCurrency(productPrice.price)
+                        : <Loader2 className="animate-spin" />
+                    : 'Read more'}
             </Link>
         </Button>
     }}</Card>

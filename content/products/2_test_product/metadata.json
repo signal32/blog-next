@@ -2,7 +2,7 @@
     "$schema": "../../../schema.json",
     "id": "test_product",
     "name": "Test Product",
-    "public": true,
+    "public": false,
     "requirements": [
         {
             "type": "internal",

@@ -1,32 +1,17 @@
 // import Image from "next/image";
 // import Link from "next/link";
 // import { useRouter } from "next/router";
-import { CreativeCommons, Menu, X } from "lucide-react";
-import { ReactElement, ReactNode, useRef, useState } from "react";
-import { Link, useLocation, useNavigation } from "react-router";
-import { cn } from "src/lib/utils";
+import { CreativeCommons, Menu, ShoppingBasket, X } from "lucide-react";
+import { ReactElement, ReactNode, useState } from "react";
+import { Link, useLocation } from "react-router";
+import { useBasket } from "#src/lib/basket";
+import { cn } from "#src/lib/utils";
 import { websiteConfig } from "../../routes/_app";
 import Breadcrumbs from "../common/Breadcrumbs";
 import ModalContext from "../common/Modal";
 import { A, H2 } from "../common/typography";
 import { Button } from "../ui/button";
 
-export function debounce<Args extends unknown[]>(
-    fn: (...args: Args) => void,
-    delay: number
-): (...args: Args) => void {
-    let timer: ReturnType<typeof setTimeout>
-
-    return (...args: Args): void => {
-        if (timer !== undefined) {
-            clearTimeout(timer)
-        }
-
-        timer = setTimeout(() => {
-            fn(...args)
-        }, delay)
-    }
-}
 
 const DEMO_IMAGE = "https://images.pexels.com/photos/4215110/pexels-photo-4215110.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
 
@@ -46,43 +31,58 @@ export interface LayoutRequestProps {
 //const AppBaseLayout = ({children, header: defaultHeaderImage, headerTitle: defaultHeaderTitle, breadcrumbs}: MainLayoutProps) => {
 const AppBaseLayout = (props: MainLayoutProps) => {
     const location = useLocation();
-    // const [showHeader, setShowHeader] = useState(true);
+    const basket = useBasket()
+
+
+
 
     const Navigation = (props: {
         column?: boolean
-    }) => (
-        <div className={cn('flex gap-2 text-white text-lg', props.column && 'flex-col')}>
-            {
-                websiteConfig.mainMenu.map((item, i) => (
-                    <Link
-                        className={cn(
-                            "grow p-2 rounded-lg text-center ring-air",
-                            location.pathname === item.href
-                                ? 'bg-air'
-                                : cn('hover:ring-2', props.column && 'bg-air/20')
+    }) => {
+        const NavigationLink = (linkProps: { to: string, children?: React.ReactElement }) => (
+            <Link
+                className={cn(
+                    "grow p-2 rounded-lg text-center ring-air",
+                    location.pathname === linkProps.to
+                        ? 'bg-air'
+                        : cn('hover:ring-2', props.column && 'bg-air/20')
 
-                        )}
-                        key={i}
-                        to={item.href}
-                        onClick={() => setShowNav(false)}
-                    >
-                        {item.name}
-                    </Link>
-                ))
-            }
+                )}
+                to={linkProps.to}
+                onClick={() => setShowNav(false)}
+            >
+                {linkProps.children}
+            </Link>
+        )
 
-            {/* Extra links (i.e. external social media) */}
-            <div className={cn("flex flex-wrap justify-center sm:justify-end items-center border-air sm:pl-4", props.column && "border-t-2")}>
-                {
-                    websiteConfig.socialLinks.map((link, i) => (
+        const basketSize = basket.size()
+        return (
+            <div className={cn('flex gap-2 text-white text-lg', props.column && 'flex-col')}>
+                {websiteConfig.mainMenu.map((item, i) => <NavigationLink key={i} to={item.href}><p>{item.name}</p></NavigationLink>)}
+                {(location.pathname.endsWith('basket') || Object.keys(basket.order.products).length > 0) && <NavigationLink to="/basket">
+                    <div className="flex justify-center">
+                        <div className="relative">
+                            <ShoppingBasket />
+                            {basketSize > 0 &&
+                                <div className="absolute bg-red-500 rounded-full -top-2 -right-2 aspect-square text-sm font-bold h-4 w-4 flex justify-center items-center">{basketSize}</div>
+                            }
+
+                        </div>
+                    </div>
+
+                </NavigationLink>}
+
+                {/* Extra links (i.e. external social media) */}
+                <div className={cn("flex flex-wrap justify-center sm:justify-end items-center border-air sm:pl-4", props.column && "border-t-2")}>
+                    {websiteConfig.socialLinks.map((link, i) => (
                         <div className="p-2" key={i}>
                             <a className="text-slate-300 hover:text-white transition-all" href={link.href} target="_blank">{link.icon}</a>
                         </div>
-                    ))
-                }
+                    ))}
+                </div>
             </div>
-        </div >
-    )
+        );
+    }
 
     const [showNav, setShowNav] = useState(false)
 
@@ -103,9 +103,12 @@ const AppBaseLayout = (props: MainLayoutProps) => {
                 </div>
             </header>
             {/*{((props.breadcrumbs ?? true)) && <Breadcrumbs />}*/}
-            {props.children}
 
-            <footer className="align-bottom dark:text-gray-300 text-gray-700">
+            <div className="h-full grow">
+                {props.children}
+            </div>
+
+            <footer className="w-full dark:text-gray-300 text-gray-700">
                 <div className="max-w-4xl mx-auto -z-20">
                     <div className="p-2 sm:px-6 sm:mb-2 rounded-lg rounded-t-lg shadow-lg dark:bg-gray-800 bg-gray-200">
                         <div className="mx-auto flex">
@@ -157,27 +160,39 @@ export function defineLayout<P = {}>(
 export function ContentLayout(props: MainLayoutProps) {
     return (
         <div className="max-w-4xl mx-auto w-full">
-            {props.header && <div className={`-mt-10 p-0 relative transition-all ease-in-out overflow-clip rounded-b-xl opacity-100`}>
+            <div className={`p-0 relative transition-all ease-in-out overflow-clip rounded-b-xl opacity-100`}>
                 {
-                    props.header?.type === 'image'
-                        ? <div className='w-full rounded-b-lg h-64'>
-                            <img
-                                src={props.header.href ?? DEMO_IMAGE}
-                                className='w-full h-64'
-                                alt=''
-                                sizes='100vw'
-                                // fill
-                                style={{ objectFit: 'cover' }}
-                            />
+                    props.header?.type === 'component'
+                        ? <div className="-mt-10">{props.header.component}</div>
+                        : (props.header?.href || props.headerTitle) && <div
+                            className={cn('w-full rounded-b-lg  -mt-10', props.header?.href ? 'h-64' : 'h-24')}
+                        >
+                            {props.header?.type === 'image' && props.header.href
+                                ? <img
+                                    src={props.header.href ?? DEMO_IMAGE}
+                                    className='w-full h-full'
+                                    alt=''
+                                    sizes='100vw'
+                                    style={{ objectFit: 'cover' }}
+                                />
+                                : <div
+                                    className="w-full h-full dark:bg-ocean/70 bg-white/70 rounded-b-xl shadow-lg"
+                                />
+                            }
+
                             {props.headerTitle &&
-                                <div className="absolute bottom-0 left-0 bg-black/80 backdrop-blur-sm py-1 px-3 rounded-tr-lg">
-                                    <H2 className="text-white">{props.headerTitle}</H2>
+                                <div
+                                    className={cn(
+                                        "absolute backdrop-blur-sm px-3 rounded-tr-lg",
+                                        props.header?.href ? "bg-black/80 text-white bottom-0 left-0" : "bottom-3 left-2"
+                                    )}
+                                >
+                                    <H2>{props.headerTitle}</H2>
                                 </div>
                             }
                         </div>
-                        : props.header?.component
                 }
-            </div>}
+            </div>
 
             <div className="pt-2">
                 <Breadcrumbs />

@@ -1,24 +1,33 @@
-import { type RouteConfig, index, prefix, route } from '@react-router/dev/routes'
+import { type RouteConfig, RouteConfigEntry, index, prefix, route } from '@react-router/dev/routes'
+import { products } from './lib/products.server'
+import { Content } from './lib/content.server'
+
+
+function contentCustomFileRoutes(contents: Content[]) {
+    const routes: RouteConfigEntry[] = []
+    for (const content of contents) {
+        if (!content.customRouteFile) continue
+        routes.push(route(content.slug, content.customRouteFile))
+    }
+    return routes
+}
 
 export default [
     index('routes/home.tsx'),
-    // route('simulation', 'routes/simulation.tsx'),
     route(':slug', './routes/page.tsx'),
+    route('basket', './routes/basket.tsx'),
+    route('order', './routes/order.tsx'),
     ...prefix('blog', [
         index('routes/blog/index.tsx'),
         route(':slug', './routes/blog/post.tsx')
     ]),
     ...prefix('product', [
-        route(':slug', './routes/product/product.tsx')
-    ])
-    // route('login', './routes/login.tsx'),
-    // route('logout', './routes/logout.tsx'),
-    // route('editor', './routes/editor.tsx'),
-    // route('activities', './routes/activities.tsx'),
-    // route('activity/:activitySlug', './routes/activity.tsx'),
-    // ...prefix('routes', [
-    //     index('./routes/routes.tsx'),
-    //     route(':routeId', './routes/route.tsx'),
-    //     route(':routeId/map', './routes/routeMap.tsx'),
-    // ])
+        route(':slug', './routes/product/product.tsx'),
+        ...contentCustomFileRoutes(await products.getAllDetailed())
+    ]),
+    ...prefix('shop', [
+        index('routes/product/index.tsx'),
+    ]),
+    route('api/content-list', './routes/api/contentList.ts'),
+    route('api/content/:libraryId/:contentId', './routes/api/contentDetails.ts'),
 ] satisfies RouteConfig

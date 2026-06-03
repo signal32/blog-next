@@ -1,86 +1,43 @@
+import { AddToBasketButton, OnAddToBasketCb } from '#src/components/AddToBasketButton.tsx';
+import { H3, P } from '#src/components/common/typography';
+import { Button } from '#src/components/ui/button';
+import { Skeleton } from '#src/components/ui/skeleton';
+import { formatCurrency } from '#src/lib/utils';
+import { SHOP } from '#src/shop';
 import { ExternalLink, FileDown } from 'lucide-react';
+import { ReactElement, useEffect, useState } from 'react';
 import { Link } from 'react-router';
-import { Button } from 'src/components/ui/button';
-import { preRenderCache } from 'src/lib/preRenderCache.server';
+import { Config, ShopClient } from 'store';
 import { ContentLayout } from "../../components/app/BaseLayout";
 import Drawer from "../../components/common/Drawer";
 import { Markdown } from '../../components/common/Markdown';
 import { useModalStore } from "../../components/common/Modal";
 import { type FileDetails, files } from "../../lib/file.server";
-import { type Product, type Requirement, products } from "../../lib/products.server";
+import { type Requirement, products, type Product } from "../../lib/products.server";
 import { Route } from './+types/product';
+import { Content } from '#src/lib/content.server.ts';
+import { isProduct as isStoreProduct } from 'store/src/product';
 
-export default function Product({ loaderData }: Route.ComponentProps) {
-
-    const modals = useModalStore();
-    const props = loaderData
-
-    const openGallery = (img: string) => {
-        modals.pushModal(
-            <div className=" h-full">
-                <img
-                    src={img}
-                    alt='product image'
-                    sizes="100vw"
-                    style={{
-                        objectFit: "contain"
-                    }} />
-            </div>
-        )
+export default function ProductRoute({ loaderData }: Route.ComponentProps) {
+    const config: Config = {
+        quantity: 1,
+        meta: {},
+        options: {}
     }
+    return <ProductLayout product={loaderData.product}>{{
+        main: <>
+            <Markdown content={loaderData.product.description ?? ''} />
 
-    return <ContentLayout
-        headerTitle={props.product?.name}
-        header={
-            props.product?.media?.banner
-                ? { type: 'image', href: props.product.media.banner }
-                : undefined}
-        breadcrumbs
-    >
-        <div>
-            <div className="flex flex-wrap-reverse gap-5">
-
-                {/* Main content */}
-                <div className=" flex-grow basis-80">
-                    <Markdown content={props.product.description ?? ''} cache={props.cache} />
-
-                    <Drawer title="Requirements">
-                        {props.product.requirements?.map((item, i) => <RequirementItem key={i} requirement={item} products={props.dependencyProducts ?? []} />)}
-                    </Drawer>
-                </div>
-
-                {/* Sidebar */}
-                <div className="flex-grow basis-20">
-                    <div className='p-2 rounded-lg shadow-lg bg-slate-200 dark:bg-slate-800'>
-                        {/* TODO images */}
-                        <div className="flex gap-3 flex-wrap">
-                            {props.product.media?.gallery?.map((item, i) => (
-                                <div key={i} className="flex-auto w-24 h-24 rounded-lg shadow-md bg-cover hover:shadow-xl hover:scale-105 transition-transform" style={{ backgroundImage: `url(${item})` }} onClick={() => openGallery(item)}></div>
-                            ))}
-                        </div>
-                        {/* TODO basic info */}
-                        <ProductDetails product={props.product} />
-                        {/* TODO download links */}
-                        {props.mainFile
-                            ? <>
-                                {/*<Button text="Download" icon={<FaInfoCircle />} href={props.mainFile.href} target='_blank' />*/}
-                                <Button asChild className='w-full'>
-                                    <a href={props.mainFile.href} target='_blank'>
-                                        <FileDown />
-                                        Download
-                                    </a>
-                                </Button>
-                                <p className="italic text-sm text-right">{props.mainFile.fileName}</p>
-                            </>
-                            : <p>Sorry, this file is currently unavailable.</p>
-                        }
-
-                        {/* <p className="italic text-sm text-right">Details: {JSON.stringify(props.mainFile)}</p> */}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </ContentLayout>
+            <Drawer title="Requirements">
+                {loaderData.product.requirements?.map((item, i) => <RequirementItem
+                    key={i}
+                    requirement={item}
+                    products={loaderData.dependencyProducts ?? []}
+                />)}
+            </Drawer>
+        </>,
+        sidebar: <ProductSidebar product={loaderData.product} file={loaderData.mainFile} config={config} />
+    }}</ProductLayout>
 }
 
 export async function loader({ params }: Route.LoaderArgs) {
@@ -99,7 +56,7 @@ export async function loader({ params }: Route.LoaderArgs) {
             else return {}
         }) || []);
 
-    const mainFile = product?.files?.primary ? (await files.getBySlug(product.files.primary)) ?? null : null
+    const mainFile = product?.files?.primary ? (await files.getBySlug(product.files.primary)) ?? undefined : undefined
     const otherFiles = product?.files?.other.map(item => ({
         file: files.getBySlug(item.slug),
         ...item,
@@ -110,21 +67,115 @@ export async function loader({ params }: Route.LoaderArgs) {
         dependencyProducts,
         mainFile,
         otherFiles,
-        cache: await preRenderCache()
     }
+}
+
+export function ProductLayout(props: {
+    product: Product,
+    children: {
+        main: ReactElement,
+        sidebar: ReactElement,
+    }
+}) {
+    return <ContentLayout
+        headerTitle={props.product?.name}
+        header={props.product?.media?.banner
+            ? { type: 'image', href: props.product.media.banner }
+            : undefined}
+        breadcrumbs
+    >
+        <div>
+            <div className="flex flex-wrap-reverse gap-5">
+                <div className="grow basis-80">
+                    {props.children.main}
+                </div>
+                <div className="grow basis-20">
+                    {props.children.sidebar}
+                </div>
+            </div>
+        </div>
+    </ContentLayout>
+}
+
+export function ProductSidebar(props: {
+    product: Product,
+    config: Config,
+    onAddToBasket?: OnAddToBasketCb,
+    file?: FileDetails,
+}) {
+
+    const [price, setPrice] = useState<Awaited<ReturnType<ShopClient['productPrice']>>>()
+    useEffect(() => {
+        const { storeProduct } = props.product
+        if (storeProduct) SHOP
+            .productPrice({ productId: storeProduct.id })
+            .then(setPrice)
+    }, [])
+
+    const modals = useModalStore();
+    const openGallery = (img: string) => {
+        modals.pushModal(
+            <div className="h-full">
+                <img
+                    src={img}
+                    alt='product image'
+                    sizes="100vw"
+                    style={{
+                        objectFit: "contain"
+                    }} />
+            </div>
+        )
+    }
+
+    return <>
+        <div className='p-2 rounded-lg shadow-lg bg-slate-200 dark:bg-slate-800'>
+            {props.product.excerpt && <P className='pb-2 font-medium'>{props.product.excerpt}</P>}
+
+            <div className="flex gap-3 flex-wrap pb-2">
+                {props.product.media?.gallery?.map((item, i) => (
+                    <div
+                        key={i}
+                        className="flex-auto w-24 h-24 rounded-lg shadow-md bg-cover hover:shadow-xl hover:scale-105 transition-transform"
+                        style={{ backgroundImage: `url(${item})` }}
+                        onClick={() => openGallery(item)}>
+                    </div>
+                ))}
+            </div>
+
+            <ProductDetails product={props.product} />
+
+            {props.file &&
+                <>
+                    <Button asChild className='w-full mt-2'>
+                        <a href={props.file.href} target='_blank'>
+                            <FileDown />
+                            Download
+                        </a>
+                    </Button>
+                    <p className="italic text-sm text-right">{props.file.fileName}</p>
+                </>
+            }
+
+            {props.product.storeProduct &&
+                <>
+                    {price?.price ? <H3>{formatCurrency(price?.price)}</H3> : <Skeleton className="h-12 mb-2 w-full" />}
+                    <AddToBasketButton product={props.product} config={props.config} onAddToBasket={props.onAddToBasket} />
+                </>
+            }
+        </div>
+    </>
 }
 
 const ProductDetails = (props: { product: Product }) => {
     const details = [
         { name: 'Published', value: props.product.published?.toDateString() },
-        { name: 'Product ID', value: props.product.id },
-        { name: 'Product name', value: props.product.name },
+        { name: 'Updated', value: props.product.updated?.toDateString() },
         { name: 'Has requirements', value: !props.product.requirements == undefined }
     ];
     return (
-        <div>
+        <div className='pb-2'>
             {details.map((detail, i) => detail.value ? (
-                <div key={i} className="flex gap-2 font-extralight">
+                <div key={i} className="flex gap-2 font-extralight text-sm">
                     <div className="flex-auto text-left">{detail.name}</div>
                     <div className="flex-auto text-right">{detail.value}</div>
                 </div>
@@ -168,3 +219,19 @@ const RequirementItem = (props: { requirement: Requirement, products: { product?
         }
     </div >
 )
+
+export function useProductPrice(product?: Product) {
+    const [price, setPrice] = useState<Awaited<ReturnType<ShopClient['productPrice']>>>()
+    useEffect(() => {
+        const { storeProduct } = product ?? {}
+        if (storeProduct) SHOP
+            .productPrice({ productId: storeProduct.id })
+            .then(setPrice)
+    }, [])
+
+    return price
+}
+
+export function isProduct(content: Content): content is Product {
+    return 'storeProduct' in content && isStoreProduct(content.storeProduct)
+}
