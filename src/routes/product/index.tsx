@@ -5,7 +5,7 @@ import { Route } from './+types/index'
 
 
 export default function Products({ loaderData }: Route.ComponentProps) {
-    return <ContentLayout headerTitle='My Shop'>
+    return <ContentLayout headerTitle='Shop'>
 
         <div className='flex flex-row flex-wrap gap-2'>
             {loaderData.products?.map((product, i) => <div key={i} className='basis-1/3 grow pb-2'>

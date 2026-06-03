@@ -11,7 +11,6 @@ import Breadcrumbs from "../common/Breadcrumbs";
 import ModalContext from "../common/Modal";
 import { A, H2 } from "../common/typography";
 import { Button } from "../ui/button";
-import { debounce } from "#src/lib/utils";
 
 
 const DEMO_IMAGE = "https://images.pexels.com/photos/4215110/pexels-photo-4215110.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
@@ -177,15 +176,15 @@ export function ContentLayout(props: MainLayoutProps) {
                                     style={{ objectFit: 'cover' }}
                                 />
                                 : <div
-                                    className="w-full h-full bg-ocean/70 rounded-b-xl shadow-lg"
+                                    className="w-full h-full dark:bg-ocean/70 bg-white/70 rounded-b-xl shadow-lg"
                                 />
                             }
 
                             {props.headerTitle &&
                                 <div
                                     className={cn(
-                                        "absolute bottom-0 left-0 backdrop-blur-sm px-3 rounded-tr-lg text-white",
-                                        props.header?.href && "bg-black/80"
+                                        "absolute backdrop-blur-sm px-3 rounded-tr-lg",
+                                        props.header?.href ? "bg-black/80 text-white bottom-0 left-0" : "bottom-3 left-2"
                                     )}
                                 >
                                     <H2>{props.headerTitle}</H2>
