@@ -2,7 +2,7 @@
     "$schema": "../../../schema.json",
     "name": "The Speyside Line",
     "title": "The Speyside Line",
-    "created": "10 Jan 2020",
+    "created": "2019-06-14T00:00:00Z",
     "published": "2019-06-14T00:00:00Z",
     "excerpt": "Travel back in time to revisit the sights and sounds of Scotland's whisky country by train.",
     "requirements": [

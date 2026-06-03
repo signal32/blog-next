@@ -95,6 +95,7 @@ export const products = defineContent<Product>([
                 description: product?.description,
                 excerpt: product?.meta.excerpt,
                 customRouteFile: product?.meta.customRouteFile,
+                created: new Date(product.created),
                 published: new Date(product.created),
                 updated: new Date(product.updated),
             }
