@@ -1,5 +1,5 @@
 import { AddToBasketButton, OnAddToBasketCb } from '#src/components/AddToBasketButton.tsx';
-import { H3 } from '#src/components/common/typography';
+import { H3, P } from '#src/components/common/typography';
 import { Button } from '#src/components/ui/button';
 import { Skeleton } from '#src/components/ui/skeleton';
 import { formatCurrency } from '#src/lib/utils';
@@ -129,7 +129,9 @@ export function ProductSidebar(props: {
 
     return <>
         <div className='p-2 rounded-lg shadow-lg bg-slate-200 dark:bg-slate-800'>
-            <div className="flex gap-3 flex-wrap">
+            {props.product.excerpt && <P className='pb-2 font-medium'>{props.product.excerpt}</P>}
+
+            <div className="flex gap-3 flex-wrap pb-2">
                 {props.product.media?.gallery?.map((item, i) => (
                     <div
                         key={i}
@@ -139,11 +141,12 @@ export function ProductSidebar(props: {
                     </div>
                 ))}
             </div>
+
             <ProductDetails product={props.product} />
 
             {props.file &&
                 <>
-                    <Button asChild className='w-full'>
+                    <Button asChild className='w-full mt-2'>
                         <a href={props.file.href} target='_blank'>
                             <FileDown />
                             Download
@@ -166,12 +169,13 @@ export function ProductSidebar(props: {
 const ProductDetails = (props: { product: Product }) => {
     const details = [
         { name: 'Published', value: props.product.published?.toDateString() },
+        { name: 'Updated', value: props.product.updated?.toDateString() },
         { name: 'Has requirements', value: !props.product.requirements == undefined }
     ];
     return (
-        <div>
+        <div className='pb-2'>
             {details.map((detail, i) => detail.value ? (
-                <div key={i} className="flex gap-2 font-extralight">
+                <div key={i} className="flex gap-2 font-extralight text-sm">
                     <div className="flex-auto text-left">{detail.name}</div>
                     <div className="flex-auto text-right">{detail.value}</div>
                 </div>

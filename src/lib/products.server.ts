@@ -6,6 +6,7 @@ import { Content, defineContent, defineFileSource } from "./content.server";
 
 export interface Product extends Content {
     published?: Date,
+    updated?: Date,
     similar?: [ProductId],
     children?: [ProductId],
     parent?: ProductId,
@@ -80,6 +81,7 @@ export const products = defineContent<Product>([
         },
         async loader(descriptor) {
             const [product] = await SHOP.findProducts({ productIds: [descriptor.id] })
+            if (!product) throw new Error(`Could not load product with id ${descriptor.id}`)
             return {
                 ...descriptor,
                 coverImage: product?.meta.headerImageUrl,
@@ -91,7 +93,10 @@ export const products = defineContent<Product>([
                 public: product?.available,
                 storeProduct: product,
                 description: product?.description,
+                excerpt: product?.meta.excerpt,
                 customRouteFile: product?.meta.customRouteFile,
+                published: new Date(product.created),
+                updated: new Date(product.updated),
             }
         }
     }
