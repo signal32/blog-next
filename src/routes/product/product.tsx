@@ -13,12 +13,12 @@ import Drawer from "../../components/common/Drawer";
 import { Markdown } from '../../components/common/Markdown';
 import { useModalStore } from "../../components/common/Modal";
 import { type FileDetails, files } from "../../lib/file.server";
-import { type Requirement, products } from "../../lib/products.server";
+import { type Requirement, products, type Product } from "../../lib/products.server";
 import { Route } from './+types/product';
 import { Content } from '#src/lib/content.server.ts';
 import { isProduct as isStoreProduct } from 'store/src/product';
 
-export default function Product({ loaderData }: Route.ComponentProps) {
+export default function ProductRoute({ loaderData }: Route.ComponentProps) {
     const config: Config = {
         quantity: 1,
         meta: {},
