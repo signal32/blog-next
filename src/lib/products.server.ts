@@ -1,7 +1,7 @@
 import { SHOP } from '#src/shop.ts';
 import fs from 'fs';
 import { join } from "path";
-import { Product as StoreProduct } from "store";
+import { Product as StoreProduct } from "shop";
 import { Content, defineContent, defineFileSource } from "./content.server";
 
 export interface Product extends Content {

@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { Order, Product, updateOrderProductConfig, Config, configId as getConfigId } from "store"
+import { Order, Product, updateOrderProductConfig, Config, configId as getConfigId } from "shop"
 import { v4 } from 'uuid'
 
 export interface Basket {

@@ -4,7 +4,7 @@ import { cn } from "#src/lib/utils.ts";
 import { ArrowRight, LucideLoaderCircle, ShoppingBasket } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router";
-import { Config, configId as getConfigId } from "store";
+import { Config, configId as getConfigId } from "shop";
 import { P } from "./common/typography";
 import { Button } from "./ui/button";
 import { RemoveFromBasketButton } from "#src/routes/basket.tsx";

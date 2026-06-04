@@ -7,7 +7,7 @@ import { SHOP } from '#src/shop';
 import { ExternalLink, FileDown } from 'lucide-react';
 import { ReactElement, useEffect, useState } from 'react';
 import { Link } from 'react-router';
-import { Config, ShopClient } from 'store';
+import { Config, ShopClient } from 'shop';
 import { ContentLayout } from "../../components/app/BaseLayout";
 import Drawer from "../../components/common/Drawer";
 import { Markdown } from '../../components/common/Markdown';
@@ -16,7 +16,7 @@ import { type FileDetails, files } from "../../lib/file.server";
 import { type Requirement, products, type Product } from "../../lib/products.server";
 import { Route } from './+types/product';
 import { Content } from '#src/lib/content.server.ts';
-import { isProduct as isStoreProduct } from 'store/src/product';
+import { isProduct as isStoreProduct } from 'shop/src/product';
 
 export default function ProductRoute({ loaderData }: Route.ComponentProps) {
     const config: Config = {

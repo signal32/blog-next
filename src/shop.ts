@@ -1,4 +1,4 @@
-import { ShopClient } from "store";
+import { ShopClient } from "shop";
 import { env } from "./lib/utils";
 
 const shopUrl = env('VITE_BLOG_SHOP_URL')

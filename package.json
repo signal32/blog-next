@@ -39,7 +39,7 @@
         "rehype-raw": "^7.0.0",
         "sanitize-filename": "^1.6.4",
         "scss-utils": "git+ssh://git@github.com:signal32/scss-utils.git",
-        "store": "github:signal32/store",
+        "shop": "github:signal32/shop",
         "tailwind-merge": "^3.4.0",
         "three": "^0.183.2",
         "ts-pattern": "^4.0.5",

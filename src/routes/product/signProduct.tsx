@@ -20,7 +20,7 @@ import { ReactNode, useEffect, useMemo, useRef, useState, useSyncExternalStore }
 import { HexAlphaColorPicker } from 'react-colorful';
 import { useSearchParams } from "react-router";
 import sanitize from "sanitize-filename";
-import { Config, configId as getConfigId } from "store";
+import { Config, configId as getConfigId } from "shop";
 import * as THREE from "three";
 import { create, UseBoundStore } from "zustand";
 import { Route } from './+types/signProduct';

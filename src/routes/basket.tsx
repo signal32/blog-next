@@ -10,7 +10,7 @@ import { ArrowRightIcon, Check, LucideClockFading, Minus, Plus, ShoppingBasketIc
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { Popover, PopoverContent, PopoverHeader, PopoverTitle, PopoverTrigger } from "src/components/ui/popover"
-import { getOrderConfig, ShopClient } from 'store'
+import { getOrderConfig, ShopClient } from 'shop'
 import { Route } from './+types/basket'
 
 const PUBLIC_URL = env('VITE_BLOG_PUBLIC_URL')
