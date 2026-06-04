@@ -48,7 +48,7 @@ jobs:
         run: npm run build
         env:
           VITE_BLOG_SHOP_URL: ${{ vars.VITE_BLOG_SHOP_URL }}
-          VITE_BLOG_PUBLIC_URL: ${{ steps.deployment.outputs.page_url }}
+          VITE_BLOG_PUBLIC_URL: ${{ vars.VITE_BLOG_PUBLIC_URL }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
