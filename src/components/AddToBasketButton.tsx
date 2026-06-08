@@ -8,6 +8,7 @@ import { Config, configId as getConfigId } from "shop";
 import { P } from "./common/typography";
 import { Button } from "./ui/button";
 import { RemoveFromBasketButton } from "#src/routes/basket.tsx";
+import { useProductPrice } from "#src/routes/product/product.tsx";
 
 export type OnAddToBasketCb = (config: Config) => Promise<boolean | undefined>
 
@@ -22,8 +23,9 @@ export function AddToBasketButton(props: {
 
     const configs = Object.entries(basket.order.products[props.product.id]?.configs ?? {})
     const [adding, setAdding] = useState(false)
+    const price = useProductPrice(props.product)
 
-    return storeProduct !== undefined && <>
+    return storeProduct !== undefined && price?.available && <>
         {basket.order.products[props.product.id]?.configs[configId]
             ? <div className="flex justify-between items-center bg-green-700/50 p-2 rounded-lg shadow">
                 <P>In your basket!</P>

@@ -6,7 +6,7 @@ import { useBasket } from '#src/lib/basket'
 import { products } from '#src/lib/products.server'
 import { cn, env, formatCurrency, } from '#src/lib/utils'
 import { SHOP } from '#src/shop'
-import { ArrowRightIcon, Check, LucideClockFading, Minus, Plus, ShoppingBasketIcon, Trash, X } from 'lucide-react'
+import { ArrowRightIcon, Check, LucideClockFading, Minus, OctagonX, Plus, ShoppingBasketIcon, Trash, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { Popover, PopoverContent, PopoverHeader, PopoverTitle, PopoverTrigger } from "src/components/ui/popover"
@@ -51,11 +51,11 @@ export default function Basket({ loaderData }: Route.ComponentProps) {
                     </tr>
                 </thead>
                 <tbody>
-                    {calculations?.linePrices.map(({ productId, unitPrice, linePrice, optionId }, i) => {
+                    {calculations?.linePrices.map(({ productId, unitPrice, linePrice, optionId, invalid }, i) => {
                         const { product, config } = getOrderConfig(basket.order, productId, optionId)
 
                         return (
-                            <tr key={i} className={cn(i % 2 === 0 ? 'bg-air/10' : 'bg-air/5')}>
+                            <tr key={i} className={invalid ? 'bg-red-500/10' : cn(i % 2 === 0 ? 'bg-air/10' : 'bg-air/5')}>
                                 <td className={cn(cellClassName)}>
                                     <Link
                                         to={`/product/${loaderData.productIdsToSlug[product.id]}?configId=${optionId}`}
@@ -69,10 +69,11 @@ export default function Basket({ loaderData }: Route.ComponentProps) {
                                                     .map(([id, option]) => <p><b className="capitalize">{id}</b>: {option.value}</p>)}
                                                 </div>
                                             </div>
+                                            {invalid && <P className='text-red-500'><b>This item is invalid:</b> Please remove it from your basket.</P>}
                                         </div>
                                     </Link>
                                 </td>
-                                <td className={cellClassName}>{formatCurrency(unitPrice)}</td>
+                                <td className={cellClassName}>{unitPrice !== null ? formatCurrency(unitPrice) : <OctagonX className='stroke-red-700' />}</td>
                                 <td className={cn(cellClassName, 'flex flex-col-reverse md:flex-row items-center')}>
                                     <Button
                                         variant='link'

@@ -104,13 +104,7 @@ export function ProductSidebar(props: {
     file?: FileDetails,
 }) {
 
-    const [price, setPrice] = useState<Awaited<ReturnType<ShopClient['productPrice']>>>()
-    useEffect(() => {
-        const { storeProduct } = props.product
-        if (storeProduct) SHOP
-            .productPrice({ productId: storeProduct.id })
-            .then(setPrice)
-    }, [])
+    const price = useProductPrice(props.product)
 
     const modals = useModalStore();
     const openGallery = (img: string) => {
@@ -158,7 +152,7 @@ export function ProductSidebar(props: {
 
             {props.product.storeProduct &&
                 <>
-                    {price?.price ? <H3>{formatCurrency(price?.price)}</H3> : <Skeleton className="h-12 mb-2 w-full" />}
+                    {price !== undefined ? price.available ? <H3>{formatCurrency(price?.price)}</H3> : 'Currently unavailable' : <Skeleton className="h-12 mb-2 w-full" />}
                     <AddToBasketButton product={props.product} config={props.config} onAddToBasket={props.onAddToBasket} />
                 </>
             }
