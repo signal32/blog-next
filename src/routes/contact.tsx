@@ -45,21 +45,25 @@ export default function Contact({ loaderData }: Route.ComponentProps) {
                         ))}
                     </div>
                 </div>
-
             </div>
 
-            <div className="basis-2/5 grow bg-card/50 border-card-foreground/50 border-2 border-dashed p-2 rounded-xl not-sm:mt-40 not-sm:mx-15">
-                <div className="flex justify-center p-6">
-                    <img
-                        className="w-full max-w-sm rounded-full mb-2 border-3 border-white shadow-2xl -mt-40"
-                        src="/graphics/hamish_weir_portrait_square.jpg"
-                        alt="Portrait of Hamish Weir"
-                    />
+            <div className="basis-2/5 grow bg-card/50 border-card-foreground/50 border-2 border-dashed p-2 rounded-xl  flex sm:flex-col gap-4">
+                <div className="basis-1/2 grow">
+                    <div className="flex justify-center p-6">
+                        <img
+                            className="w-full max-w-sm rounded-full mb-2 border-3 border-white shadow-lg sm:-mt-40"
+                            src="/graphics/hamish_weir_portrait_square.jpg"
+                            alt="Portrait of Hamish"
+                        />
+                    </div>
+                    <h1 className='text-center text-4xl font-black font-handwritten'>Hamish Weir</h1>
+                    <h1 className='text-center text-lg font-medium mb-4'>{websiteConfig.personalTagline}</h1>
+                    <P className="flex justify-center gap-4 p-1 items-center"><MapPinIcon />Midlands, UK</P>
                 </div>
-                <h1 className='text-center text-4xl font-black font-handwritten'>Hamish Weir</h1>
-                <h1 className='text-center text-lg font-medium mb-4'>{websiteConfig.personalTagline}</h1>
-                <P className="flex justify-center gap-4 p-1 items-center"><MapPinIcon />Midlands, UK</P>
-                <p className="text-center border-t-2 border-card-foreground/50 border-dashed mt-2 pt-2">{websiteConfig.personalDescription}</p>
+
+                <div className="shrink basis-1/2">
+                    <p className="text-left sm:border-t-2 border-card-foreground/50 border-dashed mt-2 pt-2">{websiteConfig.personalDescription}</p>
+                </div>
             </div>
         </div>
     </ContentLayout>
