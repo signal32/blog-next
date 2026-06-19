@@ -44,9 +44,14 @@ const PostItem = ({ post, showImage = true }: PostItemProps) => {
         footer: <Button asChild className="w-full">
             <Link to={`${post.baseUrl}/${post.slug}`}>
                 {postIsProduct
-                    ? productPrice !== undefined
-                        ? productPrice.available ? formatCurrency(productPrice.price) : 'Currently unavailable'
-                        : <Loader2 className="animate-spin" />
+                    ? <div className="w-full flex justify-between">
+                        <p>More information</p>
+                        {
+                            productPrice !== undefined
+                                ? <p className="font-semibold">{productPrice.available ? formatCurrency(productPrice.price) : 'Unavailable'}</p>
+                                : <Loader2 className="animate-spin" />
+                        }
+                    </div>
                     : 'Read more'}
             </Link>
         </Button>
