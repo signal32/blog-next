@@ -1,6 +1,6 @@
 import { type RouteConfig, RouteConfigEntry, index, prefix, route } from '@react-router/dev/routes'
-import { products } from './lib/products.server'
 import { Content } from './lib/content.server'
+import { products } from './lib/products.server'
 
 
 function contentCustomFileRoutes(contents: Content[]) {
@@ -14,6 +14,7 @@ function contentCustomFileRoutes(contents: Content[]) {
 
 export default [
     index('routes/home.tsx'),
+    route('contact', './routes/contact.tsx'),
     route(':slug', './routes/page.tsx'),
     route('basket', './routes/basket.tsx'),
     route('order', './routes/order.tsx'),

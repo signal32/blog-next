@@ -1,11 +1,11 @@
 // import Image from "next/image";
 // import Link from "next/link";
 // import { useRouter } from "next/router";
+import { useBasket } from "#src/lib/basket";
+import { cn } from "#src/lib/utils";
 import { CreativeCommons, Menu, ShoppingBasket, X } from "lucide-react";
 import { ReactElement, ReactNode, useState } from "react";
 import { Link, useLocation } from "react-router";
-import { useBasket } from "#src/lib/basket";
-import { cn } from "#src/lib/utils";
 import { websiteConfig } from "../../routes/_app";
 import Breadcrumbs from "../common/Breadcrumbs";
 import ModalContext from "../common/Modal";
@@ -94,7 +94,7 @@ const AppBaseLayout = (props: MainLayoutProps) => {
                         <Link
                             to={'/'}
                             className="flex-auto max-w-xs p-2">
-                            <h1 className='text-white/85 hover:text-white text-3xl py-2 font-black font-handwritten sm:text-left'>Hamish Weir</h1>
+                            <h1 className='text-white/85 hover:text-white text-4xl py-2 font-black font-handwritten '>Hamish Weir</h1>
                         </Link>
                         <Button className="sm:hidden cursor-pointer" variant='outline' onClick={() => setShowNav(!showNav)}>{showNav ? <X /> : <Menu />}</Button>
                         <div className="not-sm:hidden"><Navigation /></div>

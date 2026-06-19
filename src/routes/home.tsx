@@ -1,21 +1,14 @@
 import { ContentLayout } from '../components/app/BaseLayout'
-import { useModalStore } from '../components/common/Modal'
 import PostList from '../components/posts/PostList'
-import { type Post, posts as yeet } from '../lib/posts.server'
-import { type Product, products } from '../lib/products.server'
+import { posts as yeet } from '../lib/posts.server'
+import { products } from '../lib/products.server'
 import type { Route } from './+types/home'
 
-import AboutHamish from '../components/AboutHamish'
-
-interface BlogProps {
-    posts: Post[],
-    products: Product[],
-    allContent: Post[],
-    encodedEmail: string,
-}
+import { A, H3 } from '#src/components/common/typography.tsx'
+import { Link } from 'react-router'
+import { websiteConfig } from './_app'
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-    const modalStore = useModalStore();
     const props = loaderData.props
 
     return <ContentLayout header={{ type: 'component', component: <HomeHero /> }}>
@@ -33,10 +26,22 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                 <div className={'flex gap-2'}>
 
                     {/* About */}
-                    <AboutHamish encodedEmail={props.encodedEmail} />
+                    <div className='basis-2/3 grow text-lg'>
+                        <div>
+                            <div className='float-left pr-6'>
+                                <p className='font-bold font-handwritten text-5xl'>Hello!</p>
+                            </div>
+                            <p>{websiteConfig.personalDescription}</p>
+                            <p>On this site you can find some of my published projects, as well as updates on things I am currently working on.</p>
+                        </div>
+                        <div>
+                            <H3 className='mt-4'>👋 Get in touch!</H3>
+                            <p>If you would like to get in touch, please send me an e-mail and I shall be happy to hear from you. My contact details are <A><Link to={'/contact'}>here</Link></A>.</p>
+                        </div>
+                    </div>
 
                     {/* Recent posts */}
-                    <div className={'flex-1 not-sm:hidden'}>
+                    <div className={'not-sm:hidden'}>
                         {/*<PostList posts={props.allContent} />*/}
                         <img
                             className='rounded-lg'
@@ -89,7 +94,7 @@ const HomeHero = () => (
             }}
         >
             <h1 className=' text-white text-5xl font-black font-handwritten'>Hamish Weir</h1>
-            <h1 className='text-white text-xl font-medium'>Software Engineer</h1>
+            <h1 className='text-white text-xl font-medium'>{websiteConfig.personalTagline}</h1>
 
             <div style={{ display: 'flex', gap: '1rem', paddingTop: '1.5rem' }}>
                 {/*<Button text='Software' href='/design'></Button>
@@ -118,7 +123,6 @@ export const loader = async () => {
             posts: allPosts,
             products: allProducts,
             allContent: allContent,
-            encodedEmail: Buffer.from('hdweir@outlook.com', 'utf8').toString('base64')
         }
     })
 }
