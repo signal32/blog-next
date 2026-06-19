@@ -3,7 +3,7 @@
 // import { useRouter } from "next/router";
 import { useBasket } from "#src/lib/basket";
 import { cn } from "#src/lib/utils";
-import { CreativeCommons, Menu, ShoppingBasket, X } from "lucide-react";
+import { CopyrightIcon, CreativeCommons, Menu, ShoppingBasket, X } from "lucide-react";
 import { ReactElement, ReactNode, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { websiteConfig } from "../../routes/_app";
@@ -113,8 +113,10 @@ const AppBaseLayout = (props: MainLayoutProps) => {
                     <div className="p-2 sm:px-6 sm:mb-2 rounded-lg rounded-t-lg shadow-lg dark:bg-gray-800 bg-gray-200">
                         <div className="mx-auto flex">
                             <div className="flex items-center gap-2">
-                                <CreativeCommons />
-                                <p className=" dark:text-gray-300 text-gray-600 text-xs">Unless otherwise stated, this website and its contents are licensed under <A href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</A>.</p>
+                                <CopyrightIcon />
+                                <p className=" dark:text-gray-300 text-gray-600 text-xs">
+                                    2026 Hamish Weir. Content on this website may be shared for personal, non-commercial use with attribution.
+                                </p>
                             </div>
 
                         </div>
