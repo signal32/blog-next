@@ -28,7 +28,7 @@ const PostItem = ({ post, showImage = true }: PostItemProps) => {
             }
 
             <div className="flex justify-between items-start flex-col">
-                <div className="w-full text-xl font-medium dark:text-slate-100 text-slate-800">{post.name}</div>
+                <div className="w-full text-xl font-medium dark:text-slate-100 text-slate-800 pb-1">{post.name}</div>
                 {
                     post.created &&
                     <DateDisplay date={new Date(post.created)} />
