@@ -4,7 +4,7 @@ import { Button } from '#src/components/ui/button';
 import { Skeleton } from '#src/components/ui/skeleton';
 import { formatCurrency } from '#src/lib/utils';
 import { SHOP } from '#src/shop';
-import { ExternalLink, FileDown } from 'lucide-react';
+import { ExternalLink, FileDown, HandHeart } from 'lucide-react';
 import { ReactElement, useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { Config, ShopClient } from 'shop';
@@ -156,6 +156,16 @@ export function ProductSidebar(props: {
                     <AddToBasketButton product={props.product} config={props.config} onAddToBasket={props.onAddToBasket} />
                 </>
             }
+
+            {props.product.donateUrl &&
+                <Button asChild className='w-full mt-2' variant={'outline'}>
+                    <a href={props.product.donateUrl} target='_blank'>
+                        <HandHeart />
+                        Leave a donation
+                    </a>
+                </Button>
+            }
+
         </div>
     </>
 }

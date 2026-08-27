@@ -19,7 +19,8 @@ export interface Product extends Content {
         /** Miscellaneous files belonging to the product */
         other: { slug: string, tag?: FileTag }[]
     },
-    storeProduct?: StoreProduct
+    storeProduct?: StoreProduct,
+    donateUrl?: string,
 }
 
 export type FileTag = 'manual' | 'misc'

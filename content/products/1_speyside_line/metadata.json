@@ -151,5 +151,6 @@
             }
         ]
     },
-    "public": true
+    "public": true,
+    "donateUrl": "https://buy.stripe.com/5kQ00jbVR9js8Uydfs63K00"
 }
