@@ -4,7 +4,7 @@ import { products } from '#src/lib/products.server'
 import { posts } from './src/lib/posts.server'
 
 export default {
-    ssr: false,
+    ssr: true,
     prerender: async ({ getStaticPaths }) => {
         return [
             ...getStaticPaths(),

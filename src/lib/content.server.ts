@@ -27,13 +27,6 @@ export interface ContentLocation {
     path: string,
 }
 
-export const CACHE = {
-    id: new Map<string, { descriptor: ContentDescriptor, dir: string }>(),
-    slug: new Map<string, string>(), // slug -> id
-    name: new Map<string, string>(), // name -> id
-    dir: new Map<string, string[]>(), // dir -> child content ids
-}
-
 /**
  * Extracts id, slug and name from file name of the form:
  * `<id>_<slug/name>.<extension>`
