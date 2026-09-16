@@ -96,8 +96,9 @@ export type ContentLibrary<T extends Content> = {
 export function defineContent<T extends Content>(
     sources: Source<T>[]
 ): ContentLibrary<T> {
+
     const cache = {
-        id: new Map<string, { descriptor: ContentDescriptor, source: Source<T>, content?: T }>(),
+        id: new Map<string, { descriptor: ContentDescriptor, source: Source<T> }>(),
         slug: new Map<string, string>(), // slug -> id
         name: new Map<string, string>(), // name -> id
         dir: new Map<string, string[]>(), // dir -> child content ids
@@ -123,13 +124,9 @@ export function defineContent<T extends Content>(
 
         const data = cache.id.get(id);
         if (!data) return
-        if (!data?.content) {
-            data.content = await data.source.loader(data.descriptor)
-            cache.id.set(id, data)
-        }
-
-        if (data.content?.public)
-            return data.content
+        const content = await data.source.loader(data.descriptor)
+        if (content?.public)
+            return content
     };
 
     return {
