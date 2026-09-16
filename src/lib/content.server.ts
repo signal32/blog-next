@@ -1,7 +1,6 @@
 import { join } from "path";
 import fs from 'fs';
 
-const DELIMINATOR = '_';
 
 export interface ContentDescriptor {
     id: string,
@@ -37,17 +36,12 @@ export interface ContentLocation {
 export function defineFileSource<T extends Content>(dir: string, loader: (descriptor: ContentDescriptor, dir: string) => T | Promise<T>): Source<T> {
 
     const fileNameToDescriptor = (fileName: string): ContentDescriptor => {
-        const idEndIdx = Math.max(fileName.indexOf(DELIMINATOR), 0)
-        const nameStartIdx = idEndIdx > 0 ? idEndIdx + DELIMINATOR.length : 0
         const extensionIdx = fileName.lastIndexOf('.')
-
         return {
             fileName,
-            id: idEndIdx > 0
-                ? fileName.substring(0, idEndIdx)
-                : fileName,
-            slug: fileName.substring(nameStartIdx, extensionIdx > 0 ? extensionIdx : undefined),
-            name: fileName.substring(nameStartIdx, extensionIdx > 0 ? extensionIdx : undefined),
+            id: fileName,
+            slug: fileName.substring(0, extensionIdx > 0 ? extensionIdx : undefined),
+            name: fileName.substring(0, extensionIdx > 0 ? extensionIdx : undefined),
         }
     }
 
