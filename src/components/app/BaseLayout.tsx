@@ -7,7 +7,6 @@ import { CopyrightIcon, CreativeCommons, Menu, ShoppingBasket, X } from "lucide-
 import { ReactElement, ReactNode, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { websiteConfig } from "../../routes/_app";
-import Breadcrumbs from "../common/Breadcrumbs";
 import ModalContext from "../common/Modal";
 import { A, H2 } from "../common/typography";
 import { Button } from "../ui/button";
@@ -196,10 +195,7 @@ export function ContentLayout(props: MainLayoutProps) {
                 }
             </div>
 
-            <div className="pt-2">
-                <Breadcrumbs />
 
-            </div>
 
             <main className="p-2 flex-grow">
                 <div>

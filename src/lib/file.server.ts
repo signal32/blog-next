@@ -2,31 +2,16 @@ import fs from 'fs';
 import { join } from 'path';
 import { Content, ContentDescriptor, defineContent, defineFileSource } from './content.server';
 
-const PUBLIC_FILE_DIR = join(process.cwd(), 'public', 'content', 'files');
-const API_FILE_DIR = join(process.cwd(), 'public', 'content', 'files');
-const METHODS = {
-    public: { dir: API_FILE_DIR, href: (details: FileDetails) => `/content/files/${details.fileName}` },
-    api: { dir: PUBLIC_FILE_DIR, href: (details: FileDetails) => `/api/file?slug=${details.slug}` },
-    filerun: { dir: undefined, href: (details: FileDetails) => `https://files.hamishweir.uk/wl/?id=${details.fileName}&fmode=download` }
-};
-
-type Method = keyof typeof METHODS;
-
 export interface FileDetails extends Content {
     type: string
-    method: Method,
     href: string
 }
 
 export const files = defineContent<FileDetails>([defineFileSource('content/files', async (desc, path) => {
     const metadataPath = getMetadataPath(path);
     const details = getDetails(desc, path, metadataPath);
-
-    details.href = METHODS[details.method].href(details);
     return details;
 })])
-
-export const getFileDir = (file: FileDetails) => METHODS[file.method].dir;
 
 /**
  * Files can either:
@@ -52,6 +37,5 @@ const getDetails = (desc: ContentDescriptor, path: string, metadataPath?: string
     }
     else return {
         type: path.substring(path.indexOf('.') + 1),
-        method: 'public',
     } as FileDetails;
 }
