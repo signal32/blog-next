@@ -146,7 +146,7 @@ export function ProductSidebar(props: {
                             Download
                         </a>
                     </Button>
-                    <p className="italic text-sm text-right">{props.file.fileName}</p>
+                    <p className="italic text-sm text-right">{props.file.name}</p>
                 </>
             }
 

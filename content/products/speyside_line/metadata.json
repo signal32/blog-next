@@ -142,11 +142,11 @@
         ]
     },
     "files": {
-        "primary": "speyside_line_201",
+        "primary": "speyside_line",
         "other": [
             {
                 "name": "Test Product Manual",
-                "file": "speyside_line_201",
+                "file": "speyside_line",
                 "tag": "manual"
             }
         ]
