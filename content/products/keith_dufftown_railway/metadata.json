@@ -1,0 +1,94 @@
+{
+    "$schema": "../../../schema.json",
+    "name": "Keith and Dufftown Railway",
+    "title": "Keith and Dufftown Railway",
+    "created": "2016-01-01T00:00:00Z",
+    "published": "2016-01-01T00:00:00Z",
+    "excerpt": "The Keith And Dufftown Railway runs from Keith Town station to Dufftown via Drummuir. ",
+    "requirements": [
+        {
+            "type": "external",
+            "id": "DTG London - Brighton",
+            "href": [
+                "https://store.steampowered.com/app/208280/Train_Simulator_London_to_Brighton_Route_AddOn/"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "DTG Western Lines of Scotland",
+            "href": [
+                "https://store.steampowered.com/app/222554/Train_Simulator_Western_Lines_of_Scotland_Route_AddOn/"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "RSC Isle of Wight",
+            "href": [
+                "https://store.steampowered.com/app/24021/Train_Simulator_Isle_of_Wight_Route_AddOn/"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "RSC EU Assets Pack (bundled with many routes)",
+            "href": [
+                "https://steamdb.info/app/208300/subs/"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "AP Station Pack (bundled with many routes)",
+            "href": [
+                "https://steamdb.info/app/24086/subs/"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "SAD Assets Pack",
+            "href": [
+                "https://rail-sim.de/forum/filebase/entry/3305-altenburg-wildau-v-3-12/"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "UKTS Blocks-Lofts-Bridges #1",
+            "href": [
+                "https://www.golden-age-developments.co.uk/ukts-freeware-packs.html"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "UKTS Clutter",
+            "href": [
+                "https://www.golden-age-developments.co.uk/ukts-freeware-packs.html"
+            ]
+        },
+        {
+            "type": "external",
+            "id": "SBS Vegetation",
+            "href": [
+                "https://rail-sim.de/forum/wsif/index.php/Entry/3229-SBS-Vegetation-1-0/?s=cd523d796b3b1630b23a3eb9022f9abb668708d8#files"
+            ]
+        }
+    ],
+    "media": {
+        "banner": "https://s3.finch.hamishweir.uk/shop-public/releases/kdr_images/kdr_4.png",
+        "gallery": [
+            "https://s3.finch.hamishweir.uk/shop-public/releases/kdr_images/kdr_1.png",
+            "https://s3.finch.hamishweir.uk/shop-public/releases/kdr_images/kdr_2.png",
+            "https://s3.finch.hamishweir.uk/shop-public/releases/kdr_images/kdr_3.png",
+            "https://s3.finch.hamishweir.uk/shop-public/releases/kdr_images/kdr_4.png"
+        ]
+    },
+    "files": {
+        "primary": "kdr_v2",
+        "other": [
+            {
+                "name": "Version 1",
+                "file": "kdr_v1",
+                "tag": "manual"
+            }
+        ]
+    },
+    "public": true,
+    "donateUrl": "https://buy.stripe.com/5kQ00jbVR9js8Uydfs63K00"
+}
