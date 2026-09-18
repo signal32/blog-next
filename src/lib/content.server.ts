@@ -1,7 +1,8 @@
 import { join } from "path";
-import fs from 'fs';
-
-const DELIMINATOR = '_';
+import fs from "fs";
+import { range } from "./utils";
+import { index, prefix, route, RouteConfigEntry } from "@react-router/dev/routes";
+import { LoaderFunctionArgs } from "react-router";
 
 export interface ContentDescriptor {
     id: string,
@@ -27,13 +28,6 @@ export interface ContentLocation {
     path: string,
 }
 
-export const CACHE = {
-    id: new Map<string, { descriptor: ContentDescriptor, dir: string }>(),
-    slug: new Map<string, string>(), // slug -> id
-    name: new Map<string, string>(), // name -> id
-    dir: new Map<string, string[]>(), // dir -> child content ids
-}
-
 /**
  * Extracts id, slug and name from file name of the form:
  * `<id>_<slug/name>.<extension>`
@@ -44,17 +38,12 @@ export const CACHE = {
 export function defineFileSource<T extends Content>(dir: string, loader: (descriptor: ContentDescriptor, dir: string) => T | Promise<T>): Source<T> {
 
     const fileNameToDescriptor = (fileName: string): ContentDescriptor => {
-        const idEndIdx = Math.max(fileName.indexOf(DELIMINATOR), 0)
-        const nameStartIdx = idEndIdx > 0 ? idEndIdx + DELIMINATOR.length : 0
         const extensionIdx = fileName.lastIndexOf('.')
-
         return {
             fileName,
-            id: idEndIdx > 0
-                ? fileName.substring(0, idEndIdx)
-                : fileName,
-            slug: fileName.substring(nameStartIdx, extensionIdx > 0 ? extensionIdx : undefined),
-            name: fileName.substring(nameStartIdx, extensionIdx > 0 ? extensionIdx : undefined),
+            id: fileName,
+            slug: fileName.substring(0, extensionIdx > 0 ? extensionIdx : undefined),
+            name: fileName.substring(0, extensionIdx > 0 ? extensionIdx : undefined),
         }
     }
 
@@ -82,6 +71,29 @@ export type ContentLibrary<T extends Content> = {
     getById: (id: string) => Promise<T | undefined>
     getBySlug: (slug: string) => Promise<T | undefined>
     getByName: (name: string) => Promise<T | undefined>
+
+    pages: () => Promise<number>
+    page: (pageNo: number) => Promise<T[]>
+    loadPage: (args: LoaderFunctionArgs) => Promise<ListPageContent<T>>
+
+    routes: () => RouteConfigEntry[]
+    prerenderPaths: () => Promise<string[]>
+}
+
+export type ContentRoutingConfig = {
+    /** URL path relative to app root under which content pages should be served, for example: `posts` */
+    basePath: string
+    /** FS path to index page module relative to src directory, for example: `./routes/posts/index.tsx` */
+    indexPage: string
+    /**
+     * FS path to listing page module relative to src directory.
+     * This should use `content.loadPage` as the `loader`.
+     */
+    listPage: string //
+    /** FS path to main content display page module relative to src directory.*/
+    contentPage: string,
+    /** Number of results to be displayed on each list page. */
+    pageSize: number,
 }
 
 /**
@@ -94,10 +106,12 @@ export type ContentLibrary<T extends Content> = {
  * @returns
  */
 export function defineContent<T extends Content>(
-    sources: Source<T>[]
+    sources: Source<T>[],
+    routing?: ContentRoutingConfig,
 ): ContentLibrary<T> {
+
     const cache = {
-        id: new Map<string, { descriptor: ContentDescriptor, source: Source<T>, content?: T }>(),
+        id: new Map<string, { descriptor: ContentDescriptor, source: Source<T> }>(),
         slug: new Map<string, string>(), // slug -> id
         name: new Map<string, string>(), // name -> id
         dir: new Map<string, string[]>(), // dir -> child content ids
@@ -123,13 +137,9 @@ export function defineContent<T extends Content>(
 
         const data = cache.id.get(id);
         if (!data) return
-        if (!data?.content) {
-            data.content = await data.source.loader(data.descriptor)
-            cache.id.set(id, data)
-        }
-
-        if (data.content?.public)
-            return data.content
+        const content = await data.source.loader(data.descriptor)
+        if (content?.public)
+            return content
     };
 
     return {
@@ -149,12 +159,69 @@ export function defineContent<T extends Content>(
             return items
         },
 
+        routes() {
+            return routing ? prefix(routing.basePath, [
+                index(routing.indexPage),
+                route(':slug', routing.contentPage),
+                route('page/:page?', routing.listPage),
+            ]) : []
+        },
+
+        async prerenderPaths() {
+            return routing ? [
+                `/${routing.basePath}`,
+                ...(await this.getAllDetailed()).flatMap(content => [
+                    `/${routing.basePath}/${content.slug}`,
+                    `/api/content/${routing.basePath}/${content.id}`
+                ]),
+                `/${routing.basePath}/page`,
+                ...range(1, await this.pages() + 1).map(p => `/${routing.basePath}/page/${p}`),
+            ] : []
+        },
+
         getById,
         getBySlug(slug: string) {
             return getById(cache.slug.get(slug) || '')
         },
         getByName(name: string) {
             return getById(cache.name.get(name) || '')
+        },
+        async pages() {
+            if (!routing) return 0
+
+            const content = await this.getAll()
+            return Math.ceil(content.length / routing.pageSize)
+        },
+
+        async page(pageNo) {
+            if (!routing) return []
+
+            const start = pageNo * routing.pageSize
+            const end = start + routing.pageSize
+            const content = (await this.getAll()).slice(start, end)
+            let detailedContent = await Promise.all(content.map(({ id }) => getById(id)))
+            return detailedContent.filter(content => content !== undefined)
+        },
+
+        async loadPage({params}) {
+            const page = +(params['page'] ?? 1)
+            const totalPages = await this.pages()
+
+            return {
+                page,
+                totalPages,
+                content: await this.page(page - 1),
+                nextPagePath: routing  && page < totalPages ? `/${routing.basePath}/page/${page + 1}` : undefined,
+                prevPagePath: routing && page > 1 ? `/${routing.basePath}/page/${page - 1}` : undefined,
+            }
         }
     }
+}
+
+export type ListPageContent<T extends Content> = {
+    page: number,
+    totalPages: number,
+    content: T[],
+    nextPagePath?: string,
+    prevPagePath?: string,
 }

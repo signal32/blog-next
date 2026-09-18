@@ -1,8 +1,8 @@
+import { P } from '#src/components/common/typography.tsx';
 import { pages } from '#src/lib/pages.server';
 import { ContentLayout } from "../components/app/BaseLayout";
 import DateDisplay from "../components/common/DateDisplay";
 import { Markdown } from '../components/common/Markdown';
-import { Text } from '../components/common/Text';
 import { Route } from './+types/page';
 
 export default function Page({ loaderData: { page } }: Route.ComponentProps) {
@@ -15,7 +15,7 @@ export default function Page({ loaderData: { page } }: Route.ComponentProps) {
             }
             : undefined}
     >
-        <Text>{page.created && <DateDisplay date={page.created.toString()} />}</Text>
+        <P>{page.created && <DateDisplay date={page.created.toString()} />}</P>
         <Markdown content={page.content ?? ''} />
     </ContentLayout>
 }

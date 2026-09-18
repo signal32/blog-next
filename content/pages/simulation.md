@@ -13,16 +13,20 @@ You can follow Rails Developments on [Facebook](https://www.facebook.com/RailsDe
 ## Releases
 
 <div>
-    <Content library="products" id="1"></Content>
+    <Content library="products" id="speyside_line"></Content>
 </div>
 
 ## Made to Order Bespoke Scenery
 
 With over a decade of experience working with Train Simulator, I am able to deliver high quality bespoke scenery items to suit your requirements.
 
-Station signage is a popular request. For this please see my automated (and near instant) [Custom Station Sign Builder](/product/Train-Simulator-Classic-Instant-Custom-Signage).
+Station signage is a popular request. For this please see my automated (and near instant) [Custom Station Sign Builder](/product/Train-Simulator-Classic-Instant-Custom-Signage):
+<div>
+    <Content library="products" slug="Train-Simulator-Classic-Custom-Signage"></Content>
+</div>
+<br/>
 
-Examples of work include: station buildings, lineside infrastructure, turntables, bridges, fence lofts and industrial facilities.
+Examples of bespoke work include: station buildings, lineside infrastructure, turntables, bridges, fence lofts and industrial facilities.
 
 <grid>
 ![custom_track_3](https://s3.finch.hamishweir.uk/public/ts_custom_asset_portfolio/custom_track_3_s.jpg)

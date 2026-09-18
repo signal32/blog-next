@@ -43,7 +43,6 @@ export default function ProductRoute({ loaderData }: Route.ComponentProps) {
 export async function loader({ params }: Route.LoaderArgs) {
     const product = await products.getBySlug(params['slug'] ?? '');
     if (!product) throw new Response(undefined, { status: 404 })
-
     // Fetch internal products for dependencies
     // TODO do this for children, parent & related products
     const dependencyProducts = await Promise.all(product?.requirements?.filter(item => item.type == 'internal')
@@ -146,7 +145,7 @@ export function ProductSidebar(props: {
                             Download
                         </a>
                     </Button>
-                    <p className="italic text-sm text-right">{props.file.fileName}</p>
+                    <p className="italic text-sm text-right">{props.file.name}</p>
                 </>
             }
 

@@ -2,9 +2,16 @@ import fs from 'fs';
 import { readFile } from 'fs/promises';
 import matter from 'gray-matter';
 import { join } from 'path';
-import { Content, defineContent, defineFileSource } from './content.server';
+import { Content, ContentRoutingConfig, defineContent, defineFileSource } from './content.server';
 
 const POST_DIR = join(process.cwd(), '/content/posts');
+const POST_ROUTING_CONFIG: ContentRoutingConfig = {
+    basePath: 'posts',
+    contentPage: './routes/posts/post.tsx',
+    listPage: './routes/posts/list.tsx',
+    indexPage: './routes/posts/index.tsx',
+    pageSize: 3
+}
 
 export interface Post extends Content {
     author?: string
@@ -21,26 +28,27 @@ export function isPost(obj: any): obj is Post {
             'created' in obj && !isNaN(new Date(obj.created).valueOf())
             || !('created' in obj)
         )
-        //&& 'date' in obj && typeof obj.date === 'string'
-        // && ...
     );
 }
 
-export const posts = defineContent<Post>([
-    defineFileSource('content/posts', async (descriptor, path) => {
-        const fileContents = await readFile(path)
-        const { data, content } = matter(fileContents)
+export const posts = defineContent<Post>(
+    [
+        defineFileSource('content/posts', async (descriptor, path) => {
+            const fileContents = await readFile(path)
+            const { data, content } = matter(fileContents)
 
-        const post = {
-            ...descriptor,
-            ...data,
-            content,
-            baseUrl: '/blog'
-        } as Post
-        if (isPost(post)) return post
-        else throw new Error("Invalid post data")
-    })
-])
+            const post = {
+                ...descriptor,
+                ...data,
+                content,
+                baseUrl: '/posts'
+            } as Post
+            if (isPost(post)) return post
+            else throw new Error("Invalid post data")
+        })
+    ],
+    POST_ROUTING_CONFIG,
+)
 
 export function getPostSlugs() {
     return fs.readdirSync(POST_DIR);
@@ -100,4 +108,11 @@ export function getAllPosts(fields: string[] = DEFAULT_POST_FIELDS) {
         .map((slug) => getPostBySlug(slug, fields))
         .sort((post1, post2) => (post1?.created || 0) > (post2?.created || 1) ? -1 : 1);
     return posts;
+}
+
+export const BlOG_PAGE_SIZE = 3
+export async function getBlogPosts() {
+    const allPosts = await posts.getAllDetailed()
+    const pages = Math.ceil(allPosts.length / BlOG_PAGE_SIZE)
+    return { allPosts, pages }
 }

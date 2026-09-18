@@ -2,7 +2,15 @@ import { SHOP } from '#src/shop.ts';
 import fs from 'fs';
 import { join } from "path";
 import { Product as StoreProduct } from "shop";
-import { Content, defineContent, defineFileSource } from "./content.server";
+import { Content, ContentRoutingConfig, defineContent, defineFileSource } from "./content.server";
+
+const PRODUCT_ROUTING_CONFIG: ContentRoutingConfig = {
+    basePath: 'products',
+    contentPage: './routes/product/product.tsx',
+    listPage: './routes/product/list.tsx',
+    indexPage: './routes/product/index.tsx',
+    pageSize: 3
+}
 
 export interface Product extends Content {
     published?: Date,
@@ -66,7 +74,7 @@ export const products = defineContent<Product>([
             ...product,
             ...(product.media?.banner ? { coverImage: product.media.banner } : {}), // Can't be undefined
             ...(product.description && !product.excerpt ? { excerpt: product.description.slice(0, 255).trim() } : {}),
-            baseUrl: '/product',
+            baseUrl: '/products',
         }
     }),
     // Load products from Shop web service
@@ -90,7 +98,7 @@ export const products = defineContent<Product>([
                     gallery: product?.meta.imageUrls,
                     banner: product?.meta.headerImageUrl
                 },
-                baseUrl: '/product',
+                baseUrl: '/products',
                 public: product?.available,
                 storeProduct: product,
                 description: product?.description,
@@ -102,4 +110,4 @@ export const products = defineContent<Product>([
             }
         }
     }
-])
+], PRODUCT_ROUTING_CONFIG)

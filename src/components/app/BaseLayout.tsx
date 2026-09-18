@@ -7,7 +7,6 @@ import { CopyrightIcon, CreativeCommons, Menu, ShoppingBasket, X } from "lucide-
 import { ReactElement, ReactNode, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { websiteConfig } from "../../routes/_app";
-import Breadcrumbs from "../common/Breadcrumbs";
 import ModalContext from "../common/Modal";
 import { A, H2 } from "../common/typography";
 import { Button } from "../ui/button";
@@ -186,20 +185,17 @@ export function ContentLayout(props: MainLayoutProps) {
                                 <div
                                     className={cn(
                                         "absolute backdrop-blur-sm px-3 rounded-tr-lg",
-                                        props.header?.href ? "bg-black/80 text-white bottom-0 left-0" : "bottom-3 left-2"
+                                        props.header?.href ? "bg-gray-200/80 dark:bg-gray-900/75 dark:text-primary-f bottom-0 left-0" : "bottom-3 left-2"
                                     )}
                                 >
-                                    <H2>{props.headerTitle}</H2>
+                                    <H2 className="not-sm:text-xl">{props.headerTitle}</H2>
                                 </div>
                             }
                         </div>
                 }
             </div>
 
-            <div className="pt-2">
-                <Breadcrumbs />
 
-            </div>
 
             <main className="p-2 flex-grow">
                 <div>

@@ -61,3 +61,7 @@ export function env(name: string) {
         return process.env[name]
     }
 }
+
+export function range(start: number, end: number) {
+    return Array(end - start + 1).fill(0).map((_, idx) => start + idx)
+}

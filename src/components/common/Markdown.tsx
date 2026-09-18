@@ -17,7 +17,6 @@ export const Markdown = (props: {
     const modal = useModalStore()
 
     return (
-
         <ReactMarkdown
             rehypePlugins={[rehypeRaw]}
             disallowedElements={[]}
@@ -26,14 +25,28 @@ export const Markdown = (props: {
                     const library = attrs['library']
                     if (!library) throw new Error('No library specified')
                     const contentId = attrs['id']
-                    if (!contentId) throw new Error('No content ID')
+                    const contentSlug = attrs['slug']
+                    if (!contentId && !contentSlug) throw new Error('No content ID or slug')
 
                     const [content, setContent] = useState<Content>()
 
                     useEffect(() => {
-                        fetch(`/api/content/${library}/${contentId}`)
-                            .then(res => res.json())
-                            .then(setContent)
+                        if (contentId) {
+                            fetch(`/api/content/${library}/${contentId}`)
+                                .then(res => res.json())
+                                .then(setContent)
+                        }
+                        else {
+                            fetch('/api/content-list')
+                                .then(res => res.json())
+                                .then(list => {
+                                    const id = list.find(list => list.id === library)
+                                        .content.find(content => content.slug === contentSlug).id
+                                    return fetch(`/api/content/${library}/${id}`)
+                                })
+                                .then(res => res.json())
+                                .then(setContent)
+                        }
                     }, [attrs['id']])
 
                     return content
