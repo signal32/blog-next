@@ -3,14 +3,50 @@ import PostList from '../components/posts/PostList'
 import { posts as yeet } from '../lib/posts.server'
 import { products } from '../lib/products.server'
 import type { Route } from './+types/home'
-
-import { A, H1, H3, H4 } from '#src/components/common/typography.tsx'
+import { A, H3, P } from '#src/components/common/typography.tsx'
 import { Button } from '#src/components/ui/button.tsx'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '#src/components/ui/carousel.tsx'
 import { cn } from 'cn'
 import Autoplay from "embla-carousel-autoplay"
 import { Link } from 'react-router'
 import { websiteConfig } from './_app'
+
+const CAROUSEL_ITEMS = [
+    {
+        background: 'https://s3.finch.hamishweir.uk/public/rails_north_east/dava/dev/scenery_stream_01.jpg',
+        textBackgroundColour: '#293126da',
+        heading: 'The Dava Railway',
+        subheading: 'Rugged and remote. A challenge for the most seasoned driver. Coming soon to Train Simulator.',
+        actions: [{
+            title: 'Read the latest update',
+            href: '/posts/dava-dev-update-01'
+        }]
+    },
+    {
+        background: 'https://s3.finch.hamishweir.uk/shop-public/sign_images/signs_all_1-small.jpg',
+        heading: 'Custom Station Signs',
+        subheading: 'Instantly create your own station signage for Train Simulator.',
+        actions: [
+            {
+                title: 'Build now!',
+                href: '/products/Train-Simulator-Classic-Custom-Signage'
+            },
+            {
+                title: 'Bespoke asset creation',
+                href: '/simulation#bespoke-scenery'
+            }
+        ]
+    },
+    {
+        background: '/graphics/speyside_line/Screenshot_SB-The-Speyside-Line_57.45819-3.35020_12-00-36-1920x1080.jpg',
+        heading: 'The Speyside Line',
+        subheading: "Travel back in time to revisit the sights and sounds of Scotland's Whisky country by train.",
+        actions: [{
+            title: 'Go to downloads',
+            href: '/products/speyside_line'
+        }]
+    },
+]
 
 
 export default function Home({ loaderData }: Route.ComponentProps) {
@@ -59,51 +95,13 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     </ContentLayout>
 }
 
-const CAROSEL_ITEMS = [
-    {
-        background: 'https://s3.finch.hamishweir.uk/public/rails_north_east/dava/dev/scenery_stream_01.jpg',
-        textBackgroundColour: '#293126da',
-        heading: 'The Dava Railway',
-        subheading: 'Rugged and remote. A challenge for the most seasoned driver. Coming soon to Train Simulator.',
-        actions: [{
-            title: 'Read the latest update',
-            href: '/posts/dava-dev-update-01'
-        }]
-    },
-    {
-        background: 'https://s3.finch.hamishweir.uk/shop-public/sign_images/signs_all_1-small.jpg',
-        heading: 'Custom Station Signs',
-        subheading: 'Instantly create your own station signage for Train Simulator.',
-        actions: [
-            {
-                title: 'Build now!',
-                href: '/products/Train-Simulator-Classic-Custom-Signage'
-            },
-            {
-                title: 'Bespoke asset creation',
-                href: '/simulation#bespoke-scenery'
-            }
-        ]
-    },
-    {
-        background: '/graphics/speyside_line/Screenshot_SB-The-Speyside-Line_57.24829-3.75247_14-01-56-1920x1080.jpg',
-        heading: 'The Speyside Line',
-        subheading: "Travel back in time to revisit the sights and sounds of Scotland's Whisky country by train.",
-        actions: [{
-            title: 'Go to downloads',
-            href: '/products/speyside_line'
-        }]
-    },
-]
-
 const HomeHero = () => (
-    <Carousel opts={{loop: true }} plugins={[Autoplay({delay: 7000})]}>
+    <Carousel opts={{loop: true }} plugins={[Autoplay({delay: 15000})]}>
         <CarouselContent className='gap-5'>
-            {CAROSEL_ITEMS.map(item => <CarouselItem>
+            {CAROUSEL_ITEMS.map(item => <CarouselItem>
                 <div
                     className='h-96 flex rounded-2xl overflow-clip'
                     style={{
-                        // padding: '2.2rem',
                         backgroundPosition: 'center',
                         backgroundSize: 'cover',
                         backgroundImage: `url('${item.background}')`,
@@ -111,25 +109,25 @@ const HomeHero = () => (
                 >
                     <div
                         className={cn(
-                            'flex flex-col justify-center text-white p-4 bg-ocean/80',
+                            'flex flex-col justify-center text-white p-2 sm:p-4 bg-ocean/80',
                             'self-end basis-full',
                             'sm:h-full sm:self-start sm:basis-sm'
                         )}
                         style={{ backgroundColor: item.textBackgroundColour }}>
-                        <H1 className='pt-0'>{item.heading}</H1>
-                        <H4>{item.subheading}</H4>
-
-                        <div className='flex gap-2 pt-4'>
+                        <H3 className='pt-0 sm:text-3xl'>{item.heading}</H3>
+                        <P className='sm:text-lg'>{item.subheading}</P>
+                        <div className='flex gap-2 pt-2 sm:pt-4'>
                             {item.actions?.map((action, index) => <Button key={index} variant={index === 0 ? 'outline' : 'link'}>
                                 <Link to={action.href}>{ action.title }</Link>
                             </Button>)}
                         </div>
+
                     </div>
                 </div>
             </CarouselItem>)}
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
+      <CarouselPrevious className='not-lg:hidden'/>
+      <CarouselNext className='not-lg:hidden' />
     </Carousel>
 )
 
