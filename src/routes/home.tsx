@@ -97,10 +97,10 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
 const HomeHero = () => (
     <Carousel opts={{loop: true }} plugins={[Autoplay({delay: 15000})]}>
-        <CarouselContent className='gap-5'>
+        <CarouselContent className='gap-4'>
             {CAROUSEL_ITEMS.map(item => <CarouselItem>
                 <div
-                    className='h-96 flex rounded-2xl overflow-clip'
+                    className='h-96 flex rounded-lg overflow-clip'
                     style={{
                         backgroundPosition: 'center',
                         backgroundSize: 'cover',
