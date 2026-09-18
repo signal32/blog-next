@@ -50,7 +50,7 @@ export function AddToBasketButton(props: {
             <P className="text-sm pt-2">In your basket:</P>
             {configs.map(([thisConfigId, config], index) => {
                 const currentConfigId = getConfigId(config)
-                return <Link to={`/product/${props.product.slug}?configId=${currentConfigId}`}>
+                return <Link to={`/products/${props.product.slug}?configId=${currentConfigId}`}>
                     <div
                         key={index}
                         className={cn(

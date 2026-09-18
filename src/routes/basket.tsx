@@ -58,7 +58,7 @@ export default function Basket({ loaderData }: Route.ComponentProps) {
                             <tr key={i} className={invalid ? 'bg-red-500/10' : cn(i % 2 === 0 ? 'bg-air/10' : 'bg-air/5')}>
                                 <td className={cn(cellClassName)}>
                                     <Link
-                                        to={`/product/${loaderData.productIdsToSlug[product.id]}?configId=${optionId}`}
+                                        to={`/products/${loaderData.productIdsToSlug[product.id]}?configId=${optionId}`}
                                     >
                                         <div className='flex flex-col'>
                                             <P className='hover:underline text-lg font-bold'>{product.name}</P>

@@ -195,7 +195,7 @@ const RequirementItem = (props: { requirement: Requirement, products: { product?
             <div key={3} className="flex items-center gap-2">
                 <div key={2} className="flex items-center gap-2">
                     <Button asChild variant={'link'} className='cursor-pointer'>
-                        <Link to={'/product/' + props.requirement.id}>Details</Link>
+                        <Link to={'/products/' + props.requirement.id}>Details</Link>
                     </Button>
                 </div>
                 <Button asChild variant={'outline'} className='cursor-pointer'>
