@@ -4,7 +4,7 @@ import { ContentLayout } from "../../components/app/BaseLayout";
 import { Route } from "./+types/list";
 
 export default function ({ loaderData }: Route.ComponentProps) {
-    return <ContentLayout>
+    return <ContentLayout headerTitle="Products">
         <ContentPaginationPage {...loaderData} />
     </ContentLayout>
 }

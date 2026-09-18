@@ -9,7 +9,6 @@ import { Route } from './+types/index'
 
 export default function Products({ loaderData }: Route.ComponentProps) {
     return <ContentLayout headerTitle='Shop'>
-
         <div className='flex justify-between items-center'>
             <H3>Featured:</H3>
             <Button variant={'link'}><Link to='/products/page/1'>See all</Link></Button>

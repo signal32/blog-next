@@ -1,9 +1,6 @@
-// import Image from "next/image";
-// import Link from "next/link";
-// import { useRouter } from "next/router";
 import { useBasket } from "#src/lib/basket";
 import { cn } from "#src/lib/utils";
-import { CopyrightIcon, CreativeCommons, Menu, ShoppingBasket, X } from "lucide-react";
+import { CopyrightIcon, Menu, ShoppingBasket, X } from "lucide-react";
 import { ReactElement, ReactNode, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { websiteConfig } from "../../routes/_app";
@@ -16,8 +13,9 @@ const DEMO_IMAGE = "https://images.pexels.com/photos/4215110/pexels-photo-421511
 
 export interface MainLayoutProps {
     children: ReactNode,
-    header?: { type: 'image', href: string } | { type: 'component', component: JSX.Element },
+    header?: { type: 'image', href: string } | { type: 'component', component: JSX.Element } | { type: 'none' },
     headerTitle?: string,
+    description?: string,
     breadcrumbs?: boolean,
 }
 
@@ -56,7 +54,10 @@ const AppBaseLayout = (props: MainLayoutProps) => {
 
         const basketSize = basket.size()
         return (
-            <div className={cn('flex gap-2 text-white text-lg', props.column && 'flex-col')}>
+            <nav
+                className={cn('flex gap-2 text-white text-lg', props.column && 'flex-col')}
+                aria-label="Main navigation"
+            >
                 {websiteConfig.mainMenu.map((item, i) => <NavigationLink key={i} to={item.href}><p>{item.name}</p></NavigationLink>)}
                 {(location.pathname.endsWith('basket') || Object.keys(basket.order.products).length > 0) && <NavigationLink to="/basket">
                     <div className="flex justify-center">
@@ -79,7 +80,7 @@ const AppBaseLayout = (props: MainLayoutProps) => {
                         </div>
                     ))}
                 </div>
-            </div>
+            </nav>
         );
     }
 
@@ -101,7 +102,6 @@ const AppBaseLayout = (props: MainLayoutProps) => {
                     <div className={cn('sm:hidden', !showNav && 'hidden')}><Navigation column /></div>
                 </div>
             </header>
-            {/*{((props.breadcrumbs ?? true)) && <Breadcrumbs />}*/}
 
             <div className="h-full grow">
                 {props.children}
@@ -161,11 +161,12 @@ export function defineLayout<P = {}>(
 export function ContentLayout(props: MainLayoutProps) {
     return (
         <div className="max-w-4xl mx-auto w-full">
+            {props.headerTitle && <title>{`Hamish Weir: ${props.headerTitle}`}</title>}
             <div className={`p-0 relative transition-all ease-in-out overflow-clip rounded-b-xl opacity-100`}>
                 {
                     props.header?.type === 'component'
                         ? <div className="-mt-10">{props.header.component}</div>
-                        : (props.header?.href || props.headerTitle) && <div
+                        : (props.header?.type === 'image' && (props.header?.href || props.headerTitle)) && <div
                             className={cn('w-full rounded-b-lg  -mt-10', props.header?.href ? 'h-64' : 'h-24')}
                         >
                             {props.header?.type === 'image' && props.header.href

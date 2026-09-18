@@ -8,18 +8,15 @@ import { A, H3 } from '#src/components/common/typography.tsx'
 import { Link } from 'react-router'
 import { websiteConfig } from './_app'
 
+
 export default function Home({ loaderData }: Route.ComponentProps) {
     const props = loaderData.props
 
-    return <ContentLayout header={{ type: 'component', component: <HomeHero /> }}>
+    return <ContentLayout
+        header={{ type: 'component', component: <HomeHero /> }}
+        headerTitle='Software and railway simulation developer'
+    >
         <div className='h-full w-full'>
-            {/*<Head>
-                <title>Hamish Weir Blog: Home</title>
-                <meta name="description" content="test" />
-                <meta name="darkreader-lock" />
-                <link rel="icon" href="/favicon.ico" />
-            </Head>*/}
-
             <div>
                 <h3 className='text-center text-xl pb-3'>Latest Updates</h3>
                 <PostList posts={props.allContent} />

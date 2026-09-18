@@ -9,14 +9,7 @@ import { websiteConfig } from "./_app";
 
 
 export default function Contact({ loaderData }: Route.ComponentProps) {
-    return <ContentLayout>
-        {/*<div className="flex gap-4">
-            <div className="basis-3/5 grow">
-                <H1 className='text-3xl font-semibold pt-10 text-center'>👋 Get in touch!</H1>
-            </div>
-            <div className="basis-2/5 grow" />
-        </div>*/}
-
+    return <ContentLayout headerTitle="Contact">
         <div className="flex gap-4 mt-30 not-sm:flex-wrap">
             <div className="basis-3/5 grow text-center">
                 <H1 className="text-3xl font-semibold -mt-25 mb-10 text-center">

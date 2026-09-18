@@ -4,7 +4,7 @@ import { posts } from "../../lib/posts.server";
 import { Route } from "./+types/list";
 
 export default function ({ loaderData }: Route.ComponentProps) {
-    return <ContentLayout>
+    return <ContentLayout headerTitle="Blog">
         <ContentPaginationPage {...loaderData} />
     </ContentLayout>
 }
