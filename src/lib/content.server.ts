@@ -4,7 +4,6 @@ import { range } from "./utils";
 import { index, prefix, route, RouteConfigEntry } from "@react-router/dev/routes";
 import { LoaderFunctionArgs } from "react-router";
 
-
 export interface ContentDescriptor {
     id: string,
     slug: string,
@@ -108,7 +107,7 @@ export type ContentRoutingConfig = {
  */
 export function defineContent<T extends Content>(
     sources: Source<T>[],
-    routing: ContentRoutingConfig,
+    routing?: ContentRoutingConfig,
 ): ContentLibrary<T> {
 
     const cache = {
@@ -188,11 +187,15 @@ export function defineContent<T extends Content>(
             return getById(cache.name.get(name) || '')
         },
         async pages() {
+            if (!routing) return 0
+
             const content = await this.getAll()
-            return Math.ceil(content.length / routing.pageSize)
+            return Math.ceil(content.length / (routing?.pageSize ?? 3))
         },
 
         async page(pageNo) {
+            if (!routing) return []
+
             const start = pageNo * routing.pageSize
             const end = start + routing.pageSize
             const content = (await this.getAll()).slice(start, end)
