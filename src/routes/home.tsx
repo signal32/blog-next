@@ -4,7 +4,11 @@ import { posts as yeet } from '../lib/posts.server'
 import { products } from '../lib/products.server'
 import type { Route } from './+types/home'
 
-import { A, H3 } from '#src/components/common/typography.tsx'
+import { A, H1, H3, H4 } from '#src/components/common/typography.tsx'
+import { Button } from '#src/components/ui/button.tsx'
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '#src/components/ui/carousel.tsx'
+import { cn } from 'cn'
+import Autoplay from "embla-carousel-autoplay"
 import { Link } from 'react-router'
 import { websiteConfig } from './_app'
 
@@ -13,7 +17,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     const props = loaderData.props
 
     return <ContentLayout
-        header={{ type: 'component', component: <HomeHero /> }}
+        header={{ type: 'component', component: <HomeHero />, noClip: true }}
         headerTitle='Software and railway simulation developer'
     >
         <div className='h-full w-full'>
@@ -55,51 +59,78 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     </ContentLayout>
 }
 
-const HomeHero = () => (
-    <div
-        style={{
-            padding: '2.2rem',
-            backgroundPosition: 'center',
-            backgroundSize: 'cover',
-            backgroundImage: `url('/graphics/hero_landscape.jpg')`,
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '2rem',
-        }}
-    >
-        <div
-            className='flex flex-col sm:flex-row justify-center items-center text-center'
-        >
-            <img
-                className='w-3/4 max-w-sm rounded-full mb-2 border-3 border-white shadow-2xl'
-                // objectFit='contain'
-                src='/graphics/hamish_weir_portrait_square.jpg'
-                width='100'
-                height='100'
-                alt='Portrait of Hamish Weir'
-            />
-        </div>
-        <div
-            style={{
-                flex: '1 0',
-                // textAlign: 'right',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                textAlign: 'center',
-            }}
-        >
-            <h1 className=' text-white text-5xl font-black font-handwritten'>Hamish Weir</h1>
-            <h1 className='text-white text-xl font-medium'>{websiteConfig.personalTagline}</h1>
+const CAROSEL_ITEMS = [
+    {
+        background: 'https://s3.finch.hamishweir.uk/public/rails_north_east/dava/dev/scenery_stream_01.jpg',
+        textBackgroundColour: '#293126da',
+        heading: 'The Dava Railway',
+        subheading: 'Rugged and remote. A challenge for the most seasoned driver. Coming soon to Train Simulator.',
+        actions: [{
+            title: 'Read the latest update',
+            href: '/posts/dava-dev-update-01'
+        }]
+    },
+    {
+        background: 'https://s3.finch.hamishweir.uk/shop-public/sign_images/signs_all_1-small.jpg',
+        heading: 'Custom Station Signs',
+        subheading: 'Instantly create your own station signage for Train Simulator.',
+        actions: [
+            {
+                title: 'Build now!',
+                href: '/products/Train-Simulator-Classic-Custom-Signage'
+            },
+            {
+                title: 'Bespoke asset creation',
+                href: '/simulation#bespoke-scenery'
+            }
+        ]
+    },
+    {
+        background: '/graphics/speyside_line/Screenshot_SB-The-Speyside-Line_57.24829-3.75247_14-01-56-1920x1080.jpg',
+        heading: 'The Speyside Line',
+        subheading: "Travel back in time to revisit the sights and sounds of Scotland's Whisky country by train.",
+        actions: [{
+            title: 'Go to downloads',
+            href: '/products/speyside_line'
+        }]
+    },
+]
 
-            <div style={{ display: 'flex', gap: '1rem', paddingTop: '1.5rem' }}>
-                {/*<Button text='Software' href='/design'></Button>
-                <Button text='Games' href='/simulation'></Button>
-                <Button text='Photo'></Button>*/}
-            </div>
-        </div>
-    </div>
+const HomeHero = () => (
+    <Carousel opts={{loop: true }} plugins={[Autoplay({delay: 7000})]}>
+        <CarouselContent className='gap-5'>
+            {CAROSEL_ITEMS.map(item => <CarouselItem>
+                <div
+                    className='h-96 flex rounded-2xl overflow-clip'
+                    style={{
+                        // padding: '2.2rem',
+                        backgroundPosition: 'center',
+                        backgroundSize: 'cover',
+                        backgroundImage: `url('${item.background}')`,
+                    }}
+                >
+                    <div
+                        className={cn(
+                            'flex flex-col justify-center text-white p-4 bg-ocean/80',
+                            'self-end basis-full',
+                            'sm:h-full sm:self-start sm:basis-sm'
+                        )}
+                        style={{ backgroundColor: item.textBackgroundColour }}>
+                        <H1 className='pt-0'>{item.heading}</H1>
+                        <H4>{item.subheading}</H4>
+
+                        <div className='flex gap-2 pt-4'>
+                            {item.actions?.map((action, index) => <Button key={index} variant={index === 0 ? 'outline' : 'link'}>
+                                <Link to={action.href}>{ action.title }</Link>
+                            </Button>)}
+                        </div>
+                    </div>
+                </div>
+            </CarouselItem>)}
+      </CarouselContent>
+      <CarouselPrevious />
+      <CarouselNext />
+    </Carousel>
 )
 
 export const loader = async () => {

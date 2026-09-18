@@ -5,7 +5,7 @@ import { ReactElement, ReactNode, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { websiteConfig } from "../../routes/_app";
 import ModalContext from "../common/Modal";
-import { A, H2 } from "../common/typography";
+import { H2 } from "../common/typography";
 import { Button } from "../ui/button";
 
 
@@ -13,7 +13,7 @@ const DEMO_IMAGE = "https://images.pexels.com/photos/4215110/pexels-photo-421511
 
 export interface MainLayoutProps {
     children: ReactNode,
-    header?: { type: 'image', href: string } | { type: 'component', component: JSX.Element } | { type: 'none' },
+    header?: { type: 'image', href: string } | { type: 'component', component: JSX.Element, noClip?: boolean } | { type: 'none' },
     headerTitle?: string,
     description?: string,
     breadcrumbs?: boolean,
@@ -162,7 +162,10 @@ export function ContentLayout(props: MainLayoutProps) {
     return (
         <div className="max-w-4xl mx-auto w-full">
             {props.headerTitle && <title>{`Hamish Weir: ${props.headerTitle}`}</title>}
-            <div className={`p-0 relative transition-all ease-in-out overflow-clip rounded-b-xl opacity-100`}>
+            <div
+                className={cn(
+                    `p-0 relative transition-all ease-in-out rounded-b-xl opacity-100`,
+                    !(props.header?.type === 'component' && props.header.noClip) && 'overflow-clip')}>
                 {
                     props.header?.type === 'component'
                         ? <div className="-mt-10">{props.header.component}</div>
