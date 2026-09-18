@@ -96,7 +96,7 @@ const AppBaseLayout = (props: MainLayoutProps) => {
                             className="flex-auto max-w-xs p-2">
                             <h1 className='text-white/85 hover:text-white text-4xl py-2 font-black font-handwritten '>Hamish Weir</h1>
                         </Link>
-                        <Button className="sm:hidden cursor-pointer" variant='outline' onClick={() => setShowNav(!showNav)}>{showNav ? <X /> : <Menu />}</Button>
+                        <Button className="sm:hidden cursor-pointer text-white" variant='outline' onClick={() => setShowNav(!showNav)}>{showNav ? <X /> : <Menu />}</Button>
                         <div className="not-sm:hidden"><Navigation /></div>
                     </div>
                     <div className={cn('sm:hidden', !showNav && 'hidden')}><Navigation column /></div>
