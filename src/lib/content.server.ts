@@ -190,7 +190,7 @@ export function defineContent<T extends Content>(
             if (!routing) return 0
 
             const content = await this.getAll()
-            return Math.ceil(content.length / (routing?.pageSize ?? 3))
+            return Math.ceil(content.length / routing.pageSize)
         },
 
         async page(pageNo) {
