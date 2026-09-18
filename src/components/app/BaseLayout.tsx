@@ -185,10 +185,10 @@ export function ContentLayout(props: MainLayoutProps) {
                                 <div
                                     className={cn(
                                         "absolute backdrop-blur-sm px-3 rounded-tr-lg",
-                                        props.header?.href ? "bg-black/80 text-white bottom-0 left-0" : "bottom-3 left-2"
+                                        props.header?.href ? "bg-gray-200/80 dark:bg-gray-900/75 dark:text-primary-f bottom-0 left-0" : "bottom-3 left-2"
                                     )}
                                 >
-                                    <H2>{props.headerTitle}</H2>
+                                    <H2 className="not-sm:text-xl">{props.headerTitle}</H2>
                                 </div>
                             }
                         </div>
