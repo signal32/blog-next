@@ -14,7 +14,7 @@ export interface AppConfig {
 
 export const websiteConfig: AppConfig = {
     mainMenu: [
-        { name: `Blog`, href: `/blog` },
+        { name: `Blog`, href: `/posts` },
         { name: `Simulation`, href: `/simulation` },
         { name: `Contact`, href: `/contact` },
         { name: `Shop`, href: `/shop` },

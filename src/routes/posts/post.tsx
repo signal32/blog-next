@@ -21,10 +21,10 @@ export default function Post({ loaderData: { post } }: Route.ComponentProps) {
 
 export async function loader({ params }: Route.LoaderArgs) {
     const slug = params['slug']
-    if (!slug) return redirect("/", 404)
+    if (!slug) return redirect("/posts/page", { status: 302 })
 
     const post = await posts.getBySlug(slug)
-    if (!post) return redirect("/", 404)
+    if (!post) throw new Response("Not Found", { status: 404 })
 
     return {
         post: post,

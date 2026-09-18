@@ -23,7 +23,7 @@ const PostList = (props: PostListProps) => {
                         )
                     })
                 }
-                <div className="w-72 shrink-0 cursor-pointer hover:underline" onClick={() => navigate('/blog')}>
+                <div className="w-72 shrink-0 cursor-pointer hover:underline" onClick={() => navigate('/posts')}>
                     <Card>{{
                         content: <p className="text-center font-bold text-xl h-full mt-40">See more posts</p>
                     }}</Card>
