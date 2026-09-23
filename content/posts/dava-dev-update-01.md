@@ -1,5 +1,6 @@
 ---
 name: 'Dava Development Update'
+slug: 'dava-dev-update-01'
 created: '2 Sep 2026'
 public: true
 coverImage: https://s3.finch.hamishweir.uk/public/rails_north_east/dava/dev/forres_station_01.jpg

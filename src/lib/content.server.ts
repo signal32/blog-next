@@ -6,12 +6,11 @@ import { LoaderFunctionArgs } from "react-router";
 
 export interface ContentDescriptor {
     id: string,
-    slug: string,
-    name: string,
-    fileName: string,
 }
 
 export interface Content extends ContentDescriptor {
+    slug: string,
+    name: string,
     baseUrl: string,
     created?: string,
     modified?: string,
@@ -21,6 +20,7 @@ export interface Content extends ContentDescriptor {
     public?: boolean,
     price?: number,
     customRouteFile?: string,
+    tags?: [],
 }
 
 export interface ContentLocation {
@@ -29,33 +29,25 @@ export interface ContentLocation {
 }
 
 /**
- * Extracts id, slug and name from file name of the form:
- * `<id>_<slug/name>.<extension>`
- *
- * Extensions are ignored and have no effect on parsed details
- * Id is optional, and will be replaced with slug ig not found
+ * Defines a file system based content source.
+ * Each file in `dir` is an item of `Content` and its filename is the `id`.
  */
 export function defineFileSource<T extends Content>(dir: string, loader: (descriptor: ContentDescriptor, dir: string) => T | Promise<T>): Source<T> {
-
-    const fileNameToDescriptor = (fileName: string): ContentDescriptor => {
-        const extensionIdx = fileName.lastIndexOf('.')
-        return {
-            fileName,
-            id: fileName,
-            slug: fileName.substring(0, extensionIdx > 0 ? extensionIdx : undefined),
-            name: fileName.substring(0, extensionIdx > 0 ? extensionIdx : undefined),
-        }
-    }
-
-
     return {
-        descriptors: async () => fs.readdirSync(dir).map(fileNameToDescriptor),
+        descriptors: async () => fs.readdirSync(dir).map(id => ({ id })),
         loader: async (descriptor) => ({
-            ...await loader(descriptor, join(dir, descriptor.fileName)),
+            ...await loader(descriptor, join(dir, descriptor.id)),
             id: descriptor.id
         })
     }
+}
 
+export async function* iterSourceContent<T>(source: Source<T>) {
+    const descriptors = await source.descriptors()
+    for (const descriptor of descriptors) {
+        const content = await source.loader(descriptor)
+        if (content) yield {content, descriptor}
+    }
 }
 
 export type Loader<T> = (descriptor: ContentDescriptor) => Promise<T | undefined>;
@@ -111,35 +103,33 @@ export function defineContent<T extends Content>(
 ): ContentLibrary<T> {
 
     const cache = {
-        id: new Map<string, { descriptor: ContentDescriptor, source: Source<T> }>(),
-        slug: new Map<string, string>(), // slug -> id
-        name: new Map<string, string>(), // name -> id
-        dir: new Map<string, string[]>(), // dir -> child content ids
+        contentById: new Map<string, () => Promise<T | undefined>>(),
+        idBySlug: new Map<string, string>(),
+        idByName: new Map<string, string>(),
+        idsByTag: new Map<string, string[]>(),
     }
 
     async function initCache() {
-        if (cache.id.size) return
+        if (cache.contentById.size) return
 
-        const descriptors = await Promise.all(
-            sources.map(
-                async source => (await source.descriptors()).map(descriptor => ({ descriptor, source }))
-            )
-        )
-        for (const { descriptor, source } of descriptors.flat()) {
-            cache.id.set(descriptor.id, { descriptor, source });
-            cache.slug.set(descriptor.slug, descriptor.id);
-            cache.name.set(descriptor.name, descriptor.id);
-        }
+        await Promise.all(sources.map(async source => {
+            for await (const {content, descriptor} of iterSourceContent(source)) {
+                cache.contentById.set(content.id, () => source.loader(descriptor))
+                cache.idBySlug.set(content.slug, content.id)
+                cache.idByName.set(content.name, content.id)
+
+                for (const tag of content.tags ?? []) {
+                    const ids = cache.idsByTag.get(tag) ?? []
+                    cache.idsByTag.set(tag, [...ids, content.id])
+                }
+            }
+        }))
     }
 
     const getById = async (id: string) => {
         await initCache()
-
-        const data = cache.id.get(id);
-        if (!data) return
-        const content = await data.source.loader(data.descriptor)
-        if (content?.public)
-            return content
+        const content = await cache.contentById.get(id)?.();
+        if (content && content.public) return content
     };
 
     return {
@@ -181,10 +171,10 @@ export function defineContent<T extends Content>(
 
         getById,
         getBySlug(slug: string) {
-            return getById(cache.slug.get(slug) || '')
+            return getById(cache.idBySlug.get(slug) || '')
         },
         getByName(name: string) {
-            return getById(cache.name.get(name) || '')
+            return getById(cache.idByName.get(name) || '')
         },
         async pages() {
             if (!routing) return 0
