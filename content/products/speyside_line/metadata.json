@@ -153,5 +153,9 @@
         ]
     },
     "public": true,
-    "donateUrl": "https://buy.stripe.com/5kQ00jbVR9js8Uydfs63K00"
+    "donateUrl": "https://buy.stripe.com/5kQ00jbVR9js8Uydfs63K00",
+    "tags": [
+        "Train Simulator Classic",
+        "Speyside Line"
+    ]
 }

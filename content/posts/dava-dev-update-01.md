@@ -5,6 +5,10 @@ created: '2 Sep 2026'
 public: true
 coverImage: https://s3.finch.hamishweir.uk/public/rails_north_east/dava/dev/forres_station_01.jpg
 excerpt: It has been over four years since the last Dava line update. However, the route was never forgotten and this year I was finally able to start putting aside time to re-start work on it.
+tags: 
+  - Dava Line
+  - Development Update
+  - Train Simulator Classic
 ---
 
 It has been over four years since the last Dava line update. 

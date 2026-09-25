@@ -2,6 +2,7 @@ import { Config } from '@react-router/dev/config'
 import { pages } from '#src/lib/pages.server'
 import { products } from '#src/lib/products.server'
 import { posts } from './src/lib/posts.server'
+import { all } from '#src/lib/all.server.ts'
 
 export default {
     ssr: false,
@@ -11,6 +12,7 @@ export default {
             ...getStaticPaths(),
             ...await posts.prerenderPaths(),
             ...await products.prerenderPaths(),
+            ...await all.prerenderPaths(),
             ...(await pages.getAllDetailed()).flatMap(page => [
                 `/${page.slug}`,
                 `/api/content/pages/${page.id}`

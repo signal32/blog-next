@@ -63,9 +63,10 @@ export type ContentLibrary<T extends Content> = {
     getById: (id: string) => Promise<T | undefined>
     getBySlug: (slug: string) => Promise<T | undefined>
     getByName: (name: string) => Promise<T | undefined>
+    getByTag: (tag: string) => Promise<T[]>
 
-    pages: () => Promise<number>
-    page: (pageNo: number) => Promise<T[]>
+    pages: (tag?: string) => Promise<number>
+    page: (pageNo: number, tag?: string) => Promise<T[]>
     loadPage: (args: LoaderFunctionArgs) => Promise<ListPageContent<T>>
 
     routes: () => RouteConfigEntry[]
@@ -81,9 +82,9 @@ export type ContentRoutingConfig = {
      * FS path to listing page module relative to src directory.
      * This should use `content.loadPage` as the `loader`.
      */
-    listPage: string //
+    listPage?: string //
     /** FS path to main content display page module relative to src directory.*/
-    contentPage: string,
+    contentPage?: string,
     /** Number of results to be displayed on each list page. */
     pageSize: number,
 }
@@ -114,13 +115,13 @@ export function defineContent<T extends Content>(
 
         await Promise.all(sources.map(async source => {
             for await (const {content, descriptor} of iterSourceContent(source)) {
-                cache.contentById.set(content.id, () => source.loader(descriptor))
-                cache.idBySlug.set(content.slug, content.id)
-                cache.idByName.set(content.name, content.id)
+                cache.contentById.set(descriptor.id, () => source.loader(descriptor))
+                cache.idBySlug.set(content.slug, descriptor.id)
+                cache.idByName.set(content.name, descriptor.id)
 
                 for (const tag of content.tags ?? []) {
                     const ids = cache.idsByTag.get(tag) ?? []
-                    cache.idsByTag.set(tag, [...ids, content.id])
+                    cache.idsByTag.set(tag, [...ids, descriptor.id])
                 }
             }
         }))
@@ -152,57 +153,89 @@ export function defineContent<T extends Content>(
         routes() {
             return routing ? prefix(routing.basePath, [
                 index(routing.indexPage),
-                route(':slug', routing.contentPage),
-                route('page/:page?', routing.listPage),
+                ...routing.contentPage ? [route(':slug', routing.contentPage)] : [],
+                ...routing.listPage ? [route('tag?/:tag?/page?/:page?', routing.listPage)] : [],
             ]) : []
         },
 
         async prerenderPaths() {
             return routing ? [
+                // Index
                 `/${routing.basePath}`,
+                // Content pages
                 ...(await this.getAllDetailed()).flatMap(content => [
                     `/${routing.basePath}/${content.slug}`,
                     `/api/content/${routing.basePath}/${content.id}`
                 ]),
+                // List pages
                 `/${routing.basePath}/page`,
-                ...range(1, await this.pages() + 1).map(p => `/${routing.basePath}/page/${p}`),
+                ...range(1, await this.pages() + 1).map(
+                    p => `/${routing.basePath}/page/${p}`
+                ),
+                // Tag list pages
+                ... (await Promise.all(cache.idsByTag
+                    .keys()
+                    .map(async tag => [
+                        `/${routing.basePath}/tag/${tag}/`,
+                        `/${routing.basePath}/tag/${tag}/page`,
+                        ...range(1, await this.pages(tag) + 1).map(
+                            p => `/${routing.basePath}/tag/${tag}/page/${p}`
+                        )
+                    ])
+                )).flat()
             ] : []
         },
 
         getById,
+
         getBySlug(slug: string) {
             return getById(cache.idBySlug.get(slug) || '')
         },
+
         getByName(name: string) {
             return getById(cache.idByName.get(name) || '')
         },
-        async pages() {
-            if (!routing) return 0
 
-            const content = await this.getAll()
-            return Math.ceil(content.length / routing.pageSize)
+        async getByTag(tag: string) {
+            const content = await Promise.all(
+                (cache.idsByTag.get(tag) ?? [])
+                    .map(id => this.getById(id))
+            );
+            return content.filter(c => c !== undefined);
         },
 
-        async page(pageNo) {
+        async pages(tag?: string) {
+            await initCache()
+            if (!routing) return 0
+
+            const contentCount = tag ? cache.idsByTag.get(tag)?.length ?? 0 : cache.contentById.size
+            return Math.ceil(contentCount / routing.pageSize)
+        },
+
+        async page(pageNo, tag) {
             if (!routing) return []
 
             const start = pageNo * routing.pageSize
             const end = start + routing.pageSize
-            const content = (await this.getAll()).slice(start, end)
+            const content = (tag ? (await this.getByTag(tag) ?? []) : await this.getAll()).slice(start, end)
             let detailedContent = await Promise.all(content.map(({ id }) => getById(id)))
             return detailedContent.filter(content => content !== undefined)
         },
 
-        async loadPage({params}) {
+        async loadPage({ params }) {
+            const tag = params['tag']
             const page = +(params['page'] ?? 1)
-            const totalPages = await this.pages()
-
+            const totalPages = await this.pages(tag)
             return {
                 page,
                 totalPages,
-                content: await this.page(page - 1),
-                nextPagePath: routing  && page < totalPages ? `/${routing.basePath}/page/${page + 1}` : undefined,
-                prevPagePath: routing && page > 1 ? `/${routing.basePath}/page/${page - 1}` : undefined,
+                content: await this.page(page - 1, tag),
+                nextPagePath: routing && page < totalPages
+                    ? `/${routing.basePath}${tag ? `/tag/${tag}` : ''}/page/${page + 1}`
+                    : undefined,
+                prevPagePath: routing && page > 1
+                    ? `/${routing.basePath}${tag ? `/tag/${tag}` : ''}/page/${page - 1}`
+                    : undefined,
             }
         }
     }

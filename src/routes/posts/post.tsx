@@ -5,7 +5,7 @@ import DateDisplay from "../../components/common/DateDisplay";
 import { Markdown } from '../../components/common/Markdown';
 import { type Post, posts } from "../../lib/posts.server";
 import { Route } from "./+types/post";
-import { P } from "#src/components/common/typography.tsx";
+import { H6, P } from "#src/components/common/typography.tsx";
 
 export default function Post({ loaderData: { post } }: Route.ComponentProps) {
     return <ContentLayout
@@ -16,6 +16,9 @@ export default function Post({ loaderData: { post } }: Route.ComponentProps) {
             {post.created && <DateDisplay date={new Date(post.created)} />}
             <Markdown content={post.content ?? ''} />
         </P>
+
+        <H6>Tags</H6>
+        { post.tags?.join() }
     </ContentLayout>
 }
 
@@ -27,7 +30,7 @@ export async function loader({ params }: Route.LoaderArgs) {
     if (!post) throw new Response("Not Found", { status: 404 })
 
     return {
-        post: post,
+        post,
         morePosts: [],
         preview: false,
     }
