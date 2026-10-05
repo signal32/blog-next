@@ -9,7 +9,7 @@ const ALL_CONTENT = {
     products,
 }
 
-export const all: ContentLibrary<Content> = defineContent(
+export const content: ContentLibrary<Content> = defineContent(
     Object.entries(ALL_CONTENT).map(([name, content]) => {
         // Prefix prevents a collision if content from different libraries share the same id
         const prefix = `${name}_`
@@ -25,7 +25,7 @@ export const all: ContentLibrary<Content> = defineContent(
     }),
 )
 
-export const allRouting = defineContentRouting(all, {
+export const contentRouting = defineContentRouting(content, {
     basePath: 'content',
     listPage: './routes/content/list.tsx',
     indexPage: './routes/content/index.tsx',

@@ -1,4 +1,4 @@
-import { allRouting } from '#src/lib/all.server.ts'
+import { contentRouting } from '#src/lib/allContent.server.ts'
 import { pages } from '#src/lib/pages.server'
 import { productRouting } from '#src/lib/products.server'
 import { Config } from '@react-router/dev/config'
@@ -12,7 +12,7 @@ export default {
             ...getStaticPaths(),
             ...await postRouting.prerenderPaths(),
             ...await productRouting.prerenderPaths(),
-            ...await allRouting.prerenderPaths(),
+            ...await contentRouting.prerenderPaths(),
             ...(await pages.getAllDetailed()).flatMap(page => [
                 `/${page.slug}`,
                 `/api/content/pages/${page.id}`

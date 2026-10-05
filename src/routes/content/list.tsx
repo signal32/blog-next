@@ -1,5 +1,5 @@
 import { ContentPaginationPage } from "#src/components/ContentPaginationPage.tsx"
-import { allRouting } from "#src/lib/all.server.ts"
+import { contentRouting } from "#src/lib/allContent.server.ts"
 import { ContentLayout } from "../../components/app/BaseLayout"
 import { Route } from "./+types/list"
 
@@ -10,5 +10,5 @@ export default function ({ loaderData }: Route.ComponentProps) {
 }
 
 export async function loader(args: Route.LoaderArgs) {
-    return allRouting.loadPage(args)
+    return contentRouting.loadPage(args)
 }

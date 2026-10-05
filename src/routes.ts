@@ -1,5 +1,5 @@
 import { type RouteConfig, RouteConfigEntry, index, route } from '@react-router/dev/routes'
-import { allRouting } from './lib/all.server'
+import { contentRouting } from './lib/allContent.server'
 import { Content } from './lib/content.server'
 import { postRouting } from './lib/posts.server'
 import { productRouting, products } from './lib/products.server'
@@ -22,7 +22,7 @@ export default [
     route('order', './routes/order.tsx'),
     ...postRouting.routes(),
     ...productRouting.routes(),
-    ...allRouting.routes(),
+    ...contentRouting.routes(),
     ...contentCustomFileRoutes(await products.getAllDetailed()),
     route('api/content-list', './routes/api/contentList.ts'),
     route('api/content/:libraryId/:contentId', './routes/api/contentDetails.ts'),

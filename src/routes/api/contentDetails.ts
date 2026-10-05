@@ -6,7 +6,7 @@ const VALID_LIBRARY_IDS = Object.keys(SERVER_CONFIG.content)
 export async function loader({ params }: Route.LoaderArgs) {
     const { libraryId, contentId } = params
     if (libraryId === undefined) throw new Error("Missing libraryId")
-    if (!VALID_LIBRARY_IDS.includes(libraryId)) throw new Error(`LibraryId must be one of ${VALID_LIBRARY_IDS.join(', ')}`)
+    if (!VALID_LIBRARY_IDS.includes(libraryId)) throw new Error(`LibraryId must be one of ${VALID_LIBRARY_IDS.join(', ')}. Got ${libraryId}`)
     if (contentId === undefined) throw new Error("Missing contentId")
 
     const library = SERVER_CONFIG.content[libraryId]

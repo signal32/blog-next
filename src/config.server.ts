@@ -1,3 +1,4 @@
+import { content } from "./lib/allContent.server"
 import { ContentLibrary, Content } from "./lib/content.server"
 import { files } from "./lib/file.server"
 import { pages } from "./lib/pages.server"
@@ -17,5 +18,6 @@ export const SERVER_CONFIG: ServerConfig = {
         posts,
         pages,
         files,
+        content,
     },
 }
