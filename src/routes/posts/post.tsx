@@ -1,11 +1,11 @@
 
-import { redirect } from "react-router";
+import { Link, redirect } from "react-router";
 import { ContentLayout } from "../../components/app/BaseLayout";
 import DateDisplay from "../../components/common/DateDisplay";
 import { Markdown } from '../../components/common/Markdown';
 import { type Post, posts } from "../../lib/posts.server";
 import { Route } from "./+types/post";
-import { H6, P } from "#src/components/common/typography.tsx";
+import { A, H6, P } from "#src/components/common/typography.tsx";
 
 export default function Post({ loaderData: { post } }: Route.ComponentProps) {
     return <ContentLayout
@@ -17,8 +17,21 @@ export default function Post({ loaderData: { post } }: Route.ComponentProps) {
             <Markdown content={post.content ?? ''} />
         </P>
 
-        <H6>Tags</H6>
-        { post.tags?.join() }
+        {post.tags && <>
+            <H6>Tags</H6>
+            <ul>
+                {post.tags.map((tag, index) =>
+                    <li>
+                        <A>
+                            <Link key={index} to={`${post.baseUrl}/tag/${tag}`}>
+                                {tag}
+                            </Link>
+                        </A>
+                    </li>)
+                }
+            </ul>
+        </>}
+
     </ContentLayout>
 }
 

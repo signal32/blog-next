@@ -5,7 +5,7 @@ import { Route } from "./+types/list";
 
 export default function ({ loaderData }: Route.ComponentProps) {
     return <ContentLayout headerTitle="Blog">
-        <ContentPaginationPage {...loaderData} />
+        <ContentPaginationPage title="Blog Posts" content={loaderData} />
     </ContentLayout>
 }
 

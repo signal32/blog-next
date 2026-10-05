@@ -70,7 +70,8 @@ export type ContentLibrary<T extends Content> = {
     loadPage: (args: LoaderFunctionArgs) => Promise<ListPageContent<T>>
 
     routes: () => RouteConfigEntry[]
-    prerenderPaths: () => Promise<string[]>
+    prerenderPaths: () => Promise<string[]>,
+    routing?: ContentRoutingConfig,
 }
 
 export type ContentRoutingConfig = {
@@ -173,6 +174,7 @@ export function defineContent<T extends Content>(
                     p => `/${routing.basePath}/page/${p}`
                 ),
                 // Tag list pages
+                `/${routing.basePath}/tag/`,
                 ... (await Promise.all(cache.idsByTag
                     .keys()
                     .map(async tag => [
@@ -217,12 +219,15 @@ export function defineContent<T extends Content>(
 
             const start = pageNo * routing.pageSize
             const end = start + routing.pageSize
-            const content = (tag ? (await this.getByTag(tag) ?? []) : await this.getAll()).slice(start, end)
-            let detailedContent = await Promise.all(content.map(({ id }) => getById(id)))
-            return detailedContent.filter(content => content !== undefined)
+            const ids = (tag
+                ? (cache.idsByTag.get(tag) ?? [])
+                : cache.contentById.keys().toArray()
+            ).slice(start, end)
+
+            return Promise.all(ids.map((id) => getById(id))).then(content => content.filter(content => content !== undefined))
         },
 
-        async loadPage({ params }) {
+        async loadPage({params}) {
             const tag = params['tag']
             const page = +(params['page'] ?? 1)
             const totalPages = await this.pages(tag)
@@ -236,8 +241,17 @@ export function defineContent<T extends Content>(
                 prevPagePath: routing && page > 1
                     ? `/${routing.basePath}${tag ? `/tag/${tag}` : ''}/page/${page - 1}`
                     : undefined,
+                tags: cache.idsByTag.entries().toArray().map(([tag, content]) => ({
+                    tag,
+                    path: `/${routing?.basePath}/tag/${tag}`,
+                    count: content.length
+                })).toSorted((a, b) => b.count - a.count),
+                currentTag: tag,
+                basePath: `/${routing?.basePath}`
             }
-        }
+        },
+
+        routing,
     }
 }
 
@@ -247,4 +261,7 @@ export type ListPageContent<T extends Content> = {
     content: T[],
     nextPagePath?: string,
     prevPagePath?: string,
+    basePath: string,
+    tags: { tag: string, path: string, count: number, }[],
+    currentTag?: string,
 }
