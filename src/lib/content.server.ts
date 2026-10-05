@@ -64,14 +64,12 @@ export type ContentLibrary<T extends Content> = {
     getBySlug: (slug: string) => Promise<T | undefined>
     getByName: (name: string) => Promise<T | undefined>
     getByTag: (tag: string) => Promise<T[]>
-
-    pages: (tag?: string) => Promise<number>
-    page: (pageNo: number, tag?: string) => Promise<T[]>
-    loadPage: (args: LoaderFunctionArgs) => Promise<ListPageContent<T>>
-
-    routes: () => RouteConfigEntry[]
-    prerenderPaths: () => Promise<string[]>,
-    routing?: ContentRoutingConfig,
+    getCache: () => Promise<{
+        contentById: Map<string, () => Promise<T | undefined>>
+        idBySlug: Map<string, string>
+        idByName: Map<string, string>
+        idsByTag: Map<string, string[]>
+    }>
 }
 
 export type ContentRoutingConfig = {
@@ -101,7 +99,6 @@ export type ContentRoutingConfig = {
  */
 export function defineContent<T extends Content>(
     sources: Source<T>[],
-    routing?: ContentRoutingConfig,
 ): ContentLibrary<T> {
 
     const cache = {
@@ -135,6 +132,11 @@ export function defineContent<T extends Content>(
     };
 
     return {
+         async getCache() {
+            await initCache()
+            return cache
+        },
+
         async getAll() {
             await initCache()
             return (await Promise.all(sources.map(source => source.descriptors()))).flat()
@@ -149,43 +151,6 @@ export function defineContent<T extends Content>(
             }
 
             return items
-        },
-
-        routes() {
-            return routing ? prefix(routing.basePath, [
-                index(routing.indexPage),
-                ...routing.contentPage ? [route(':slug', routing.contentPage)] : [],
-                ...routing.listPage ? [route('tag?/:tag?/page?/:page?', routing.listPage)] : [],
-            ]) : []
-        },
-
-        async prerenderPaths() {
-            return routing ? [
-                // Index
-                `/${routing.basePath}`,
-                // Content pages
-                ...(await this.getAllDetailed()).flatMap(content => [
-                    `/${routing.basePath}/${content.slug}`,
-                    `/api/content/${routing.basePath}/${content.id}`
-                ]),
-                // List pages
-                `/${routing.basePath}/page`,
-                ...range(1, await this.pages() + 1).map(
-                    p => `/${routing.basePath}/page/${p}`
-                ),
-                // Tag list pages
-                `/${routing.basePath}/tag/`,
-                ... (await Promise.all(cache.idsByTag
-                    .keys()
-                    .map(async tag => [
-                        `/${routing.basePath}/tag/${tag}/`,
-                        `/${routing.basePath}/tag/${tag}/page`,
-                        ...range(1, await this.pages(tag) + 1).map(
-                            p => `/${routing.basePath}/tag/${tag}/page/${p}`
-                        )
-                    ])
-                )).flat()
-            ] : []
         },
 
         getById,
@@ -205,53 +170,6 @@ export function defineContent<T extends Content>(
             );
             return content.filter(c => c !== undefined);
         },
-
-        async pages(tag?: string) {
-            await initCache()
-            if (!routing) return 0
-
-            const contentCount = tag ? cache.idsByTag.get(tag)?.length ?? 0 : cache.contentById.size
-            return Math.ceil(contentCount / routing.pageSize)
-        },
-
-        async page(pageNo, tag) {
-            if (!routing) return []
-
-            const start = pageNo * routing.pageSize
-            const end = start + routing.pageSize
-            const ids = (tag
-                ? (cache.idsByTag.get(tag) ?? [])
-                : cache.contentById.keys().toArray()
-            ).slice(start, end)
-
-            return Promise.all(ids.map((id) => getById(id))).then(content => content.filter(content => content !== undefined))
-        },
-
-        async loadPage({params}) {
-            const tag = params['tag']
-            const page = +(params['page'] ?? 1)
-            const totalPages = await this.pages(tag)
-            return {
-                page,
-                totalPages,
-                content: await this.page(page - 1, tag),
-                nextPagePath: routing && page < totalPages
-                    ? `/${routing.basePath}${tag ? `/tag/${tag}` : ''}/page/${page + 1}`
-                    : undefined,
-                prevPagePath: routing && page > 1
-                    ? `/${routing.basePath}${tag ? `/tag/${tag}` : ''}/page/${page - 1}`
-                    : undefined,
-                tags: cache.idsByTag.entries().toArray().map(([tag, content]) => ({
-                    tag,
-                    path: `/${routing?.basePath}/tag/${tag}`,
-                    count: content.length
-                })).toSorted((a, b) => b.count - a.count),
-                currentTag: tag,
-                basePath: `/${routing?.basePath}`
-            }
-        },
-
-        routing,
     }
 }
 
@@ -264,4 +182,105 @@ export type ListPageContent<T extends Content> = {
     basePath: string,
     tags: { tag: string, path: string, count: number, }[],
     currentTag?: string,
+}
+
+export type ContentRouting<T extends Content> = {
+    pages: (tag?: string) => Promise<number>
+    page: (pageNo: number, tag?: string) => Promise<T[]>
+    loadPage: (args: LoaderFunctionArgs) => Promise<ListPageContent<T>>
+
+    routes: () => RouteConfigEntry[]
+    prerenderPaths: () => Promise<string[]>,
+}
+
+export function defineContentRouting<T extends Content>(library: ContentLibrary<T>, config: ContentRoutingConfig): ContentRouting<T> {
+    return {
+        routes() {
+            return prefix(config.basePath, [
+                index(config.indexPage),
+                ...config.contentPage ? [route(':slug', config.contentPage)] : [],
+                ...config.listPage ? [route('tag?/:tag?/page?/:page?', config.listPage)] : [],
+            ])
+        },
+
+        async prerenderPaths() {
+            const cache = await library.getCache()
+            return [
+                // Index
+                `/${config.basePath}`,
+                // Content pages
+                ...(await library.getAllDetailed()).flatMap(content => [
+                    `/${config.basePath}/${content.slug}`,
+                    `/api/content/${config.basePath}/${content.id}`
+                ]),
+                // List pages
+                `/${config.basePath}/page`,
+                ...range(1, await this.pages() + 1).map(
+                    p => `/${config.basePath}/page/${p}`
+                ),
+                // Tag list pages
+                `/${config.basePath}/tag/`,
+                ... (await Promise.all(cache.idsByTag
+                    .keys()
+                    .map(async tag => [
+                        `/${config.basePath}/tag/${tag}/`,
+                        `/${config.basePath}/tag/${tag}/page`,
+                        ...range(1, await this.pages(tag) + 1).map(
+                            p => `/${config.basePath}/tag/${tag}/page/${p}`
+                        )
+                    ])
+                )).flat()
+            ]
+        },
+
+        async pages(tag?: string) {
+            const cache = await library.getCache()
+            const contentCount = tag
+                ? cache.idsByTag.get(tag)?.length ?? 0
+                : cache.contentById.size
+            return Math.ceil(contentCount / config.pageSize)
+        },
+
+        async page(pageNo, tag) {
+            const cache = await library.getCache()
+            const start = pageNo * config.pageSize
+            const end = start + config.pageSize
+            const ids = (tag
+                ? (cache.idsByTag.get(tag) ?? [])
+                : cache.contentById.keys().toArray()
+            ).slice(start, end)
+
+            return Promise
+                .all(ids.map(id => library.getById(id)))
+                .then(content => content.filter(content => content !== undefined))
+        },
+
+        async loadPage({params}) {
+            const tag = params['tag']
+            const page = +(params['page'] ?? 1)
+            const totalPages = await this.pages(tag)
+            const content = await this.page(page - 1, tag)
+            const cache = await library.getCache()
+
+            return {
+                page,
+                totalPages,
+                content,
+                nextPagePath: page < totalPages
+                    ? `/${config.basePath}${tag ? `/tag/${tag}` : ''}/page/${page + 1}`
+                    : undefined,
+                prevPagePath: page > 1
+                    ? `/${config.basePath}${tag ? `/tag/${tag}` : ''}/page/${page - 1}`
+                    : undefined,
+                tags: cache.idsByTag.entries().toArray().map(([tag, content]) => ({
+                    tag,
+                    path: `/${config.basePath}/tag/${tag}`,
+                    count: content.length
+                })).toSorted((a, b) => b.count - a.count),
+                currentTag: tag,
+                basePath: `/${config.basePath}`
+            }
+        },
+
+    }
 }

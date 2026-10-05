@@ -2,16 +2,9 @@ import fs from 'fs';
 import { readFile } from 'fs/promises';
 import matter from 'gray-matter';
 import { join } from 'path';
-import { Content, ContentRoutingConfig, defineContent, defineFileSource } from './content.server';
+import { Content, defineContent, defineContentRouting, defineFileSource } from './content.server';
 
 const POST_DIR = join(process.cwd(), '/content/posts');
-const POST_ROUTING_CONFIG: ContentRoutingConfig = {
-    basePath: 'posts',
-    contentPage: './routes/posts/post.tsx',
-    listPage: './routes/posts/list.tsx',
-    indexPage: './routes/posts/index.tsx',
-    pageSize: 3
-}
 
 export interface Post extends Content {
     author?: string
@@ -47,8 +40,15 @@ export const posts = defineContent<Post>(
             else throw new Error("Invalid post data")
         })
     ],
-    POST_ROUTING_CONFIG,
 )
+
+export const postRouting = defineContentRouting(posts, {
+    basePath: 'posts',
+    contentPage: './routes/posts/post.tsx',
+    listPage: './routes/posts/list.tsx',
+    indexPage: './routes/posts/index.tsx',
+    pageSize: 3
+})
 
 export function getPostSlugs() {
     return fs.readdirSync(POST_DIR);

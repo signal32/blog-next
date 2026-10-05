@@ -1,4 +1,4 @@
-import { Content, ContentLibrary, ContentRoutingConfig, defineContent } from "./content.server";
+import { Content, ContentLibrary, defineContent, defineContentRouting } from "./content.server";
 import { pages } from "./pages.server";
 import { posts } from "./posts.server";
 import { products } from "./products.server";
@@ -7,13 +7,6 @@ const ALL_CONTENT = {
     posts,
     pages,
     products,
-}
-
-const ALL_CONTENT_ROUTING: ContentRoutingConfig = {
-    basePath: 'content',
-    listPage: './routes/content/list.tsx',
-    indexPage: './routes/content/index.tsx',
-    pageSize: 10,
 }
 
 export const all: ContentLibrary<Content> = defineContent(
@@ -30,5 +23,11 @@ export const all: ContentLibrary<Content> = defineContent(
             }
         });
     }),
-    ALL_CONTENT_ROUTING,
 )
+
+export const allRouting = defineContentRouting(all, {
+    basePath: 'content',
+    listPage: './routes/content/list.tsx',
+    indexPage: './routes/content/index.tsx',
+    pageSize: 10,
+})
