@@ -2,15 +2,7 @@ import { SHOP } from '#src/shop.ts';
 import fs from 'fs';
 import { join } from "path";
 import { Product as StoreProduct } from "shop";
-import { Content, ContentRoutingConfig, defineContent, defineFileSource } from "./content.server";
-
-const PRODUCT_ROUTING_CONFIG: ContentRoutingConfig = {
-    basePath: 'products',
-    contentPage: './routes/product/product.tsx',
-    listPage: './routes/product/list.tsx',
-    indexPage: './routes/product/index.tsx',
-    pageSize: 3
-}
+import { Content, defineContent, defineContentRouting, defineFileSource } from "./content.server";
 
 export interface Product extends Content {
     published?: Date,
@@ -110,4 +102,12 @@ export const products = defineContent<Product>([
             }
         }
     }
-], PRODUCT_ROUTING_CONFIG)
+])
+
+export const productRouting = defineContentRouting(products, {
+    basePath: 'products',
+    contentPage: './routes/product/product.tsx',
+    listPage: './routes/product/list.tsx',
+    indexPage: './routes/product/index.tsx',
+    pageSize: 3
+})

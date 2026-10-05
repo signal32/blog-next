@@ -1,7 +1,8 @@
-import { type RouteConfig, RouteConfigEntry, index, prefix, route } from '@react-router/dev/routes'
+import { type RouteConfig, RouteConfigEntry, index, route } from '@react-router/dev/routes'
+import { contentRouting } from './lib/allContent.server'
 import { Content } from './lib/content.server'
-import { products } from './lib/products.server'
-import { posts } from './lib/posts.server'
+import { postRouting } from './lib/posts.server'
+import { productRouting, products } from './lib/products.server'
 
 
 function contentCustomFileRoutes(contents: Content[]) {
@@ -19,8 +20,9 @@ export default [
     route(':slug', './routes/page.tsx'),
     route('basket', './routes/basket.tsx'),
     route('order', './routes/order.tsx'),
-    ...posts.routes(),
-    ...products.routes(),
+    ...postRouting.routes(),
+    ...productRouting.routes(),
+    ...contentRouting.routes(),
     ...contentCustomFileRoutes(await products.getAllDetailed()),
     route('api/content-list', './routes/api/contentList.ts'),
     route('api/content/:libraryId/:contentId', './routes/api/contentDetails.ts'),

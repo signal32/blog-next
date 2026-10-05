@@ -2,6 +2,7 @@
     "$schema": "../../../schema.json",
     "name": "Keith and Dufftown Railway",
     "title": "Keith and Dufftown Railway",
+    "slug": "keith_dufftown_railway",
     "created": "2016-01-01T00:00:00Z",
     "published": "2016-01-01T00:00:00Z",
     "excerpt": "The Keith And Dufftown Railway runs from Keith Town station to Dufftown via Drummuir. ",

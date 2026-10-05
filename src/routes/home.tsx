@@ -18,8 +18,8 @@ const CAROUSEL_ITEMS = [
         heading: 'The Dava Railway',
         subheading: 'Rugged and remote. A challenge for the most seasoned driver. Coming soon to Train Simulator.',
         actions: [{
-            title: 'Read the latest update',
-            href: '/posts/dava-dev-update-01'
+            title: 'Read the latest updates',
+            href: '/posts/tag/Dava Line'
         }]
     },
     {
