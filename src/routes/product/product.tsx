@@ -149,7 +149,7 @@ export function ProductSidebar(props: {
                 </>
             }
 
-            {props.product.storeProduct &&
+            {props.product.stripePriceId &&
                 <>
                     {price !== undefined ? price.available ? <H3>{formatCurrency(price?.price)}</H3> : 'Currently unavailable' : <Skeleton className="h-12 mb-2 w-full" />}
                     <AddToBasketButton product={props.product} config={props.config} onAddToBasket={props.onAddToBasket} />
@@ -226,10 +226,9 @@ const RequirementItem = (props: { requirement: Requirement, products: { product?
 export function useProductPrice(product?: Product) {
     const [price, setPrice] = useState<Awaited<ReturnType<ShopClient['productPrice']>>>()
     useEffect(() => {
-        const { storeProduct } = product ?? {}
-        if (storeProduct) SHOP
-            .productPrice({ productId: storeProduct.id })
-            .then(setPrice)
+        SHOP.POST('/productPrice', { body: { product } })
+            .then(({ data}) => setPrice(data))
+            .catch(console.error)
     }, [])
 
     return price

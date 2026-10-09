@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "#src/components/ui/tabs.tsx";
 import { useBasket } from "#src/lib/basket.ts";
 import { products } from "#src/lib/products.server";
-import { SHOP } from "#src/shop.ts";
+import { SHOP, SHOP_URL } from "#src/shop.ts";
 import { Environment, OrbitControls, useGLTF } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import merge from 'deepmerge';
@@ -167,15 +167,9 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
         setProductConfig({
             quantity: 1,
             options: {
-                name: {
-                    value: config.assetName
-                },
-                provider: {
-                    value: config.provider
-                },
-                product: {
-                    value: config.product
-                },
+                name: config.assetName,
+                provider: config.provider,
+                product: config.product,
             },
             meta: {
                 textureFilename: `${config.provider}-${config.product}-${config.assetName}`,
@@ -274,9 +268,15 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
         const body = await texture.asBlob()
         const filename = productConfig.meta['textureFilename']
         if (!filename) throw new Error('No texture filename')
-        const { url } = await SHOP.generatePreSignedUploadUrl({ filename, type: 'image/png' })
+        const { data } = await SHOP.POST('/generatePreSignedUploadUrl', {
+            body: {
+                filename,
+                type: 'image/png'
+            }
+        })
 
-        await fetch(url, {
+        if (!data?.url) throw new Error('Did not get upload URL')
+        await fetch(data.url, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'image/png',
@@ -293,7 +293,7 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                 <div className="h-96 bg-accent rounded-lg shadow">
                     <ClientOnly>
                         {() => loaderData.signs[config.signId] ? <Viewer
-                            model={`${SHOP.url}${loaderData.signs[config.signId]?.previewModelUrl}`}
+                            model={`${SHOP_URL}${loaderData.signs[config.signId]?.previewModelUrl}`}
                             texture={texture?.dataUrl}
                             textureDimensions={(textureWidth, textureHeight) => setConfig(c => ({ ...c, textureWidth, textureHeight }))}
                         /> : <p>no sign :( {config.signId}</p>}
@@ -518,6 +518,10 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
     }}</ProductLayout >
 }
 
+const getSigns = () => SHOP.GET('/listSigns')
+    .then(({ data }) => Object.fromEntries((data?.signs ?? []).map(sign => [sign.id, sign])))
+    .catch(console.error)
+
 export async function loader({ request }: Route.LoaderArgs) {
     const url = new URL(request.url)
     const slug = url.pathname.split('/').at((-1))
@@ -525,17 +529,16 @@ export async function loader({ request }: Route.LoaderArgs) {
 
     const product = await products.getBySlug(slug)
     if (!product) throw new Response(undefined, { status: 404 })
-    const { signs } = await SHOP.listSigns({})
+    const signs = await getSigns()
 
-    return { product, signs: Object.fromEntries(signs.map(sign => [sign.id, sign])) }
+    return { product, signs }
 }
 
 export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
-    const { signs } = await SHOP.listSigns({})
 
     return {
         ...await serverLoader(),
-        signs: Object.fromEntries(signs.map(sign => [sign.id, sign]))
+        signs: await getSigns()
     }
 }
 

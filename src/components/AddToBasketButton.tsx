@@ -18,14 +18,13 @@ export function AddToBasketButton(props: {
     onAddToBasket?: OnAddToBasketCb,
 }) {
     const basket = useBasket()
-    const storeProduct = props.product.storeProduct
     const configId = useMemo(() => getConfigId(props.config), [props.config])
 
     const configs = Object.entries(basket.order.products[props.product.id]?.configs ?? {})
     const [adding, setAdding] = useState(false)
     const price = useProductPrice(props.product)
 
-    return storeProduct !== undefined && price?.available && <>
+    return price?.available && <>
         {basket.order.products[props.product.id]?.configs[configId]
             ? <div className="flex justify-between items-center bg-green-700/50 p-2 rounded-lg shadow">
                 <P>In your basket!</P>
@@ -35,7 +34,7 @@ export function AddToBasketButton(props: {
                 setAdding(true)
                 if ((await props.onAddToBasket?.(props.config)) ?? true)
                     basket.addProduct(
-                        storeProduct,
+                        props.product,
                         props.config
                     );
                 setAdding(false)
@@ -60,8 +59,7 @@ export function AddToBasketButton(props: {
                     >
                         <div className="flex flex-col text-sm text-card-foreground grow">{Object
                             .entries(config.options)
-                            .filter(([_, option]) => !option.hidden)
-                            .map(([id, option]) => <p key={id}><b className="capitalize">{id}</b>: {option.value}</p>)}
+                            .map(([id, option]) => <p key={id}><b className="capitalize">{id}</b>: {option}</p>)}
                         </div>
                         <RemoveFromBasketButton productId={props.product.id} configId={thisConfigId} />
 

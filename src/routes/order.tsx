@@ -126,8 +126,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
     const orderId = new URL(request.url).searchParams.get('id')
     if (!orderId) throw new Error("Order ID required")
 
-    const order = await SHOP.getOrder({ orderId })
-
+    const { data: order } = await SHOP.POST('/getOrder', { body: { orderId }})
     return { order, orderId }
 }
 

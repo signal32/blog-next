@@ -5,7 +5,8 @@
     "type": "module",
     "homepage": "https://hamishweir.uk",
     "imports": {
-        "#src/*": "./src/*"
+        "#src/*": "./src/*",
+        "#content/*": "./content/*"
     },
     "scripts": {
         "build": "react-router build",

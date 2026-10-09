@@ -10,7 +10,7 @@ import { ArrowRightIcon, Check, LucideClockFading, Minus, OctagonX, Plus, Shoppi
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { Popover, PopoverContent, PopoverHeader, PopoverTitle, PopoverTrigger } from "src/components/ui/popover"
-import { getOrderConfig, ShopClient } from 'shop'
+import { getOrderConfig, openApiSchema } from 'shop'
 import { Route } from './+types/basket'
 
 const PUBLIC_URL = env('VITE_BLOG_PUBLIC_URL')
@@ -19,26 +19,34 @@ export default function Basket({ loaderData }: Route.ComponentProps) {
     const basket = useBasket()
 
     const goToCheckout = async () => {
-        const { url } = await SHOP.createStripePayment({
-            order: basket.order,
-            successUrl: `${PUBLIC_URL}/order?id=${basket.order.id}&success=true`,
-            url: `${PUBLIC_URL}/order?id=${basket.order.id}`
+        const { data } = await SHOP.POST('/createStripePayment', {
+            body: {
+                order: basket.order,
+                successUrl: `${PUBLIC_URL}/order?id=${basket.order.id}&success=true`,
+                url: `${PUBLIC_URL}/order?id=${basket.order.id}`
+            }
         })
-        window.location.href = url
+
+        if (data?.url) {
+            window.location.href = data?.url
+        }
     }
 
     function BasketTable() {
         const cellClassName = 'p-1'
         const basket = useBasket()
 
-        const [calculations, setCalculations] = useState<Awaited<ReturnType<ShopClient['calculateOrder']>>>()
+        type CalculatedOrder = openApiSchema.components['schemas']['CalculatedOrder']
+        const [calculations, setCalculations] = useState<CalculatedOrder>()
         useEffect(() => {
             SHOP
-                .calculateOrder({ order: basket.order })
-                .then(setCalculations)
-                .catch(console.log)
+                .POST('/calculateOrder', {
+                    body: basket.order
+                })
+                .then(({ data }) => setCalculations(data))
+                .catch(console.error)
         }, [basket])
-
+        console.log({calculations})
         return calculations ? (
             <table className='table-auto w-full text-lg mb-5'>
                 <thead className='text-left'>
@@ -58,15 +66,14 @@ export default function Basket({ loaderData }: Route.ComponentProps) {
                             <tr key={i} className={invalid ? 'bg-red-500/10' : cn(i % 2 === 0 ? 'bg-air/10' : 'bg-air/5')}>
                                 <td className={cn(cellClassName)}>
                                     <Link
-                                        to={`/products/${loaderData.productIdsToSlug[product.id]}?configId=${optionId}`}
+                                        to={`/products/${loaderData.slugById[product.id]}?configId=${optionId}`}
                                     >
                                         <div className='flex flex-col'>
                                             <P className='hover:underline text-lg font-bold'>{product.name}</P>
                                             <div className='text-sm'>
                                                 <div className="flex flex-wrap gap-x-2 text-sm opacity-80">{Object
                                                     .entries(config.options)
-                                                    .filter(([_, option]) => !option.hidden)
-                                                    .map(([id, option]) => <p><b className="capitalize">{id}</b>: {option.value}</p>)}
+                                                    .map(([id, option]) => <p><b className="capitalize">{id}</b>: {option}</p>)}
                                                 </div>
                                             </div>
                                             {invalid && <P className='text-red-500'><b>This item is invalid:</b> Please remove it from your basket.</P>}
@@ -174,12 +181,15 @@ export default function Basket({ loaderData }: Route.ComponentProps) {
 }
 
 
-export async function loader({ params }: Route.LoaderArgs) {
-    const productIdsToSlug = Object.fromEntries(
-        (await products.getAll()).map(product => [product.id, product.slug])
+export async function loader(_: Route.LoaderArgs) {
+    const idBySlug = (await products.getCache()).idBySlug
+    const slugById = Object.fromEntries(idBySlug
+        .entries()
+        .map(entry => entry.reverse())
     )
 
-    return { productIdsToSlug }
+    console.log({slugById, idBySlug})
+    return { slugById }
 }
 
 export function RemoveFromBasketButton(props: {

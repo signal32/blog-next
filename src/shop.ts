@@ -1,10 +1,7 @@
-import { ShopClient } from "shop";
+import { defineClient } from "shop";
 import { env } from "./lib/utils";
 
-const shopUrl = env('VITE_BLOG_SHOP_URL')
+export const SHOP_URL = env('VITE_BLOG_SHOP_URL')
+if (!SHOP_URL) throw new Error('VITE_BLOG_SHOP_URL env must be set.')
 
-if (!shopUrl) {
-    throw new Error('VITE_BLOG_SHOP_URL env must be set.')
-}
-
-export const SHOP = new ShopClient(shopUrl)
+export const SHOP = defineClient(SHOP_URL)
