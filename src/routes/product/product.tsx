@@ -55,11 +55,8 @@ export async function loader({ params }: Route.LoaderArgs) {
             else return {}
         }) || []);
 
-    const mainFile = product?.files?.primary ? (await files.getBySlug(product.files.primary)) ?? undefined : undefined
-    const otherFiles = product?.files?.other.map(item => ({
-        file: files.getBySlug(item.slug),
-        ...item,
-    })) || []
+    const mainFile = product?.files?.[0]
+    const otherFiles = product.files
 
     return {
         product,
@@ -171,8 +168,8 @@ export function ProductSidebar(props: {
 
 const ProductDetails = (props: { product: Product }) => {
     const details = [
-        { name: 'Published', value: props.product.published?.toDateString() },
-        { name: 'Updated', value: props.product.updated?.toDateString() },
+        { name: 'Published', value: new Date(props.product.published).toDateString() },
+        { name: 'Updated', value: new Date(props.product.updated).toDateString() },
         { name: 'Has requirements', value: !props.product.requirements == undefined }
     ];
     return (

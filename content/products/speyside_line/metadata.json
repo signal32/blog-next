@@ -1,5 +1,4 @@
 {
-    "$schema": "../../../schema.json",
     "name": "The Speyside Line",
     "title": "The Speyside Line",
     "created": "2019-06-14T00:00:00Z",
@@ -142,16 +141,15 @@
             "/graphics/speyside_line/speyside_line_map.svg"
         ]
     },
-    "files": {
-        "primary": "speyside_line",
-        "other": [
-            {
-                "name": "Test Product Manual",
-                "file": "speyside_line",
-                "tag": "manual"
-            }
-        ]
-    },
+    "files": [
+        {
+            "label": "Speyside Line v1.01",
+            "type": "direct",
+            "href": "http://s3.finch.hamishweir.uk/shop-public/releases/SBSL_Speyside%20Line_Full%20v1.01.zip",
+            "visibility": "public",
+            "tags": []
+        }
+    ],
     "public": true,
     "donateUrl": "https://buy.stripe.com/5kQ00jbVR9js8Uydfs63K00",
     "tags": [

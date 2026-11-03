@@ -2,6 +2,8 @@ import fs, { existsSync } from 'fs';
 import { join } from "path";
 import { Product as ShopProduct } from "shop";
 import { Content, defineContent, defineContentRouting, defineFileSource } from "./content.server";
+import { env } from './utils';
+
 
 export interface Product extends Content, ShopProduct {
     published?: string,
@@ -12,15 +14,10 @@ export interface Product extends Content, ShopProduct {
     requirements?: Requirement[],
     description?: string,
     media?: ProductMedia,
-    files?: {
-        /** Primary file ID */
-        primary: string,
-        /** Miscellaneous files belonging to the product */
-        other: { slug: string, tag?: FileTag }[]
-    },
     configurationOptions?: ConfigurationOptions,
     stripePriceId?: string,
     donateUrl?: string,
+    postPurchaseInstructions?: string,
 }
 
 export type ConfigurationOption = {
@@ -80,7 +77,7 @@ export const products = defineContent<Product>([
             }) as Product;
         }
         else {
-            throw new Error('Could find product metadata file.')
+            throw new Error('Could find product metadata file.' + jsPath)
         }
 
         const descPath = join(path, 'description.md');
@@ -92,6 +89,7 @@ export const products = defineContent<Product>([
             ...product,
             ...(product.media?.banner ? { coverImage: product.media.banner } : {}), // Can't be undefined
             ...(product.description && !product.excerpt ? { excerpt: product.description.slice(0, 255).trim() } : {}),
+            url: `${env('VITE_BLOG_PUBLIC_URL')}/api/content/products/${descriptor.id}`,
             baseUrl: '/products',
         }
     }),

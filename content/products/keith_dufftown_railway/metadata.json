@@ -1,5 +1,4 @@
 {
-    "$schema": "../../../schema.json",
     "name": "Keith and Dufftown Railway",
     "title": "Keith and Dufftown Railway",
     "slug": "keith_dufftown_railway",
@@ -80,16 +79,15 @@
             "https://s3.finch.hamishweir.uk/shop-public/releases/kdr_images/kdr_4.png"
         ]
     },
-    "files": {
-        "primary": "kdr_v2",
-        "other": [
-            {
-                "name": "Version 1",
-                "file": "kdr_v1",
-                "tag": "manual"
-            }
-        ]
-    },
+    "files": [
+        {
+            "label": "KDR V2",
+            "type": "direct",
+            "href": "http://s3.finch.hamishweir.uk/shop-public/releases/[SP] KDRV1.0.rar",
+            "visibility": "public",
+            "tags": []
+        }
+    ],
     "public": true,
     "donateUrl": "https://buy.stripe.com/5kQ00jbVR9js8Uydfs63K00"
 }
