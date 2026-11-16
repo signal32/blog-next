@@ -57,6 +57,8 @@ export interface ProductMedia {
 
 export type ProductId = string;
 
+const modules = import.meta.glob('../../content/products/**/*.ts')
+
 export const products = defineContent<Product>([
     // Load products from local static files
     defineFileSource('content/products', async (descriptor, path) => {
@@ -65,9 +67,10 @@ export const products = defineContent<Product>([
         const jsonPath = join(path, 'metadata.json');
         let product: Product
 
-        if (existsSync(jsPath)) {
-            /* @vite-ignore */
-            product = (await import(/* @vite-ignore */ '../../' + jsPath)).default as Product
+        const importer = modules['../../' + jsPath]
+        if (importer) {
+            const mod = (await importer()) as { default: Product };
+            product = mod.default;
         }
         else if (existsSync(jsonPath)) {
             const file = fs.readFileSync(jsonPath, 'utf8');

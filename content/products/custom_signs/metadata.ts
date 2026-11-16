@@ -1,9 +1,8 @@
-import { Product } from "#src/lib/products.server.ts";
+import type { Product } from "#src/lib/products.server.ts";
 import { SHOP_URL } from "#src/shop.ts";
 
 export default {
     "name": "Train Simulator Classic Custom Signs",
-    "title": "Train Simulator Classic Custom Signs",
     "slug": "Train-Simulator-Classic-Custom-Signage",
     "public": true,
     "excerpt": "Build your custom signs online and have them in-game, ready for use, within minutes.",
@@ -44,4 +43,4 @@ export default {
             ],
         }
     ]
-    } satisfies Product
+} satisfies Partial<Product>
