@@ -1,10 +1,10 @@
-import { Info } from "lucide-react";
-import { ReactElement } from "react";
+import { Info } from 'lucide-react'
+import { ReactElement } from 'react'
 
 export function InfoCard(props: {
     children: {
-        body: ReactElement,
-        footer?: ReactElement,
+        body: ReactElement
+        footer?: ReactElement
     }
 }) {
     return (
@@ -14,10 +14,7 @@ export function InfoCard(props: {
                 {props.children.body}
             </div>
 
-            <div className="flex gap-3 pt-2">
-                {props.children.footer}
-            </div>
-
+            <div className="flex gap-3 pt-2">{props.children.footer}</div>
         </div>
     )
 }

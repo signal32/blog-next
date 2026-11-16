@@ -1,5 +1,4 @@
 {
-    "$schema": "../../../schema.json",
     "name": "The Speyside Line",
     "title": "The Speyside Line",
     "created": "2019-06-14T00:00:00Z",
@@ -38,23 +37,17 @@
         {
             "type": "external",
             "id": "RSC EU Assets Pack (bundled with many routes)",
-            "href": [
-                "https://steamdb.info/app/208300/subs/"
-            ]
+            "href": ["https://steamdb.info/app/208300/subs/"]
         },
         {
             "type": "external",
             "id": "AP Station Pack (bundled with many routes)",
-            "href": [
-                "https://steamdb.info/app/24086/subs/"
-            ]
+            "href": ["https://steamdb.info/app/24086/subs/"]
         },
         {
             "type": "external",
             "id": "SAD Assets Pack",
-            "href": [
-                "https://rail-sim.de/forum/filebase/entry/3305-altenburg-wildau-v-3-12/"
-            ]
+            "href": ["https://rail-sim.de/forum/filebase/entry/3305-altenburg-wildau-v-3-12/"]
         },
         {
             "type": "external",
@@ -66,30 +59,22 @@
         {
             "type": "external",
             "id": "UK Lattice Post Signals",
-            "href": [
-                "https://www.uktrainsim.com/filelib-info.php?form_fileid=32041"
-            ]
+            "href": ["https://www.uktrainsim.com/filelib-info.php?form_fileid=32041"]
         },
         {
             "type": "external",
             "id": "UKTS Blocks-Lofts-Bridges #1",
-            "href": [
-                "https://www.golden-age-developments.co.uk/ukts-freeware-packs.html"
-            ]
+            "href": ["https://www.golden-age-developments.co.uk/ukts-freeware-packs.html"]
         },
         {
             "type": "external",
             "id": "UKTS Clutter",
-            "href": [
-                "https://www.golden-age-developments.co.uk/ukts-freeware-packs.html"
-            ]
+            "href": ["https://www.golden-age-developments.co.uk/ukts-freeware-packs.html"]
         },
         {
             "type": "external",
             "id": "VP Grass Pack",
-            "href": [
-                "https://drive.google.com/file/d/1-XaAYJJIpiIWGyI62WmZpTp_jLbSJxxC/view"
-            ]
+            "href": ["https://drive.google.com/file/d/1-XaAYJJIpiIWGyI62WmZpTp_jLbSJxxC/view"]
         },
         {
             "type": "external",
@@ -142,20 +127,16 @@
             "/graphics/speyside_line/speyside_line_map.svg"
         ]
     },
-    "files": {
-        "primary": "speyside_line",
-        "other": [
-            {
-                "name": "Test Product Manual",
-                "file": "speyside_line",
-                "tag": "manual"
-            }
-        ]
-    },
+    "files": [
+        {
+            "label": "Speyside Line v1.01",
+            "type": "direct",
+            "href": "http://s3.finch.hamishweir.uk/shop-public/releases/SBSL_Speyside%20Line_Full%20v1.01.zip",
+            "visibility": "public",
+            "tags": []
+        }
+    ],
     "public": true,
     "donateUrl": "https://buy.stripe.com/5kQ00jbVR9js8Uydfs63K00",
-    "tags": [
-        "Train Simulator Classic",
-        "Speyside Line"
-    ]
+    "tags": ["Train Simulator Classic", "Speyside Line"]
 }

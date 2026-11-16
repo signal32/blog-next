@@ -1,15 +1,15 @@
-import { content } from "./lib/allContent.server"
-import { ContentLibrary, Content } from "./lib/content.server"
-import { files } from "./lib/file.server"
-import { pages } from "./lib/pages.server"
-import { posts } from "./lib/posts.server"
-import { products } from "./lib/products.server"
+import { content } from './lib/allContent.server'
+import { ContentLibrary, Content } from './lib/content.server'
+import { files } from './lib/file.server'
+import { pages } from './lib/pages.server'
+import { posts } from './lib/posts.server'
+import { products } from './lib/products.server'
 
 //@ts-expect-error
 process.loadEnvFile()
 
 export interface ServerConfig {
-    content: Record<string, ContentLibrary<Content>>,
+    content: Record<string, ContentLibrary<Content>>
 }
 
 export const SERVER_CONFIG: ServerConfig = {

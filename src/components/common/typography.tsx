@@ -5,11 +5,21 @@ import { cn } from '#src/lib/utils'
 type ElementProps<T, K = HTMLAttributes<T>> = ClassAttributes<T> & K
 
 export function H1(props: ElementProps<HTMLHeadingElement>) {
-    return <h1 {...props} className={cn('text-4xl font-display font-extrabold py-3', props.className)} />
+    return (
+        <h1
+            {...props}
+            className={cn('text-4xl font-display font-extrabold py-3', props.className)}
+        />
+    )
 }
 
 export function H2(props: ElementProps<HTMLHeadingElement>) {
-    return <h2 {...props} className={cn('text-3xl font-display font-extrabold py-2', props.className)} />
+    return (
+        <h2
+            {...props}
+            className={cn('text-3xl font-display font-extrabold py-2', props.className)}
+        />
+    )
 }
 
 export function H3(props: ElementProps<HTMLHeadingElement>) {
@@ -33,7 +43,9 @@ export function P(props: ElementProps<HTMLParagraphElement>) {
 }
 
 export function A(props: ElementProps<HTMLAnchorElement, AnchorHTMLAttributes<HTMLAnchorElement>>) {
-    return props.href?.startsWith('/')
-        ? <Link to={props.href} className='underline' {...props} />
-        : <a className='underline' {...props} />
+    return props.href?.startsWith('/') ? (
+        <Link to={props.href} className="underline" {...props} />
+    ) : (
+        <a className="underline" {...props} />
+    )
 }

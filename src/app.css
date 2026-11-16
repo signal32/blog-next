@@ -1,6 +1,6 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "./fonts.css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import './fonts.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -8,10 +8,10 @@
     --color-transparent: transparent;
     --color-current: currentColor;
     --color-paua: #262356;
-    --color-air: #0A59E2;
+    --color-air: #0a59e2;
     --color-ocean: #1532a7;
     --color-matisse: #3c5f82;
-    --color-heather: #88639D;
+    --color-heather: #88639d;
     --color-htest: #1a0c0e;
     --font-handwritten: Caveat;
     --font-display: Raleway;
@@ -21,7 +21,7 @@
 
 html,
 body {
-    @apply dark:text-slate-200 text-slate-700
+    @apply dark:text-slate-200 text-slate-700;
 }
 
 button {
@@ -71,10 +71,10 @@ button {
 
 :root {
     --color-paua: #262356;
-    --color-air: #0A59E2;
+    --color-air: #0a59e2;
     --color-ocean: #1532a7;
     --color-matisse: #3c5f82;
-    --color-heather: #88639D;
+    --color-heather: #88639d;
     --color-htest: #1a0c0e;
 
     --radius: 0.625rem;

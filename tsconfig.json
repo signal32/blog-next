@@ -1,28 +1,16 @@
 {
     "compilerOptions": {
-        "lib": [
-            "DOM",
-            "DOM.Iterable",
-            "ESNext"
-        ],
-        "types": [
-            "node",
-            "vite/client",
-            "@react-router/node"
-        ],
+        "lib": ["DOM", "DOM.Iterable", "ESNext"],
+        "types": ["node", "vite/client", "@react-router/node"],
         "target": "ESNext",
         "module": "ESNext",
         "moduleResolution": "bundler",
         "jsx": "react-jsx",
-        "rootDirs": [
-            ".",
-            "./.react-router/types"
-        ],
+        "rootDirs": [".", "./.react-router/types"],
         "baseUrl": ".",
         "paths": {
-            "#src/*": [
-                "./src/*"
-            ]
+            "#src/*": ["./src/*"],
+            "#content/*": ["./content/*"]
         },
         "esModuleInterop": true,
         "noEmit": true,
@@ -35,13 +23,8 @@
         "noImplicitOverride": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "noPropertyAccessFromIndexSignature": true,
+        "noPropertyAccessFromIndexSignature": true
     },
-    "include": [
-        "**/*.ts",
-        "**/*.tsx"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
+    "include": ["**/*.ts", "**/*.tsx"],
+    "exclude": ["node_modules"]
 }

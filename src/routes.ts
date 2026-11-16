@@ -4,7 +4,6 @@ import { Content } from './lib/content.server'
 import { postRouting } from './lib/posts.server'
 import { productRouting, products } from './lib/products.server'
 
-
 function contentCustomFileRoutes(contents: Content[]) {
     const routes: RouteConfigEntry[] = []
     for (const content of contents) {

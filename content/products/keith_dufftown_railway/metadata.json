@@ -1,5 +1,4 @@
 {
-    "$schema": "../../../schema.json",
     "name": "Keith and Dufftown Railway",
     "title": "Keith and Dufftown Railway",
     "slug": "keith_dufftown_railway",
@@ -31,37 +30,27 @@
         {
             "type": "external",
             "id": "RSC EU Assets Pack (bundled with many routes)",
-            "href": [
-                "https://steamdb.info/app/208300/subs/"
-            ]
+            "href": ["https://steamdb.info/app/208300/subs/"]
         },
         {
             "type": "external",
             "id": "AP Station Pack (bundled with many routes)",
-            "href": [
-                "https://steamdb.info/app/24086/subs/"
-            ]
+            "href": ["https://steamdb.info/app/24086/subs/"]
         },
         {
             "type": "external",
             "id": "SAD Assets Pack",
-            "href": [
-                "https://rail-sim.de/forum/filebase/entry/3305-altenburg-wildau-v-3-12/"
-            ]
+            "href": ["https://rail-sim.de/forum/filebase/entry/3305-altenburg-wildau-v-3-12/"]
         },
         {
             "type": "external",
             "id": "UKTS Blocks-Lofts-Bridges #1",
-            "href": [
-                "https://www.golden-age-developments.co.uk/ukts-freeware-packs.html"
-            ]
+            "href": ["https://www.golden-age-developments.co.uk/ukts-freeware-packs.html"]
         },
         {
             "type": "external",
             "id": "UKTS Clutter",
-            "href": [
-                "https://www.golden-age-developments.co.uk/ukts-freeware-packs.html"
-            ]
+            "href": ["https://www.golden-age-developments.co.uk/ukts-freeware-packs.html"]
         },
         {
             "type": "external",
@@ -80,16 +69,15 @@
             "https://s3.finch.hamishweir.uk/shop-public/releases/kdr_images/kdr_4.png"
         ]
     },
-    "files": {
-        "primary": "kdr_v2",
-        "other": [
-            {
-                "name": "Version 1",
-                "file": "kdr_v1",
-                "tag": "manual"
-            }
-        ]
-    },
+    "files": [
+        {
+            "label": "KDR V2",
+            "type": "direct",
+            "href": "http://s3.finch.hamishweir.uk/shop-public/releases/[SP] KDRV1.0.rar",
+            "visibility": "public",
+            "tags": []
+        }
+    ],
     "public": true,
     "donateUrl": "https://buy.stripe.com/5kQ00jbVR9js8Uydfs63K00"
 }

@@ -1,57 +1,55 @@
-import fs from 'fs';
-import { readFile } from 'fs/promises';
-import matter from 'gray-matter';
-import { join } from 'path';
-import { Content, defineContent, defineContentRouting, defineFileSource } from './content.server';
+import fs from 'fs'
+import { readFile } from 'fs/promises'
+import matter from 'gray-matter'
+import { join } from 'path'
+import { Content, defineContent, defineContentRouting, defineFileSource } from './content.server'
 
-const POST_DIR = join(process.cwd(), '/content/posts');
+const POST_DIR = join(process.cwd(), '/content/posts')
 
 export interface Post extends Content {
     author?: string
-    content?: string,
-    page?: boolean,
+    content?: string
+    page?: boolean
 }
 
 export function isPost(obj: any): obj is Post {
     return (
-        typeof obj === 'object' && obj !== null
-        && 'slug' in obj && typeof obj.slug === 'string'
-        && 'name' in obj && typeof obj.name === 'string'
-        && (
-            'created' in obj && !isNaN(new Date(obj.created).valueOf())
-            || !('created' in obj)
-        )
-    );
+        typeof obj === 'object' &&
+        obj !== null &&
+        'slug' in obj &&
+        typeof obj.slug === 'string' &&
+        'name' in obj &&
+        typeof obj.name === 'string' &&
+        (('created' in obj && !isNaN(new Date(obj.created).valueOf())) || !('created' in obj))
+    )
 }
 
-export const posts = defineContent<Post>(
-    [
-        defineFileSource('content/posts', async (descriptor, path) => {
-            const fileContents = await readFile(path)
-            const { data, content } = matter(fileContents)
+export const posts = defineContent<Post>([
+    defineFileSource('content/posts', async (descriptor, path) => {
+        const fileContents = await readFile(path)
+        const { data, content } = matter(fileContents)
 
-            const post = {
-                ...descriptor,
-                ...data,
-                content,
-                baseUrl: '/posts'
-            } as Post
-            if (isPost(post)) return post
-            else throw new Error("Invalid post data")
-        })
-    ],
-)
+        const post = {
+            ...descriptor,
+            ...data,
+            content,
+            baseUrl: '/posts',
+        } as Post
+        if (isPost(post)) return post
+        else throw new Error('Invalid post data')
+    }),
+])
 
 export const postRouting = defineContentRouting(posts, {
     basePath: 'posts',
     contentPage: './routes/posts/post.tsx',
     listPage: './routes/posts/list.tsx',
     indexPage: './routes/posts/index.tsx',
-    pageSize: 3
+    pageSize: 3,
 })
 
 export function getPostSlugs() {
-    return fs.readdirSync(POST_DIR);
+    return fs.readdirSync(POST_DIR)
 }
 
 /**
@@ -71,7 +69,7 @@ export function getPostBySlug(slug: string, fields: string[] = []) {
     }
 
     const items: Items = {
-        baseUrl: '/blog'
+        baseUrl: '/blog',
     }
 
     // Ensure only the minimal needed data is exposed
@@ -88,7 +86,7 @@ export function getPostBySlug(slug: string, fields: string[] = []) {
         }
     })
 
-    return items as unknown as Post;
+    return items as unknown as Post
 }
 
 const DEFAULT_POST_FIELDS = [
@@ -103,11 +101,11 @@ const DEFAULT_POST_FIELDS = [
 ]
 
 export function getAllPosts(fields: string[] = DEFAULT_POST_FIELDS) {
-    const slugs = getPostSlugs();
+    const slugs = getPostSlugs()
     const posts = slugs
         .map((slug) => getPostBySlug(slug, fields))
-        .sort((post1, post2) => (post1?.created || 0) > (post2?.created || 1) ? -1 : 1);
-    return posts;
+        .sort((post1, post2) => ((post1?.created || 0) > (post2?.created || 1) ? -1 : 1))
+    return posts
 }
 
 export const BlOG_PAGE_SIZE = 3

@@ -1,7 +1,9 @@
-
 # Dev Notes
+
 ## Shop
+
 Still to do:
+
 - [x] Load variant configs from basket links
 - [x] Handle payment success by triggering asset creation
 - [x] Add page where customers can retrieve their purchases

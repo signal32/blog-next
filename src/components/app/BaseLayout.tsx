@@ -1,49 +1,46 @@
-import { useBasket } from "#src/lib/basket";
-import { cn } from "#src/lib/utils";
-import { CopyrightIcon, Menu, ShoppingBasket, X } from "lucide-react";
-import { ReactElement, ReactNode, useState } from "react";
-import { Link, useLocation } from "react-router";
-import { websiteConfig } from "../../routes/_app";
-import ModalContext from "../common/Modal";
-import { H2 } from "../common/typography";
-import { Button } from "../ui/button";
+import { useBasket } from '#src/lib/basket'
+import { cn } from '#src/lib/utils'
+import { CopyrightIcon, Menu, ShoppingBasket, X } from 'lucide-react'
+import { ReactElement, ReactNode, useState } from 'react'
+import { Link, useLocation } from 'react-router'
+import { websiteConfig } from '../../routes/_app'
+import ModalContext from '../common/Modal'
+import { H2 } from '../common/typography'
+import { Button } from '../ui/button'
 
-
-const DEMO_IMAGE = "https://images.pexels.com/photos/4215110/pexels-photo-4215110.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
+const DEMO_IMAGE =
+    'https://images.pexels.com/photos/4215110/pexels-photo-4215110.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
 
 export interface MainLayoutProps {
-    children: ReactNode,
-    header?: { type: 'image', href: string } | { type: 'component', component: JSX.Element, noClip?: boolean } | { type: 'none' },
-    headerTitle?: string,
-    description?: string,
-    breadcrumbs?: boolean,
+    children: ReactNode
+    header?:
+        | { type: 'image'; href: string }
+        | { type: 'component'; component: JSX.Element; noClip?: boolean }
+        | { type: 'none' }
+    headerTitle?: string
+    description?: string
+    breadcrumbs?: boolean
 }
 
 export type LayoutConfig = Omit<MainLayoutProps, 'children'>
 
 export interface LayoutRequestProps {
-    updateLayout(config: LayoutConfig): void,
+    updateLayout(config: LayoutConfig): void
 }
 
 //const AppBaseLayout = ({children, header: defaultHeaderImage, headerTitle: defaultHeaderTitle, breadcrumbs}: MainLayoutProps) => {
 const AppBaseLayout = (props: MainLayoutProps) => {
-    const location = useLocation();
+    const location = useLocation()
     const basket = useBasket()
 
-
-
-
-    const Navigation = (props: {
-        column?: boolean
-    }) => {
-        const NavigationLink = (linkProps: { to: string, children?: React.ReactElement }) => (
+    const Navigation = (props: { column?: boolean }) => {
+        const NavigationLink = (linkProps: { to: string; children?: React.ReactElement }) => (
             <Link
                 className={cn(
-                    "grow p-2 rounded-lg text-center ring-air",
+                    'grow p-2 rounded-lg text-center ring-air',
                     location.pathname === linkProps.to
                         ? 'bg-air'
-                        : cn('hover:ring-2', props.column && 'bg-air/20')
-
+                        : cn('hover:ring-2', props.column && 'bg-air/20'),
                 )}
                 to={linkProps.to}
                 onClick={() => setShowNav(false)}
@@ -58,30 +55,48 @@ const AppBaseLayout = (props: MainLayoutProps) => {
                 className={cn('flex gap-2 text-white text-lg', props.column && 'flex-col')}
                 aria-label="Main navigation"
             >
-                {websiteConfig.mainMenu.map((item, i) => <NavigationLink key={i} to={item.href}><p>{item.name}</p></NavigationLink>)}
-                {(location.pathname.endsWith('basket') || Object.keys(basket.order.products).length > 0) && <NavigationLink to="/basket">
-                    <div className="flex justify-center">
-                        <div className="relative">
-                            <ShoppingBasket />
-                            {basketSize > 0 &&
-                                <div className="absolute bg-red-500 rounded-full -top-2 -right-2 aspect-square text-sm font-bold h-4 w-4 flex justify-center items-center">{basketSize}</div>
-                            }
-
+                {websiteConfig.mainMenu.map((item, i) => (
+                    <NavigationLink key={i} to={item.href}>
+                        <p>{item.name}</p>
+                    </NavigationLink>
+                ))}
+                {(location.pathname.endsWith('basket') ||
+                    Object.keys(basket.order.products).length > 0) && (
+                    <NavigationLink to="/basket">
+                        <div className="flex justify-center">
+                            <div className="relative">
+                                <ShoppingBasket />
+                                {basketSize > 0 && (
+                                    <div className="absolute bg-red-500 rounded-full -top-2 -right-2 aspect-square text-sm font-bold h-4 w-4 flex justify-center items-center">
+                                        {basketSize}
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                    </div>
-
-                </NavigationLink>}
+                    </NavigationLink>
+                )}
 
                 {/* Extra links (i.e. external social media) */}
-                <div className={cn("flex flex-wrap justify-center sm:justify-end items-center border-air sm:pl-4", props.column && "border-t-2")}>
+                <div
+                    className={cn(
+                        'flex flex-wrap justify-center sm:justify-end items-center border-air sm:pl-4',
+                        props.column && 'border-t-2',
+                    )}
+                >
                     {websiteConfig.socialLinks.map((link, i) => (
                         <div className="p-2" key={i}>
-                            <a className="text-slate-300 hover:text-white transition-all" href={link.href} target="_blank">{link.icon}</a>
+                            <a
+                                className="text-slate-300 hover:text-white transition-all"
+                                href={link.href}
+                                target="_blank"
+                            >
+                                {link.icon}
+                            </a>
                         </div>
                     ))}
                 </div>
             </nav>
-        );
+        )
     }
 
     const [showNav, setShowNav] = useState(false)
@@ -91,21 +106,29 @@ const AppBaseLayout = (props: MainLayoutProps) => {
             <header className="mb-5 top-0 sticky bg-gradient-to-t from-transparent dark:to-gray-900 to-gray-300 z-40">
                 <div className="max-w-4xl mx-auto px-2 sm:px-6 mt-0 md:mt-2 rounded-b-lg md:rounded-lg shadow-lg bg-ocean">
                     <div className="flex flex-wrap gap-2 justify-between items-center pb-1 px-4">
-                        <Link
-                            to={'/'}
-                            className="flex-auto max-w-xs p-2">
-                            <h1 className='text-white/85 hover:text-white text-4xl py-2 font-black font-handwritten '>Hamish Weir</h1>
+                        <Link to={'/'} className="flex-auto max-w-xs p-2">
+                            <h1 className="text-white/85 hover:text-white text-4xl py-2 font-black font-handwritten ">
+                                Hamish Weir
+                            </h1>
                         </Link>
-                        <Button className="sm:hidden cursor-pointer text-white" variant='outline' onClick={() => setShowNav(!showNav)}>{showNav ? <X /> : <Menu />}</Button>
-                        <div className="not-sm:hidden"><Navigation /></div>
+                        <Button
+                            className="sm:hidden cursor-pointer text-white"
+                            variant="outline"
+                            onClick={() => setShowNav(!showNav)}
+                        >
+                            {showNav ? <X /> : <Menu />}
+                        </Button>
+                        <div className="not-sm:hidden">
+                            <Navigation />
+                        </div>
                     </div>
-                    <div className={cn('sm:hidden', !showNav && 'hidden')}><Navigation column /></div>
+                    <div className={cn('sm:hidden', !showNav && 'hidden')}>
+                        <Navigation column />
+                    </div>
                 </div>
             </header>
 
-            <div className="h-full grow">
-                {props.children}
-            </div>
+            <div className="h-full grow">{props.children}</div>
 
             <footer className="w-full dark:text-gray-300 text-gray-700">
                 <div className="max-w-4xl mx-auto -z-20">
@@ -114,10 +137,10 @@ const AppBaseLayout = (props: MainLayoutProps) => {
                             <div className="flex items-center gap-2">
                                 <CopyrightIcon />
                                 <p className=" dark:text-gray-300 text-gray-600 text-xs">
-                                    2026 Hamish Weir. Content on this website may be shared for personal, non-commercial use with attribution.
+                                    2026 Hamish Weir. Content on this website may be shared for
+                                    personal, non-commercial use with attribution.
                                 </p>
                             </div>
-
                         </div>
                     </div>
 
@@ -135,20 +158,19 @@ const AppBaseLayout = (props: MainLayoutProps) => {
                             </div>
                         </div>
                     </div>*/}
-
                 </div>
             </footer>
 
             <ModalContext />
-
         </div>
-    );
+    )
 }
 
-export default AppBaseLayout;
+export default AppBaseLayout
 
 export function defineLayout<P = {}>(
-    config: Omit<MainLayoutProps, 'children'> | ((props: P) => Omit<MainLayoutProps, 'children'>) = {}
+    config:
+        Omit<MainLayoutProps, 'children'> | ((props: P) => Omit<MainLayoutProps, 'children'>) = {},
 ) {
     // eslint-disable-next-line react/display-name
     return (page: ReactElement, props: P) => (
@@ -165,46 +187,51 @@ export function ContentLayout(props: MainLayoutProps) {
             <div
                 className={cn(
                     `p-0 relative transition-all ease-in-out rounded-b-xl opacity-100`,
-                    !(props.header?.type === 'component' && props.header.noClip) && 'overflow-clip')}>
-                {
-                    props.header?.type === 'component'
-                        ? <div className="-mt-10">{props.header.component}</div>
-                        : (props.header?.type === 'image' && (props.header?.href || props.headerTitle)) && <div
-                            className={cn('w-full rounded-b-lg  -mt-10', props.header?.href ? 'h-64' : 'h-24')}
+                    !(props.header?.type === 'component' && props.header.noClip) && 'overflow-clip',
+                )}
+            >
+                {props.header?.type === 'component' ? (
+                    <div className="-mt-10">{props.header.component}</div>
+                ) : (
+                    props.header?.type === 'image' &&
+                    (props.header?.href || props.headerTitle) && (
+                        <div
+                            className={cn(
+                                'w-full rounded-b-lg  -mt-10',
+                                props.header?.href ? 'h-64' : 'h-24',
+                            )}
                         >
-                            {props.header?.type === 'image' && props.header.href
-                                ? <img
+                            {props.header?.type === 'image' && props.header.href ? (
+                                <img
                                     src={props.header.href ?? DEMO_IMAGE}
-                                    className='w-full h-full'
-                                    alt=''
-                                    sizes='100vw'
+                                    className="w-full h-full"
+                                    alt=""
+                                    sizes="100vw"
                                     style={{ objectFit: 'cover' }}
                                 />
-                                : <div
-                                    className="w-full h-full dark:bg-ocean/70 bg-white/70 rounded-b-xl shadow-lg"
-                                />
-                            }
+                            ) : (
+                                <div className="w-full h-full dark:bg-ocean/70 bg-white/70 rounded-b-xl shadow-lg" />
+                            )}
 
-                            {props.headerTitle &&
+                            {props.headerTitle && (
                                 <div
                                     className={cn(
-                                        "absolute backdrop-blur-sm px-3 rounded-tr-lg",
-                                        props.header?.href ? "bg-gray-200/80 dark:bg-gray-900/75 dark:text-primary-f bottom-0 left-0" : "bottom-3 left-2"
+                                        'absolute backdrop-blur-sm px-3 rounded-tr-lg',
+                                        props.header?.href
+                                            ? 'bg-gray-200/80 dark:bg-gray-900/75 dark:text-primary-f bottom-0 left-0'
+                                            : 'bottom-3 left-2',
                                     )}
                                 >
                                     <H2 className="not-sm:text-xl">{props.headerTitle}</H2>
                                 </div>
-                            }
+                            )}
                         </div>
-                }
+                    )
+                )}
             </div>
 
-
-
             <main className="p-2 flex-grow">
-                <div>
-                    {props.children}
-                </div>
+                <div>{props.children}</div>
             </main>
         </div>
     )

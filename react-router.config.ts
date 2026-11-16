@@ -10,12 +10,12 @@ export default {
     prerender: async ({ getStaticPaths }) => {
         return [
             ...getStaticPaths(),
-            ...await postRouting.prerenderPaths(),
-            ...await productRouting.prerenderPaths(),
-            ...await contentRouting.prerenderPaths(),
-            ...(await pages.getAllDetailed()).flatMap(page => [
+            ...(await postRouting.prerenderPaths()),
+            ...(await productRouting.prerenderPaths()),
+            ...(await contentRouting.prerenderPaths()),
+            ...(await pages.getAllDetailed()).flatMap((page) => [
                 `/${page.slug}`,
-                `/api/content/pages/${page.id}`
+                `/api/content/pages/${page.id}`,
             ]),
         ]
     },
