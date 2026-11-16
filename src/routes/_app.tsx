@@ -1,8 +1,5 @@
 import { Github, Instagram } from 'lucide-react'
 import { ReactNode } from 'react'
-import LayoutApp from '../components/app/LayoutApp'
-
-export default LayoutApp
 
 export interface AppConfig {
     mainMenu: { name: string; href: string }[]
