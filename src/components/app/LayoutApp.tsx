@@ -13,11 +13,11 @@ type AppPropsWithLayout = AppProps & {
 };
 
 export default function LayoutApp({ Component, pageProps }: AppPropsWithLayout) {
-  const layout = Component.layout ?? ((page) => page)
+    const layout = Component.layout ?? ((page) => page)
 
-  return (
-    <div>
-      { layout(<Component { ...pageProps } />, pageProps) }
-    </div>
-  );
+    return (
+        <div>
+            { layout(<Component { ...pageProps } />, pageProps) }
+        </div>
+    );
 }

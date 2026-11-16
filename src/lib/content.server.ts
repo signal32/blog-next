@@ -132,7 +132,7 @@ export function defineContent<T extends Content>(
     };
 
     return {
-         async getCache() {
+        async getCache() {
             await initCache()
             return cache
         },

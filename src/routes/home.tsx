@@ -125,9 +125,9 @@ const HomeHero = () => (
                     </div>
                 </div>
             </CarouselItem>)}
-      </CarouselContent>
-      <CarouselPrevious className='not-lg:hidden'/>
-      <CarouselNext className='not-lg:hidden' />
+        </CarouselContent>
+        <CarouselPrevious className='not-lg:hidden'/>
+        <CarouselNext className='not-lg:hidden' />
     </Carousel>
 )
 

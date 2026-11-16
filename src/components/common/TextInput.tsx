@@ -22,11 +22,11 @@ type Status = 'success' | 'information' | 'warning' | 'danger';
 
 const getStatusColor = (status: Status, bg = true, text = true, outline = true) => {
     switch (status) {
-        case 'success': return `${bg? 'bg-green-200 dark:bg-green-700' : ''} ${text? 'text-green-700 dark:text-green-200' : ''} ${outline? 'outline-green-200 dark:outline-green-700' : ''}`;
-        case 'information': return `${bg? 'bg-blue-200 dark:bg-blue-700' : ''} ${text? 'text-blue-700 dark:text-blue-200' : ''} ${outline? 'outline-blue-200 dark:outline-blue-700' : ''}`;
-        case 'warning': return `${bg? 'bg-yellow-200 dark:bg-yellow-700' : ''} ${text? 'text-yellow-700 dark:text-yellow-200' : ''} ${outline? 'outline-yellow-200 dark:outline-yellow-700' : ''}`;
-        case 'danger': return `${bg? 'bg-red-200 dark:bg-red-700' : ''} ${text? 'text-red-700 dark:text-red-200' : ''} ${outline? 'outline-red-200 dark:outline-red-700' : ''}`;
-        default: return `${bg? 'bg-slate-200 dark:bg-slate-700' : ''} ${text? 'text-slate-700 dark:text-slate-200' : ''} ${outline? 'outline-slate-200 dark:outline-slate-700' : ''}`
+    case 'success': return `${bg? 'bg-green-200 dark:bg-green-700' : ''} ${text? 'text-green-700 dark:text-green-200' : ''} ${outline? 'outline-green-200 dark:outline-green-700' : ''}`;
+    case 'information': return `${bg? 'bg-blue-200 dark:bg-blue-700' : ''} ${text? 'text-blue-700 dark:text-blue-200' : ''} ${outline? 'outline-blue-200 dark:outline-blue-700' : ''}`;
+    case 'warning': return `${bg? 'bg-yellow-200 dark:bg-yellow-700' : ''} ${text? 'text-yellow-700 dark:text-yellow-200' : ''} ${outline? 'outline-yellow-200 dark:outline-yellow-700' : ''}`;
+    case 'danger': return `${bg? 'bg-red-200 dark:bg-red-700' : ''} ${text? 'text-red-700 dark:text-red-200' : ''} ${outline? 'outline-red-200 dark:outline-red-700' : ''}`;
+    default: return `${bg? 'bg-slate-200 dark:bg-slate-700' : ''} ${text? 'text-slate-700 dark:text-slate-200' : ''} ${outline? 'outline-slate-200 dark:outline-slate-700' : ''}`
     }
 }
 
