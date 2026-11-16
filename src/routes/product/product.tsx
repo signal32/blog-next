@@ -203,15 +203,15 @@ const ProductDetails = (props: { product: Product }) => {
     const details = [
         {
             name: 'Published',
-            value: new Date(props.product.published).toDateString(),
+            value: props.product.published
+                ? new Date(props.product.published).toDateString()
+                : undefined,
         },
         {
             name: 'Updated',
-            value: new Date(props.product.updated).toDateString(),
-        },
-        {
-            name: 'Has requirements',
-            value: !props.product.requirements == undefined,
+            value: props.product.updated
+                ? new Date(props.product.updated).toDateString()
+                : undefined,
         },
     ]
     return (
