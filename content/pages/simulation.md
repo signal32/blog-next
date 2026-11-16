@@ -5,6 +5,7 @@ excerpt: About me
 coverImage: /graphics/posts/dava/aviemore_box_shed.jpg
 public: true
 ---
+
 I am a developer of Train Simulator Classic addons, focusing on realism and authenticity within my home area of North East Scotland.
 
 My work is published under the Rails Developments branding.

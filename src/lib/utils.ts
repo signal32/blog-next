@@ -1,11 +1,10 @@
-import { clsx, type ClassValue } from "clsx"
-import { useEffect, useRef } from "react"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from 'clsx'
+import { useEffect, useRef } from 'react'
+import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
 }
-
 
 export function useSyncedRef<T>(value: T) {
     const ref = useRef(value)
@@ -20,21 +19,21 @@ export function formatCurrency(amount: number) {
 }
 
 export function once<T>(fn: () => T): () => T {
-    let called = false;
-    let result: T;
+    let called = false
+    let result: T
 
     return () => {
         if (!called) {
-            called = true;
-            result = fn();
+            called = true
+            result = fn()
         }
-        return result;
-    };
+        return result
+    }
 }
 
 export function debounce<Args extends unknown[], X>(
     fn: (...args: Args) => X,
-    delay: number
+    delay: number,
 ): (...args: Args) => Promise<Awaited<X>> {
     let timer: ReturnType<typeof setTimeout>
 
@@ -54,8 +53,7 @@ export function debounce<Args extends unknown[], X>(
 export function env(name: string) {
     if (typeof window !== 'undefined') {
         return import.meta.env[name]
-    }
-    else {
+    } else {
         //@ts-expect-error
         process.loadEnvFile()
         return process.env[name]
@@ -63,5 +61,7 @@ export function env(name: string) {
 }
 
 export function range(start: number, end: number) {
-    return Array(end - start + 1).fill(0).map((_, idx) => start + idx)
+    return Array(end - start + 1)
+        .fill(0)
+        .map((_, idx) => start + idx)
 }

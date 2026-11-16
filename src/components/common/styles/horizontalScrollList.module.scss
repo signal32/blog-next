@@ -9,9 +9,10 @@
     padding-bottom: 1rem;
 
     -ms-overflow-style: none; // IE & Edge
-    scrollbar-width: none;  // Firefox
-    &::-webkit-scrollbar { // Chrome
-      display: none;
+    scrollbar-width: none; // Firefox
+    &::-webkit-scrollbar {
+        // Chrome
+        display: none;
     }
 }
 
@@ -26,7 +27,7 @@
     padding: 0.5rem;
     aspect-ratio: 1 / 1;
     border-radius: 100%;
-    cursor: pointer
+    cursor: pointer;
 }
 
 .scrollButtonLeft {
@@ -54,5 +55,5 @@
 
 .scrollGradientRight {
     @extend .scrollGradient;
-    right: 0
+    right: 0;
 }

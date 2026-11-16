@@ -5,11 +5,11 @@ import LayoutApp from '../components/app/LayoutApp'
 export default LayoutApp
 
 export interface AppConfig {
-    mainMenu: { name: string, href: string }[],
-    socialLinks: { name: string, icon: ReactNode, href: string }[],
-    siteName: string,
-    personalDescription: string,
-    personalTagline: string,
+    mainMenu: { name: string; href: string }[]
+    socialLinks: { name: string; icon: ReactNode; href: string }[]
+    siteName: string
+    personalDescription: string
+    personalTagline: string
 }
 
 export const websiteConfig: AppConfig = {
@@ -20,10 +20,27 @@ export const websiteConfig: AppConfig = {
         { name: `Shop`, href: `/products` },
     ],
     socialLinks: [
-        { name: `GitHub`, href: 'https://github.com/signal32', icon: <div><Github /></div> },
-        { name: `Instagram`, href: 'https://www.instagram.com/hamishweirphoto/', icon: <div><Instagram /></div> }
+        {
+            name: `GitHub`,
+            href: 'https://github.com/signal32',
+            icon: (
+                <div>
+                    <Github />
+                </div>
+            ),
+        },
+        {
+            name: `Instagram`,
+            href: 'https://www.instagram.com/hamishweirphoto/',
+            icon: (
+                <div>
+                    <Instagram />
+                </div>
+            ),
+        },
     ],
     siteName: `Hamish Weir Blog`,
     personalTagline: 'Creative Technologist',
-    personalDescription: 'I am Hamish, a software engineer and creative technologist floating around on the British canal system. From developing all sorts of software and building detailed rail simulations through to installing off-grid electrical systems and practicing photography, I enjoy creative problem solving in many different forms.'
+    personalDescription:
+        'I am Hamish, a software engineer and creative technologist floating around on the British canal system. From developing all sorts of software and building detailed rail simulations through to installing off-grid electrical systems and practicing photography, I enjoy creative problem solving in many different forms.',
 }

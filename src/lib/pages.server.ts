@@ -16,5 +16,5 @@ export const pages = defineContent<Post>([
 
         if (isPost(post)) return post
         else throw Error('Invalid post data')
-    })
+    }),
 ])

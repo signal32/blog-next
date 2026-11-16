@@ -11,8 +11,11 @@ import React from 'react'
 import { useModalStore } from './Modal'
 
 export const Markdown = (props: {
-    content: string,
-    contentLibraries?: { posts: ContentLibrary<Post>, products: ContentLibrary<Product> }
+    content: string
+    contentLibraries?: {
+        posts: ContentLibrary<Post>
+        products: ContentLibrary<Product>
+    }
 }) => {
     const modal = useModalStore()
 
@@ -20,73 +23,99 @@ export const Markdown = (props: {
         <ReactMarkdown
             rehypePlugins={[rehypeRaw]}
             disallowedElements={[]}
-            components={{
-                content: (attrs: Record<string, string>) => {
-                    const library = attrs['library']
-                    if (!library) throw new Error('No library specified')
-                    const contentId = attrs['id']
-                    const contentSlug = attrs['slug']
-                    if (!contentId && !contentSlug) throw new Error('No content ID or slug')
+            components={
+                {
+                    content: (attrs: Record<string, string>) => {
+                        const library = attrs['library']
+                        if (!library) throw new Error('No library specified')
+                        const contentId = attrs['id']
+                        const contentSlug = attrs['slug']
+                        if (!contentId && !contentSlug) throw new Error('No content ID or slug')
 
-                    const [content, setContent] = useState<Content>()
+                        const [content, setContent] = useState<Content>()
 
-                    useEffect(() => {
-                        if (contentId) {
-                            fetch(`/api/content/${library}/${contentId}`)
-                                .then(res => res.json())
-                                .then(setContent)
-                        }
-                        else {
-                            fetch('/api/content-list')
-                                .then(res => res.json())
-                                .then(list => {
-                                    const id = list.find(list => list.id === library)
-                                        .content.find(content => content.slug === contentSlug).id
-                                    return fetch(`/api/content/${library}/${id}`)
-                                })
-                                .then(res => res.json())
-                                .then(setContent)
-                        }
-                    }, [attrs['id']])
+                        useEffect(() => {
+                            if (contentId) {
+                                fetch(`/api/content/${library}/${contentId}`)
+                                    .then((res) => res.json())
+                                    .then(setContent)
+                            } else {
+                                fetch('/api/content-list')
+                                    .then((res) => res.json())
+                                    .then((list) => {
+                                        const id = list
+                                            .find((list) => list.id === library)
+                                            .content.find(
+                                                (content) => content.slug === contentSlug,
+                                            ).id
+                                        return fetch(`/api/content/${library}/${id}`)
+                                    })
+                                    .then((res) => res.json())
+                                    .then(setContent)
+                            }
+                        }, [attrs['id']])
 
-                    return content
-                        ? <div className='no-markdown'><PostItem post={content} showImage /></div>
-                        : <Skeleton className='w-full h-48' />
-                },
-                grid: (props: { children: ReactNode }) => {
-                    const lines = React.Children.toArray(props.children)
-                        .filter((child): child is string => typeof child === 'string')
-                        .join('\n')
-                        .split('\n')
-                        .map(l => l.trim())
-                        .filter(Boolean)
-
-                    return <div className="flex flex-wrap gap-4">
-                        {lines.map((line, i) => (
-                            <div key={i} className="flex-1 min-w-50">
-                                <Markdown
-                                    content={line} />
+                        return content ? (
+                            <div className="no-markdown">
+                                <PostItem post={content} showImage />
                             </div>
-                        ))}
-                    </div>
-                },
-                h1: typography.H1,
-                h2: typography.H2,
-                h3: typography.H3,
-                h4: typography.H4,
-                h5: typography.H5,
-                h6: typography.H6,
-                a: typography.A,
-                p: (props) => <typography.P className='mb-3' {...props} />,
-                ul: (props) => <ul className='px-5 list-disc' {...props} />,
-                ol: (props) => <ol className='px-5 list-decimal' {...props} />,
-                li: (props) => <li className='my-1' {...props} />,
-                blockquote: (props) => <blockquote className='my-2 p-1 bg-card border-l-4 border-r-primary rounded shadow' {...props} />,
-                img: (props) => <img
-                    className='w-full my-3 rounded-lg shadow-lg cursor-pointer' {...props}
-                    onClick={() => modal.pushModal(<img className="object-cover overflow-clip rounded-xl w-full p-0" src={props.src} />)}
-                />,
-            } as Components}
-        >{props.content}</ReactMarkdown>
+                        ) : (
+                            <Skeleton className="w-full h-48" />
+                        )
+                    },
+                    grid: (props: { children: ReactNode }) => {
+                        const lines = React.Children.toArray(props.children)
+                            .filter((child): child is string => typeof child === 'string')
+                            .join('\n')
+                            .split('\n')
+                            .map((l) => l.trim())
+                            .filter(Boolean)
+
+                        return (
+                            <div className="flex flex-wrap gap-4">
+                                {lines.map((line, i) => (
+                                    <div key={i} className="flex-1 min-w-50">
+                                        <Markdown content={line} />
+                                    </div>
+                                ))}
+                            </div>
+                        )
+                    },
+                    h1: typography.H1,
+                    h2: typography.H2,
+                    h3: typography.H3,
+                    h4: typography.H4,
+                    h5: typography.H5,
+                    h6: typography.H6,
+                    a: typography.A,
+                    p: (props) => <typography.P className="mb-3" {...props} />,
+                    ul: (props) => <ul className="px-5 list-disc" {...props} />,
+                    ol: (props) => <ol className="px-5 list-decimal" {...props} />,
+                    li: (props) => <li className="my-1" {...props} />,
+                    blockquote: (props) => (
+                        <blockquote
+                            className="my-2 p-1 bg-card border-l-4 border-r-primary rounded shadow"
+                            {...props}
+                        />
+                    ),
+                    img: (props) => (
+                        <img
+                            className="w-full my-3 rounded-lg shadow-lg cursor-pointer"
+                            {...props}
+                            onClick={() =>
+                                modal.pushModal(
+                                    <img
+                                        className="object-cover overflow-clip rounded-xl w-full p-0"
+                                        src={props.src}
+                                    />,
+                                )
+                            }
+                        />
+                    ),
+                } as Components
+            }
+        >
+            {props.content}
+        </ReactMarkdown>
     )
 }

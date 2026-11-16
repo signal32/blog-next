@@ -1,21 +1,25 @@
-import { create } from "zustand"
+import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { Order, Product, updateOrderProductConfig, Config, configId as getConfigId } from "shop"
+import { Order, Product, updateOrderProductConfig, Config, configId as getConfigId } from 'shop'
 import { v4 } from 'uuid'
 
 export interface Basket {
-    order: Order,
-    addProduct(product: Product, config: Config, configId?: string): void,
-    updateProduct(productId: string, config: Config | ((current: Config) => Config), configId?: string): void,
-    removeProduct(productId: string, optionId?: string): void,
-    size(): number,
-    clear(): void,
+    order: Order
+    addProduct(product: Product, config: Config, configId?: string): void
+    updateProduct(
+        productId: string,
+        config: Config | ((current: Config) => Config),
+        configId?: string,
+    ): void
+    removeProduct(productId: string, optionId?: string): void
+    size(): number
+    clear(): void
 }
 
 function newOrder(): Order {
     return {
         id: v4(),
-        products: {}
+        products: {},
     }
 }
 
@@ -30,22 +34,21 @@ export const useBasket = create<Basket>()(
                 const current = order.products[product.id]?.configs[configId]
                 if (current) {
                     updateOrderProductConfig(
-                        prev => ({
+                        (prev) => ({
                             ...prev,
-                            quantity: prev.quantity + config.quantity
+                            quantity: prev.quantity + config.quantity,
                         }),
                         order,
                         product.id,
-                        configId
+                        configId,
                     )
-                }
-                else {
+                } else {
                     order.products[product.id] = {
                         product,
                         configs: {
                             ...order.products[product.id]?.configs,
-                            [configId]: config
-                        }
+                            [configId]: config,
+                        },
                     }
                 }
                 set({ order })
@@ -68,24 +71,25 @@ export const useBasket = create<Basket>()(
                     if (Object.keys(product.configs).length === 0) {
                         delete order.products[productId]
                     }
-                }
-                else delete order.products[productId]
+                } else delete order.products[productId]
 
                 set({ order })
             },
 
             size() {
                 const { order } = get()
-                return Object.values(order.products).map(product => Object.keys(product.configs)).flat().length
-
+                return Object.values(order.products)
+                    .map((product) => Object.keys(product.configs))
+                    .flat().length
             },
 
             clear() {
                 set({ order: newOrder() })
-            }
+            },
         }),
         {
             name: 'basket-storage',
             storage: createJSONStorage(() => localStorage),
-        }
-    ))
+        },
+    ),
+)

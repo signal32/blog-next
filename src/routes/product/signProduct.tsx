@@ -1,64 +1,86 @@
-import { OnAddToBasketCb } from "#src/components/AddToBasketButton.tsx";
-import { InfoCard } from "#src/components/common/InfoCard.tsx";
-import { Markdown } from "#src/components/common/Markdown.tsx";
-import { H5, P } from "#src/components/common/typography.tsx";
-import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "#src/components/ui/alert-dialog.tsx";
-import { Button } from "#src/components/ui/button.tsx";
-import { Field, FieldError, FieldLabel } from "#src/components/ui/field.tsx";
-import { Input } from "#src/components/ui/input.tsx";
-import { Popover, PopoverContent, PopoverDescription, PopoverHeader, PopoverTitle, PopoverTrigger } from "#src/components/ui/popover.tsx";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "#src/components/ui/select.tsx";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "#src/components/ui/tabs.tsx";
-import { useBasket } from "#src/lib/basket.ts";
-import { products } from "#src/lib/products.server";
-import { SHOP, SHOP_URL } from "#src/shop.ts";
-import { Environment, OrbitControls, useGLTF } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
-import merge from 'deepmerge';
-import { Check, CircleQuestionMark, Info, Palette, Rotate3D, Save, Trash, X } from "lucide-react";
-import { ReactNode, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import { HexAlphaColorPicker } from 'react-colorful';
-import { useSearchParams } from "react-router";
-import sanitize from "sanitize-filename";
-import { Config, configId as getConfigId } from "shop";
-import * as THREE from "three";
-import { create, UseBoundStore } from "zustand";
-import { Route } from './+types/signProduct';
-import { ProductLayout, ProductSidebar } from "./product";
+import { OnAddToBasketCb } from '#src/components/AddToBasketButton.tsx'
+import { InfoCard } from '#src/components/common/InfoCard.tsx'
+import { Markdown } from '#src/components/common/Markdown.tsx'
+import { H5, P } from '#src/components/common/typography.tsx'
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '#src/components/ui/alert-dialog.tsx'
+import { Button } from '#src/components/ui/button.tsx'
+import { Field, FieldError, FieldLabel } from '#src/components/ui/field.tsx'
+import { Input } from '#src/components/ui/input.tsx'
+import {
+    Popover,
+    PopoverContent,
+    PopoverDescription,
+    PopoverHeader,
+    PopoverTitle,
+    PopoverTrigger,
+} from '#src/components/ui/popover.tsx'
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '#src/components/ui/select.tsx'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '#src/components/ui/tabs.tsx'
+import { useBasket } from '#src/lib/basket.ts'
+import { products } from '#src/lib/products.server'
+import { SHOP, SHOP_URL } from '#src/shop.ts'
+import { Environment, OrbitControls, useGLTF } from '@react-three/drei'
+import { Canvas } from '@react-three/fiber'
+import merge from 'deepmerge'
+import { Check, CircleQuestionMark, Info, Palette, Rotate3D, Save, Trash, X } from 'lucide-react'
+import { ReactNode, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
+import { HexAlphaColorPicker } from 'react-colorful'
+import { useSearchParams } from 'react-router'
+import sanitize from 'sanitize-filename'
+import { Config, configId as getConfigId } from 'shop'
+import * as THREE from 'three'
+import { create, UseBoundStore } from 'zustand'
+import { Route } from './+types/signProduct'
+import { ProductLayout, ProductSidebar } from './product'
 
 type SignConfig = {
-    signId: string,
-    textureWidth: number,
-    textureHeight: number,
-    useCustomTexture: boolean,
-    backgroundColour: string,
-    borderColour: string,
-    borderThickness: number,
-    customTextureUrl?: string,
-    primaryText: TextConfig,
-    secondaryText: TextConfig,
-    provider: string,
-    product: string,
-    assetName: string,
+    signId: string
+    textureWidth: number
+    textureHeight: number
+    useCustomTexture: boolean
+    backgroundColour: string
+    borderColour: string
+    borderThickness: number
+    customTextureUrl?: string
+    primaryText: TextConfig
+    secondaryText: TextConfig
+    provider: string
+    product: string
+    assetName: string
 }
 
 type TextConfig = {
-    textValue?: string,
-    textSize: number,
-    textFont: string,
+    textValue?: string
+    textSize: number
+    textFont: string
     textColour: string
     verticalOffset: number
 }
 
 type TextureData = {
-    asBlob: () => Promise<Blob>,
+    asBlob: () => Promise<Blob>
     dataUrl: string
 }
 
 const FONTS = [
     { name: 'Raleway', fontFace: 'Raleway' },
     { name: 'Caveat', fontFace: 'Caveat' },
-    { name: 'Sans Serif', fontFace: 'sans-serif' }
+    { name: 'Sans Serif', fontFace: 'sans-serif' },
 ]
 
 const SIGN_BOARD_MESH_NAME = '_board'
@@ -71,50 +93,68 @@ const fieldInputClasses = 'basis-1/2'
 function createTextureFromConfig(config: SignConfig): TextureData {
     const canvas = document.createElement('canvas')
     canvas.width = config.textureWidth //512
-    canvas.height = config.textureHeight// 512
-    const ctx = canvas.getContext("2d")
+    canvas.height = config.textureHeight // 512
+    const ctx = canvas.getContext('2d')
     if (!ctx) throw new Error('Could not get canvas context')
 
     ctx.fillStyle = config.backgroundColour
-    ctx.lineWidth = config.borderThickness;
+    ctx.lineWidth = config.borderThickness
     ctx.strokeStyle = config.borderColour
     ctx.fillRect(0, 0, canvas.width, canvas.height)
     ctx.strokeRect(0, 0, canvas.width, canvas.height)
 
-
     const drawText = (config: TextConfig, x: number, y: number, width: number) => {
         ctx.fillStyle = config.textColour
-        ctx.font = `bold ${config.textSize}px ${config.textFont}`;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(config.textValue ?? 'Your text here', x, y + config.verticalOffset, width);
+        ctx.font = `bold ${config.textSize}px ${config.textFont}`
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.fillText(config.textValue ?? 'Your text here', x, y + config.verticalOffset, width)
     }
 
-    drawText(config.primaryText, canvas.width / 2, canvas.height / 2, canvas.width - 10 - (config.borderThickness * 2))
-    drawText(config.secondaryText, canvas.width / 2, (canvas.height / 2) + (config.primaryText.textSize / 2), canvas.width - 10 - (config.borderThickness * 2))
+    drawText(
+        config.primaryText,
+        canvas.width / 2,
+        canvas.height / 2,
+        canvas.width - 10 - config.borderThickness * 2,
+    )
+    drawText(
+        config.secondaryText,
+        canvas.width / 2,
+        canvas.height / 2 + config.primaryText.textSize / 2,
+        canvas.width - 10 - config.borderThickness * 2,
+    )
 
     return {
         dataUrl: canvas.toDataURL('image/png'),
-        asBlob: () => new Promise((resolve, reject) => {
-            canvas.toBlob((blob) => blob !== null ? resolve(blob) : reject(), "image/png");
-        })
+        asBlob: () =>
+            new Promise((resolve, reject) => {
+                canvas.toBlob((blob) => (blob !== null ? resolve(blob) : reject()), 'image/png')
+            }),
     }
 }
 
 function validateConfig(config: SignConfig): {
-    [K in keyof SignConfig]?: { valid: boolean, message?: string }
+    [K in keyof SignConfig]?: { valid: boolean; message?: string }
 } {
-    const isSafeFilePath = (path: string) => path !== sanitize(path)
-        ? { valid: false, message: 'Must contain no spaces or special characters' }
-        : hasLength(path)
-    const hasLength = (name: string, min = 3) => name.length < 3
-        ? { valid: false, message: `Must contain at least ${min} characters` }
-        : { valid: true }
+    const isSafeFilePath = (path: string) =>
+        path !== sanitize(path)
+            ? {
+                valid: false,
+                message: 'Must contain no spaces or special characters',
+            }
+            : hasLength(path)
+    const hasLength = (name: string, min = 3) =>
+        name.length < 3
+            ? {
+                valid: false,
+                message: `Must contain at least ${min} characters`,
+            }
+            : { valid: true }
 
     return {
         provider: isSafeFilePath(config.provider),
         product: isSafeFilePath(config.product),
-        assetName: hasLength(config.assetName, 5)
+        assetName: hasLength(config.assetName, 5),
     }
 }
 
@@ -157,11 +197,14 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
         const config = basket.order.products[loaderData.product.id]?.configs[configId]
         const signConfig = config?.meta['signConfig']
         if (signConfig) setConfig(JSON.parse(signConfig))
-
     }, [params, basket])
 
     const [texture, setTexture] = useState<TextureData>()
-    const [productConfig, setProductConfig] = useState<Config>({ quantity: 1, options: {}, meta: {} })
+    const [productConfig, setProductConfig] = useState<Config>({
+        quantity: 1,
+        options: {},
+        meta: {},
+    })
     useEffect(() => {
         setTexture(createTextureFromConfig(config))
         setProductConfig({
@@ -174,10 +217,11 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
             meta: {
                 textureFilename: `${config.provider}-${config.product}-${config.assetName}`,
                 signConfig: JSON.stringify(config),
-            }
+            },
         })
     }, [config])
-    const currentProductConfig = basket.order.products[loaderData.product.id]?.configs[getConfigId(productConfig)]
+    const currentProductConfig =
+        basket.order.products[loaderData.product.id]?.configs[getConfigId(productConfig)]
 
     const updateBasketRequired = useMemo(() => {
         const config = currentProductConfig
@@ -185,12 +229,11 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
         return config?.meta['signConfig'] !== productConfig.meta['signConfig']
     }, [productConfig, basket])
 
-
     const updateBasket = async () => {
         const signConfig = productConfig.meta['signConfig']
-        const config = basket.order.products[loaderData.product.id]?.configs[getConfigId(productConfig)]
+        const config =
+            basket.order.products[loaderData.product.id]?.configs[getConfigId(productConfig)]
         if (!config || !signConfig) return
-
 
         basket.updateProduct(
             loaderData.product.id,
@@ -199,22 +242,23 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                 meta: {
                     ...config.meta,
                     signConfig,
-                }
+                },
             },
             getConfigId(productConfig),
         )
 
         try {
             await uploadTexture()
-        }
-        catch (err) {
+        } catch (err) {
             console.error(err)
-            alert('Could not update basket. Texture was not uploaded. Reverting to previous configuration.')
+            alert(
+                'Could not update basket. Texture was not uploaded. Reverting to previous configuration.',
+            )
             basket.updateProduct(
                 loaderData.product.id,
                 {
                     ...config,
-                    meta: config.meta
+                    meta: config.meta,
                 },
                 getConfigId(productConfig),
             )
@@ -239,25 +283,35 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                 if (!valid) {
                     setShowAlertDialog({
                         title: 'Invalid configuration',
-                        message: <p>
-                            <b>The sign could not be added to your basket due to an invalid field.</b><br />
-                            Please return and correct before proceeding.<br /><br />
-                        </p>
+                        message: (
+                            <p>
+                                <b>
+                                    The sign could not be added to your basket due to an invalid
+                                    field.
+                                </b>
+                                <br />
+                                Please return and correct before proceeding.
+                                <br />
+                                <br />
+                            </p>
+                        ),
                     })
                     return false
                 }
             }
 
             await uploadTexture()
-        }
-        catch (err) {
+        } catch (err) {
             console.error(err)
             setShowAlertDialog({
                 title: 'Something went wrong',
-                message: <p>
-                    An error occurred while adding the sign to your basket.<br />
-                    Please try again and get in touch if this continues.
-                </p>
+                message: (
+                    <p>
+                        An error occurred while adding the sign to your basket.
+                        <br />
+                        Please try again and get in touch if this continues.
+                    </p>
+                ),
             })
             return false
         }
@@ -271,8 +325,8 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
         const { data } = await SHOP.POST('/generatePreSignedUploadUrl', {
             body: {
                 filename,
-                type: 'image/png'
-            }
+                type: 'image/png',
+            },
         })
 
         if (!data?.url) throw new Error('Did not get upload URL')
@@ -282,249 +336,426 @@ export default function SignProduct({ loaderData, params }: Route.ComponentProps
                 'Content-Type': 'image/png',
             },
             body,
-        });
+        })
     }
 
-    const [showAlertDialog, setShowAlertDialog] = useState<{ title: string, message: ReactNode }>()
+    const [showAlertDialog, setShowAlertDialog] = useState<{
+        title: string
+        message: ReactNode
+    }>()
 
-    return <ProductLayout product={loaderData.product}>{{
-        main: <>
-            <div className="p-2 bg-accent/50 rounded-lg shadow">
-                <div className="h-96 bg-accent rounded-lg shadow">
-                    <ClientOnly>
-                        {() => loaderData.signs[config.signId] ? <Viewer
-                            model={`${SHOP_URL}${loaderData.signs[config.signId]?.previewModelUrl}`}
-                            texture={texture?.dataUrl}
-                            textureDimensions={(textureWidth, textureHeight) => setConfig(c => ({ ...c, textureWidth, textureHeight }))}
-                        /> : <p>no sign :( {config.signId}</p>}
-                    </ClientOnly>
-                </div>
-
-                <Tabs defaultValue="config" className="pt-2">
-                    <TabsList className="w-full">
-                        <TabsTrigger value="config"><Palette />Editor</TabsTrigger>
-                        <TabsTrigger value="description"><Info />About</TabsTrigger>
-                    </TabsList>
-
-                    <TabsContent value="config">
-                        {updateBasketRequired && <InfoCard>{{
-                            body: <P className="text-sm">
-                                <b>You have modified a sign which is already in your basket.</b><br />
-                                If you would like to add a new sign, please change either the <i>Provider</i>, <i>Product</i>, or <i>Name</i> fields and then select <i>Add to basket</i>.<br />
-                            </P>,
-                            footer: <>
-                                <Button className="grow" variant='outline' onClick={updateBasket}><Save /> Update Basket</Button>
-                                <Button className="grow" variant='outline' onClick={restoreFromBasket}><Trash /> Discard changes</Button>
-                            </>
-                        }}</InfoCard>}
-                        <form className="">
-                            <div className="flex justify-between border-air/50 border-b-2 pt-2">
-                                <H5>Asset Config</H5>
+    return (
+        <ProductLayout product={loaderData.product}>
+            {{
+                main: (
+                    <>
+                        <div className="p-2 bg-accent/50 rounded-lg shadow">
+                            <div className="h-96 bg-accent rounded-lg shadow">
+                                <ClientOnly>
+                                    {() =>
+                                        loaderData.signs[config.signId] ? (
+                                            <Viewer
+                                                model={`${SHOP_URL}${loaderData.signs[config.signId]?.previewModelUrl}`}
+                                                texture={texture?.dataUrl}
+                                                textureDimensions={(textureWidth, textureHeight) =>
+                                                    setConfig((c) => ({
+                                                        ...c,
+                                                        textureWidth,
+                                                        textureHeight,
+                                                    }))
+                                                }
+                                            />
+                                        ) : (
+                                            <p>no sign :( {config.signId}</p>
+                                        )
+                                    }
+                                </ClientOnly>
                             </div>
 
-                            <Field className={fieldClasses} orientation="horizontal">
-                                <FieldLabel htmlFor="input-field-provider">Provider</FieldLabel>
-                                <Input
-                                    className={fieldInputClasses}
-                                    id="input-field-provider"
-                                    type="text"
-                                    placeholder="Hamish Weir"
-                                    value={config.provider}
-                                    onChange={ev => setConfig(c => ({ ...c, provider: ev.currentTarget?.value }))}
-                                />
-                                <HelpPopover title="Provider">
-                                    <Markdown content={PROVIDER_MARKDOWN} />
-                                </HelpPopover>
-                                {configValidation.provider?.valid === false && <FieldError className="text-right basis-full mb-2">{configValidation.provider.message}</FieldError>}
+                            <Tabs defaultValue="config" className="pt-2">
+                                <TabsList className="w-full">
+                                    <TabsTrigger value="config">
+                                        <Palette />
+                                        Editor
+                                    </TabsTrigger>
+                                    <TabsTrigger value="description">
+                                        <Info />
+                                        About
+                                    </TabsTrigger>
+                                </TabsList>
 
-                            </Field>
+                                <TabsContent value="config">
+                                    {updateBasketRequired && (
+                                        <InfoCard>
+                                            {{
+                                                body: (
+                                                    <P className="text-sm">
+                                                        <b>
+                                                            You have modified a sign which is
+                                                            already in your basket.
+                                                        </b>
+                                                        <br />
+                                                        If you would like to add a new sign, please
+                                                        change either the <i>Provider</i>,{' '}
+                                                        <i>Product</i>, or <i>Name</i> fields and
+                                                        then select <i>Add to basket</i>.
+                                                        <br />
+                                                    </P>
+                                                ),
+                                                footer: (
+                                                    <>
+                                                        <Button
+                                                            className="grow"
+                                                            variant="outline"
+                                                            onClick={updateBasket}
+                                                        >
+                                                            <Save /> Update Basket
+                                                        </Button>
+                                                        <Button
+                                                            className="grow"
+                                                            variant="outline"
+                                                            onClick={restoreFromBasket}
+                                                        >
+                                                            <Trash /> Discard changes
+                                                        </Button>
+                                                    </>
+                                                ),
+                                            }}
+                                        </InfoCard>
+                                    )}
+                                    <form className="">
+                                        <div className="flex justify-between border-air/50 border-b-2 pt-2">
+                                            <H5>Asset Config</H5>
+                                        </div>
 
-                            <Field className={fieldClasses} orientation="horizontal">
-                                <FieldLabel htmlFor="input-field-product">Product</FieldLabel>
-                                <Input
-                                    className={fieldInputClasses}
-                                    id="input-field-product"
-                                    type="text"
-                                    placeholder="Signs"
-                                    value={config.product}
-                                    onChange={ev => setConfig(c => ({ ...c, product: ev.currentTarget?.value }))}
-                                />
-                                <HelpPopover title="Product">
-                                    <Markdown content={PRODUCT_MARKDOWN} />
-                                </HelpPopover>
-                                {configValidation.product?.valid === false && <FieldError className="text-right basis-full mb-2">{configValidation.product.message}</FieldError>}
+                                        <Field className={fieldClasses} orientation="horizontal">
+                                            <FieldLabel htmlFor="input-field-provider">
+                                                Provider
+                                            </FieldLabel>
+                                            <Input
+                                                className={fieldInputClasses}
+                                                id="input-field-provider"
+                                                type="text"
+                                                placeholder="Hamish Weir"
+                                                value={config.provider}
+                                                onChange={(ev) =>
+                                                    setConfig((c) => ({
+                                                        ...c,
+                                                        provider: ev.currentTarget?.value,
+                                                    }))
+                                                }
+                                            />
+                                            <HelpPopover title="Provider">
+                                                <Markdown content={PROVIDER_MARKDOWN} />
+                                            </HelpPopover>
+                                            {configValidation.provider?.valid === false && (
+                                                <FieldError className="text-right basis-full mb-2">
+                                                    {configValidation.provider.message}
+                                                </FieldError>
+                                            )}
+                                        </Field>
 
-                            </Field>
+                                        <Field className={fieldClasses} orientation="horizontal">
+                                            <FieldLabel htmlFor="input-field-product">
+                                                Product
+                                            </FieldLabel>
+                                            <Input
+                                                className={fieldInputClasses}
+                                                id="input-field-product"
+                                                type="text"
+                                                placeholder="Signs"
+                                                value={config.product}
+                                                onChange={(ev) =>
+                                                    setConfig((c) => ({
+                                                        ...c,
+                                                        product: ev.currentTarget?.value,
+                                                    }))
+                                                }
+                                            />
+                                            <HelpPopover title="Product">
+                                                <Markdown content={PRODUCT_MARKDOWN} />
+                                            </HelpPopover>
+                                            {configValidation.product?.valid === false && (
+                                                <FieldError className="text-right basis-full mb-2">
+                                                    {configValidation.product.message}
+                                                </FieldError>
+                                            )}
+                                        </Field>
 
-                            <Field className={fieldClasses} orientation="horizontal">
-                                <FieldLabel htmlFor="input-field-asset-name">Name</FieldLabel>
-                                <Input
-                                    className={fieldInputClasses}
-                                    id="input-field-asset-name"
-                                    type="text"
-                                    placeholder="My custom sign"
-                                    value={config.assetName}
-                                    onChange={ev => setConfig(c => ({ ...c, assetName: ev.currentTarget?.value }))}
-                                />
-                                <HelpPopover title="Name">
-                                    <Markdown content={NAME_MARKDOWN} />
-                                </HelpPopover>
-                                {configValidation.assetName?.valid === false && <FieldError className="text-right basis-full mb-2">{configValidation.assetName.message}</FieldError>}
+                                        <Field className={fieldClasses} orientation="horizontal">
+                                            <FieldLabel htmlFor="input-field-asset-name">
+                                                Name
+                                            </FieldLabel>
+                                            <Input
+                                                className={fieldInputClasses}
+                                                id="input-field-asset-name"
+                                                type="text"
+                                                placeholder="My custom sign"
+                                                value={config.assetName}
+                                                onChange={(ev) =>
+                                                    setConfig((c) => ({
+                                                        ...c,
+                                                        assetName: ev.currentTarget?.value,
+                                                    }))
+                                                }
+                                            />
+                                            <HelpPopover title="Name">
+                                                <Markdown content={NAME_MARKDOWN} />
+                                            </HelpPopover>
+                                            {configValidation.assetName?.valid === false && (
+                                                <FieldError className="text-right basis-full mb-2">
+                                                    {configValidation.assetName.message}
+                                                </FieldError>
+                                            )}
+                                        </Field>
 
-                            </Field>
+                                        <div className="flex justify-between border-air/50 border-b-2 pt-2">
+                                            <H5>Sign Style</H5>
+                                        </div>
+                                        <Field className={fieldClasses} orientation="horizontal">
+                                            <FieldLabel>Model</FieldLabel>
+                                            <Select
+                                                value={config.signId}
+                                                onValueChange={(signId) =>
+                                                    setConfig((c) => ({
+                                                        ...merge(
+                                                            c,
+                                                            (loaderData.signs[signId]
+                                                                ?.defaultConfig as SignConfig) ??
+                                                                {},
+                                                        ),
+                                                        signId: signId || c.signId,
+                                                    }))
+                                                }
+                                            >
+                                                <SelectTrigger className={fieldInputClasses}>
+                                                    <SelectValue placeholder="Choose model" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectGroup>
+                                                        {Object.entries(loaderData.signs).map(
+                                                            ([id, sign]) => (
+                                                                <SelectItem value={id}>
+                                                                    {sign.name}
+                                                                </SelectItem>
+                                                            ),
+                                                        )}
+                                                    </SelectGroup>
+                                                </SelectContent>
+                                            </Select>
+                                            <HelpPopover title="Model">
+                                                This is the base 3D model onto which your custom
+                                                design will be applied.
+                                            </HelpPopover>
+                                        </Field>
 
-                            <div className="flex justify-between border-air/50 border-b-2 pt-2">
-                                <H5>Sign Style</H5>
-                            </div>
-                            <Field className={fieldClasses} orientation="horizontal">
-                                <FieldLabel>Model</FieldLabel>
-                                <Select
-                                    value={config.signId}
-                                    onValueChange={signId => setConfig(
-                                        c => ({
-                                            ...merge(c, (loaderData.signs[signId]?.defaultConfig as SignConfig) ?? {}),
-                                            signId: signId || c.signId,
-                                        }))}>
-                                    <SelectTrigger className={fieldInputClasses}>
-                                        <SelectValue placeholder="Choose model" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectGroup>
-                                            {Object.entries(loaderData.signs).map(([id, sign]) => <SelectItem value={id}>{sign.name}</SelectItem>)}
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
-                                <HelpPopover title="Model">
-                                    This is the base 3D model onto which your custom design will be applied.
-                                </HelpPopover>
-                            </Field>
-
-                            {/*<div className="pt-4 flex justify-between">
+                                        {/*<div className="pt-4 flex justify-between">
                                 <P className="text-sm"><b>Try before you buy</b><br />This sample asset can be used in game.</P>
                                 <Button variant={"secondary"}><FileDown />Download sample</Button>
                             </div>*/}
 
-                            <div className="flex justify-between border-air/50 border-b-2 pt-2">
-                                <H5>Board Design</H5>
-                                {/*<Field orientation="horizontal" className="w-fit">
+                                        <div className="flex justify-between border-air/50 border-b-2 pt-2">
+                                            <H5>Board Design</H5>
+                                            {/*<Field orientation="horizontal" className="w-fit">
                                     <FieldLabel htmlFor="2fa">Use custom texture</FieldLabel>
                                     <Switch checked={config.useCustomTexture} onCheckedChange={checked => setConfig(c => ({ ...c, useCustomTexture: checked }))} id="2fa" />
                                 </Field>*/}
-                            </div>
+                                        </div>
 
-                            <div className="flex gap-2 py-2">
-                                <div className="basis-2/3">
-                                    {
-                                        config?.useCustomTexture
-                                            ? <>
-                                                <P className="text-sm">
-                                                    <b>Warning:</b> Each sign model has a different texture resolution.<br />
-                                                    Please chose the model you wish to use before uploading custom textures.
-                                                </P>
-                                                <Button variant="outline" size="sm" className="w-full p-4">
-                                                    Upload texture
-                                                </Button>
-                                                <P>Resolution: {config.textureWidth}px x {config.textureHeight}px</P>
+                                        <div className="flex gap-2 py-2">
+                                            <div className="basis-2/3">
+                                                {config?.useCustomTexture ? (
+                                                    <>
+                                                        <P className="text-sm">
+                                                            <b>Warning:</b> Each sign model has a
+                                                            different texture resolution.
+                                                            <br />
+                                                            Please chose the model you wish to use
+                                                            before uploading custom textures.
+                                                        </P>
+                                                        <Button
+                                                            variant="outline"
+                                                            size="sm"
+                                                            className="w-full p-4"
+                                                        >
+                                                            Upload texture
+                                                        </Button>
+                                                        <P>
+                                                            Resolution: {config.textureWidth}
+                                                            px x {config.textureHeight}
+                                                            px
+                                                        </P>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Tabs defaultValue="background">
+                                                            <TabsList>
+                                                                <TabsTrigger value="background">
+                                                                    Background
+                                                                </TabsTrigger>
+                                                                <TabsTrigger value="primary-text">
+                                                                    Primary Text
+                                                                </TabsTrigger>
+                                                                <TabsTrigger value="secondary-text">
+                                                                    Secondary Text
+                                                                </TabsTrigger>
+                                                            </TabsList>
 
-                                            </>
-                                            : <>
-                                                <Tabs defaultValue="background">
-                                                    <TabsList>
-                                                        <TabsTrigger value="background">Background</TabsTrigger>
-                                                        <TabsTrigger value="primary-text">Primary Text</TabsTrigger>
-                                                        <TabsTrigger value="secondary-text">Secondary Text</TabsTrigger>
-                                                    </TabsList>
+                                                            <TabsContent value="background">
+                                                                <Field
+                                                                    className={fieldClasses}
+                                                                    orientation="horizontal"
+                                                                >
+                                                                    <FieldLabel>Colour</FieldLabel>
+                                                                    <SignColourPicker
+                                                                        currentColour={
+                                                                            config.backgroundColour
+                                                                        }
+                                                                        onChange={(
+                                                                            backgroundColour,
+                                                                        ) =>
+                                                                            setConfig((c) => ({
+                                                                                ...c,
+                                                                                backgroundColour,
+                                                                            }))
+                                                                        }
+                                                                    />
+                                                                </Field>
 
-                                                    <TabsContent value="background">
-                                                        <Field className={fieldClasses} orientation="horizontal">
-                                                            <FieldLabel>Colour</FieldLabel>
-                                                            <SignColourPicker
-                                                                currentColour={config.backgroundColour}
-                                                                onChange={backgroundColour => setConfig(c => ({ ...c, backgroundColour }))}
-                                                            />
-                                                        </Field>
+                                                                <Field
+                                                                    className={fieldClasses}
+                                                                    orientation="horizontal"
+                                                                >
+                                                                    <FieldLabel>
+                                                                        Border colour
+                                                                    </FieldLabel>
+                                                                    <SignColourPicker
+                                                                        currentColour={
+                                                                            config.borderColour
+                                                                        }
+                                                                        onChange={(borderColour) =>
+                                                                            setConfig((c) => ({
+                                                                                ...c,
+                                                                                borderColour,
+                                                                            }))
+                                                                        }
+                                                                    />
+                                                                </Field>
 
-                                                        <Field className={fieldClasses} orientation="horizontal">
-                                                            <FieldLabel>Border colour</FieldLabel>
-                                                            <SignColourPicker
-                                                                currentColour={config.borderColour}
-                                                                onChange={borderColour => setConfig(c => ({ ...c, borderColour }))}
-                                                            />
-                                                        </Field>
+                                                                <Field
+                                                                    className={fieldClasses}
+                                                                    orientation="horizontal"
+                                                                >
+                                                                    <FieldLabel>
+                                                                        Border thickness
+                                                                    </FieldLabel>
+                                                                    <Input
+                                                                        className={
+                                                                            fieldInputClasses
+                                                                        }
+                                                                        type="number"
+                                                                        defaultValue={25}
+                                                                        value={
+                                                                            config.borderThickness
+                                                                        }
+                                                                        onChange={(e) =>
+                                                                            setConfig((c) => ({
+                                                                                ...c,
+                                                                                borderThickness:
+                                                                                    +e.target.value,
+                                                                            }))
+                                                                        }
+                                                                    />
+                                                                </Field>
+                                                            </TabsContent>
 
-                                                        <Field className={fieldClasses} orientation="horizontal">
-                                                            <FieldLabel>Border thickness</FieldLabel>
-                                                            <Input
-                                                                className={fieldInputClasses}
-                                                                type="number"
-                                                                defaultValue={25}
-                                                                value={config.borderThickness}
-                                                                onChange={e => setConfig(c => ({ ...c, borderThickness: +e.target.value }))}
-                                                            />
-                                                        </Field>
+                                                            <TabsContent value="primary-text">
+                                                                <TextConfigFields
+                                                                    config={config.primaryText}
+                                                                    onChange={(primaryText) =>
+                                                                        setConfig((config) => ({
+                                                                            ...config,
+                                                                            primaryText,
+                                                                        }))
+                                                                    }
+                                                                />
+                                                            </TabsContent>
 
-                                                    </TabsContent>
+                                                            <TabsContent value="secondary-text">
+                                                                <TextConfigFields
+                                                                    config={config.secondaryText}
+                                                                    onChange={(secondaryText) =>
+                                                                        setConfig((config) => ({
+                                                                            ...config,
+                                                                            secondaryText,
+                                                                        }))
+                                                                    }
+                                                                />
+                                                            </TabsContent>
+                                                        </Tabs>
+                                                    </>
+                                                )}
+                                            </div>
+                                            <div className="basis-2/3">
+                                                {texture && (
+                                                    <img src={texture.dataUrl} className="shadow" />
+                                                )}
+                                            </div>
+                                        </div>
+                                    </form>
+                                </TabsContent>
 
-                                                    <TabsContent value="primary-text">
-                                                        <TextConfigFields
-                                                            config={config.primaryText}
-                                                            onChange={primaryText => setConfig(config => ({ ...config, primaryText }))}
-                                                        />
-                                                    </TabsContent>
+                                <TabsContent value="description">
+                                    <Markdown content={ABOUT_MARKDOWN} />
 
-                                                    <TabsContent value="secondary-text">
-                                                        <TextConfigFields
-                                                            config={config.secondaryText}
-                                                            onChange={secondaryText => setConfig(config => ({ ...config, secondaryText }))}
-                                                        />
-                                                    </TabsContent>
-
-                                                </Tabs>
-                                            </>
-                                    }
-                                </div>
-                                <div className="basis-2/3">
-                                    {texture && <img src={texture.dataUrl} className="shadow" />}
-                                </div>
-                            </div>
-                        </form>
-                    </TabsContent>
-
-                    <TabsContent value="description">
-                        <Markdown content={ABOUT_MARKDOWN} />
-
-                        <Markdown content={loaderData.product.description ?? ''} />
-                    </TabsContent>
-                </Tabs>
-            </div>
-            <AlertDialog
-                open={showAlertDialog !== undefined}
-                onOpenChange={open => open ? undefined : setShowAlertDialog(undefined)}
-            >
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>{showAlertDialog?.title}</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            {showAlertDialog?.message}
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogAction onClick={() => setShowAlertDialog(undefined)}>Okay</AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
-        </>,
-        sidebar: <ProductSidebar product={loaderData.product} config={productConfig} onAddToBasket={handleAddToBasket} />
-    }}</ProductLayout >
+                                    <Markdown content={loaderData.product.description ?? ''} />
+                                </TabsContent>
+                            </Tabs>
+                        </div>
+                        <AlertDialog
+                            open={showAlertDialog !== undefined}
+                            onOpenChange={(open) =>
+                                open ? undefined : setShowAlertDialog(undefined)
+                            }
+                        >
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>{showAlertDialog?.title}</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        {showAlertDialog?.message}
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogAction
+                                        onClick={() => setShowAlertDialog(undefined)}
+                                    >
+                                        Okay
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                    </>
+                ),
+                sidebar: (
+                    <ProductSidebar
+                        product={loaderData.product}
+                        config={productConfig}
+                        onAddToBasket={handleAddToBasket}
+                    />
+                ),
+            }}
+        </ProductLayout>
+    )
 }
 
-const getSigns = () => SHOP.GET('/listSigns')
-    .then(({ data }) => Object.fromEntries((data?.signs ?? []).map(sign => [sign.id, sign])))
-    .catch(console.error)
+const getSigns = () =>
+    SHOP.GET('/listSigns')
+        .then(({ data }) => Object.fromEntries((data?.signs ?? []).map((sign) => [sign.id, sign])))
+        .catch(console.error)
 
 export async function loader({ request }: Route.LoaderArgs) {
     const url = new URL(request.url)
-    const slug = url.pathname.split('/').at((-1))
+    const slug = url.pathname.split('/').at(-1)
     if (!slug) throw new Response(undefined, { status: 404 })
 
     const product = await products.getBySlug(slug)
@@ -535,17 +766,16 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
-
     return {
-        ...await serverLoader(),
-        signs: await getSigns()
+        ...(await serverLoader()),
+        signs: await getSigns(),
     }
 }
 
-clientLoader.hydrate = true as const;
+clientLoader.hydrate = true as const
 
 const baseTextureStore = create<{
-    modelBaseTexture: Record<string, ImageBitmap>,
+    modelBaseTexture: Record<string, ImageBitmap>
     setModelBaseTexture(modelId: string, baseTexture: ImageBitmap): ImageBitmap
 }>()((set, get) => ({
     modelBaseTexture: {},
@@ -553,19 +783,18 @@ const baseTextureStore = create<{
         set({
             modelBaseTexture: {
                 ...get().modelBaseTexture,
-                [modelId]: baseTexture
-            }
+                [modelId]: baseTexture,
+            },
         })
         return baseTexture
-
-    }
+    },
 }))
 
 zustandHmrFix('baseTextureStore', baseTextureStore)
 
 function Viewer(props: {
-    model: string,
-    texture?: string,
+    model: string
+    texture?: string
     textureDimensions?: (width: number, height: number) => void
 }) {
     const { scene, materials, meshes } = useGLTF(props.model)
@@ -574,17 +803,22 @@ function Viewer(props: {
     useEffect(() => {
         if (!props.texture) return
 
-        const material = (materials[SIGN_BOARD_MATERIAL_NAME] ?? materials['Material'])
+        const material = materials[SIGN_BOARD_MATERIAL_NAME] ?? materials['Material']
         if (!material || !(material instanceof THREE.MeshStandardMaterial)) return
 
-        const baseTexture = modelBaseTexture[props.model] ?? setModelBaseTexture(props.model, (() => {
-            const image = material.map?.image
-            if (image instanceof ImageBitmap) return image
-            else {
-                console.error({ image, material, modelBaseTexture })
-                throw new Error("Invalid image")
-            }
-        })())
+        const baseTexture =
+            modelBaseTexture[props.model] ??
+            setModelBaseTexture(
+                props.model,
+                (() => {
+                    const image = material.map?.image
+                    if (image instanceof ImageBitmap) return image
+                    else {
+                        console.error({ image, material, modelBaseTexture })
+                        throw new Error('Invalid image')
+                    }
+                })(),
+            )
         if (!baseTexture) return
 
         const canvas = document.createElement('canvas')
@@ -623,20 +857,21 @@ function Viewer(props: {
                 newTexture.image = null as any
                 newTexture = null
             }, 100)
-
         }
     }, [props.texture, props.model])
 
     useEffect(() => {
-        const meshKey = Object.keys(meshes).find(key => key.endsWith(SIGN_BOARD_MESH_NAME))
+        const meshKey = Object.keys(meshes).find((key) => key.endsWith(SIGN_BOARD_MESH_NAME))
         if (!meshKey) throw new Error(`Could not find sign board mesh.`)
 
         const signBoardMesh = meshes[meshKey]
         const uvAttr = signBoardMesh?.geometry.attributes['uv']
-        if (!uvAttr) throw new Error("Sign board mesh has no UVs")
+        if (!uvAttr) throw new Error('Sign board mesh has no UVs')
 
-        let minU = Infinity, minV = Infinity
-        let maxU = -Infinity, maxV = -Infinity
+        let minU = Infinity,
+            minV = Infinity
+        let maxU = -Infinity,
+            maxV = -Infinity
 
         for (let i = 0; i < uvAttr.count; i++) {
             const u = uvAttr.getX(i)
@@ -663,11 +898,9 @@ function Viewer(props: {
     const controlsRef = useRef<any>(null)
 
     useEffect(() => {
-        const meshKey = Object.keys(meshes)
-            .find(key =>
-                key.endsWith(CAMERA_TARGET_MESH_NAME) ||
-                key.endsWith(SIGN_BOARD_MESH_NAME)
-            )
+        const meshKey = Object.keys(meshes).find(
+            (key) => key.endsWith(CAMERA_TARGET_MESH_NAME) || key.endsWith(SIGN_BOARD_MESH_NAME),
+        )
 
         if (!meshKey) return
 
@@ -679,11 +912,11 @@ function Viewer(props: {
 
         controlsRef.current?.target.copy(worldPos)
         controlsRef.current?.update()
-
     }, [meshes, props.model])
 
-
-    const Command = (props: { children: ReactNode }) => <span className="bg-gray-500/25 p-1 rounded-md">{props.children}</span>
+    const Command = (props: { children: ReactNode }) => (
+        <span className="bg-gray-500/25 p-1 rounded-md">{props.children}</span>
+    )
 
     return (
         <div className="relative w-full h-full">
@@ -692,15 +925,18 @@ function Viewer(props: {
                 <primitive object={scene} scale={1} />
                 <OrbitControls ref={controlsRef} target={[0, 0.5, 0]} />
                 <Environment preset="studio" backgroundIntensity={0.1} environmentIntensity={0.1} />
-
             </Canvas>
 
             <div className="absolute bottom-2 right-2 flex flex-row gap-2">
                 <Rotate3D className="w-5 h-5" />
                 <P className="text-sm">
                     Explore in 3D
-                    <span className="border-l-2 border-l-gray-500 pl-2 ml-2"><Command>click</Command> + <Command>drag</Command> rotate</span>
-                    <span className="border-l-2 border-l-gray-500 pl-2 ml-2"><Command>scroll</Command> zoom</span>
+                    <span className="border-l-2 border-l-gray-500 pl-2 ml-2">
+                        <Command>click</Command> + <Command>drag</Command> rotate
+                    </span>
+                    <span className="border-l-2 border-l-gray-500 pl-2 ml-2">
+                        <Command>scroll</Command> zoom
+                    </span>
                 </P>
                 <div>
                     <P></P>
@@ -708,14 +944,10 @@ function Viewer(props: {
                 </div>
             </div>
         </div>
-
     )
 }
 
-function SignColourPicker(props: {
-    currentColour: string,
-    onChange?: (colour: string) => void
-}) {
+function SignColourPicker(props: { currentColour: string; onChange?: (colour: string) => void }) {
     const [pickerColour, setPickerColour] = useState<string>(props.currentColour)
     const [popoverOpen, setPopoverOpen] = useState(false)
 
@@ -732,90 +964,128 @@ function SignColourPicker(props: {
     return (
         <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
             <PopoverTrigger asChild>
-                <Button variant="outline">{props.currentColour} <div className="w-5 aspect-square" style={{ backgroundColor: props.currentColour }}></div></Button>
+                <Button variant="outline">
+                    {props.currentColour}{' '}
+                    <div
+                        className="w-5 aspect-square"
+                        style={{ backgroundColor: props.currentColour }}
+                    ></div>
+                </Button>
             </PopoverTrigger>
             <PopoverContent className="w-59">
                 <HexAlphaColorPicker color={pickerColour} onChange={setPickerColour} />
 
-                <Input className="w-50 mt-4" value={pickerColour} onChange={e => setPickerColour(e.target.value)} />
+                <Input
+                    className="w-50 mt-4"
+                    value={pickerColour}
+                    onChange={(e) => setPickerColour(e.target.value)}
+                />
 
                 <div className="w-50 flex flex-row gap-2 pt-4">
-                    <Button className="grow" variant="outline" onClick={onSelect}>Select <Check /></Button>
-                    <Button className="grow" variant="outline" onClick={onCancel}>Cancel <X /></Button>
+                    <Button className="grow" variant="outline" onClick={onSelect}>
+                        Select <Check />
+                    </Button>
+                    <Button className="grow" variant="outline" onClick={onCancel}>
+                        Cancel <X />
+                    </Button>
                 </div>
             </PopoverContent>
         </Popover>
     )
 }
 
-function TextConfigFields(props: {
-    config: TextConfig,
-    onChange: (config: TextConfig) => void
-}) {
-    return <>
-        <Field className={fieldClasses} orientation="horizontal">
-            <FieldLabel htmlFor="input-field-primary-text">Text</FieldLabel>
-            <Input
-                className={fieldInputClasses}
-                id="input-field-primary-text"
-                type="text"
-                placeholder="Your text here"
-                value={props.config.textValue}
-                onChange={ev => props.onChange({ ...props.config, textValue: ev.currentTarget?.value })}
-            />
-        </Field>
-        <Field className={fieldClasses} orientation="horizontal">
-            <FieldLabel>Font</FieldLabel>
-            <Select value={props.config.textFont} onValueChange={textFont => props.onChange({ ...props.config, textFont })}>
-                <SelectTrigger
+function TextConfigFields(props: { config: TextConfig; onChange: (config: TextConfig) => void }) {
+    return (
+        <>
+            <Field className={fieldClasses} orientation="horizontal">
+                <FieldLabel htmlFor="input-field-primary-text">Text</FieldLabel>
+                <Input
                     className={fieldInputClasses}
+                    id="input-field-primary-text"
+                    type="text"
+                    placeholder="Your text here"
+                    value={props.config.textValue}
+                    onChange={(ev) =>
+                        props.onChange({
+                            ...props.config,
+                            textValue: ev.currentTarget?.value,
+                        })
+                    }
+                />
+            </Field>
+            <Field className={fieldClasses} orientation="horizontal">
+                <FieldLabel>Font</FieldLabel>
+                <Select
+                    value={props.config.textFont}
+                    onValueChange={(textFont) => props.onChange({ ...props.config, textFont })}
                 >
-                    <SelectValue placeholder="Choose font" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectGroup>
-                        {FONTS.map(font => <SelectItem value={font.fontFace} style={{ fontFamily: font.fontFace }}>{font.name}</SelectItem>)}
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
-        </Field>
-        <Field className={fieldClasses} orientation="horizontal">
-            <FieldLabel>Size</FieldLabel>
-            <Input
-                className={fieldInputClasses}
-                type="number"
-                defaultValue={12}
-                value={props.config.textSize}
-                onChange={e => props.onChange({ ...props.config, textSize: +e.target.value })}
-            />
-        </Field>
+                    <SelectTrigger className={fieldInputClasses}>
+                        <SelectValue placeholder="Choose font" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectGroup>
+                            {FONTS.map((font) => (
+                                <SelectItem
+                                    value={font.fontFace}
+                                    style={{ fontFamily: font.fontFace }}
+                                >
+                                    {font.name}
+                                </SelectItem>
+                            ))}
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
+            </Field>
+            <Field className={fieldClasses} orientation="horizontal">
+                <FieldLabel>Size</FieldLabel>
+                <Input
+                    className={fieldInputClasses}
+                    type="number"
+                    defaultValue={12}
+                    value={props.config.textSize}
+                    onChange={(e) =>
+                        props.onChange({
+                            ...props.config,
+                            textSize: +e.target.value,
+                        })
+                    }
+                />
+            </Field>
 
-        <Field className={fieldClasses} orientation="horizontal">
-            <FieldLabel>Colour</FieldLabel>
-            <SignColourPicker
-                currentColour={props.config.textColour}
-                onChange={textColour => props.onChange({ ...props.config, textColour })}
-            />
-        </Field>
+            <Field className={fieldClasses} orientation="horizontal">
+                <FieldLabel>Colour</FieldLabel>
+                <SignColourPicker
+                    currentColour={props.config.textColour}
+                    onChange={(textColour) => props.onChange({ ...props.config, textColour })}
+                />
+            </Field>
 
-        <Field className={fieldClasses} orientation="horizontal">
-            <FieldLabel>Vertical offset</FieldLabel>
-            <Input
-                className={fieldInputClasses}
-                type="number"
-                value={props.config.verticalOffset}
-                onChange={e => props.onChange({ ...props.config, verticalOffset: +e.target.value })}
-            />
-        </Field>
-
-    </>
+            <Field className={fieldClasses} orientation="horizontal">
+                <FieldLabel>Vertical offset</FieldLabel>
+                <Input
+                    className={fieldInputClasses}
+                    type="number"
+                    value={props.config.verticalOffset}
+                    onChange={(e) =>
+                        props.onChange({
+                            ...props.config,
+                            verticalOffset: +e.target.value,
+                        })
+                    }
+                />
+            </Field>
+        </>
+    )
 }
 
-function ClientOnly({ children, fallback = null }: {
-    children(): React.ReactNode;
-    fallback?: React.ReactNode;
+function ClientOnly({
+    children,
+    fallback = null,
+}: {
+    children(): React.ReactNode
+    fallback?: React.ReactNode
 }) {
-    return useHydrated() ? children() : fallback;
+    return useHydrated() ? children() : fallback
 }
 
 function useHydrated() {
@@ -823,25 +1093,25 @@ function useHydrated() {
         subscribe,
         () => true,
         () => false,
-    );
+    )
 }
 
 function subscribe() {
-    return () => { };
+    return () => {}
 }
 
-function HelpPopover(props: { title?: string, children: ReactNode }) {
+function HelpPopover(props: { title?: string; children: ReactNode }) {
     return (
         <Popover>
             <PopoverTrigger asChild>
-                <Button variant="link" size="icon"><CircleQuestionMark /></Button>
+                <Button variant="link" size="icon">
+                    <CircleQuestionMark />
+                </Button>
             </PopoverTrigger>
             <PopoverContent align="start" className="w-96 max-h-96 overflow-scroll">
                 <PopoverHeader>
                     {props.title && <PopoverTitle>{props.title}</PopoverTitle>}
-                    <PopoverDescription>
-                        {props.children}
-                    </PopoverDescription>
+                    <PopoverDescription>{props.children}</PopoverDescription>
                 </PopoverHeader>
             </PopoverContent>
         </Popover>
@@ -850,26 +1120,32 @@ function HelpPopover(props: { title?: string, children: ReactNode }) {
 
 export function zustandHmrFix(name: string, useStore: UseBoundStore<any>) {
     if (import.meta.hot) {
-        const savedState = import.meta.hot!.data[name];
+        const savedState = import.meta.hot!.data[name]
         if (savedState) {
-            const newState = { ...savedState, actions: useStore.getState().actions };
-            useStore.setState(newState);
+            const newState = {
+                ...savedState,
+                actions: useStore.getState().actions,
+            }
+            useStore.setState(newState)
         }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         useStore.subscribe((state: any) => {
-            const stateToSave = { ...state };
-            delete stateToSave.actions;
-            import.meta.hot!.data[name] = stateToSave;
-        });
+            const stateToSave = { ...state }
+            delete stateToSave.actions
+            import.meta.hot!.data[name] = stateToSave
+        })
         import.meta.hot!.accept((newModule) => {
             if (newModule) {
-                const savedState = import.meta.hot!.data[name];
+                const savedState = import.meta.hot!.data[name]
                 if (savedState) {
-                    const newState = { ...savedState, actions: useStore.getState().actions };
-                    useStore.setState(newState);
+                    const newState = {
+                        ...savedState,
+                        actions: useStore.getState().actions,
+                    }
+                    useStore.setState(newState)
                 }
             }
-        });
+        })
     }
 }
 

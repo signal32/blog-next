@@ -1,11 +1,11 @@
-import { useNavigate } from "react-router";
-import { type Post } from "../../lib/posts.server";
-import { Card } from "../card";
-import HorizontalScrollList from '../common/HorizontalScrollList';
-import PostItem from "./PostItem";
+import { useNavigate } from 'react-router'
+import { type Post } from '../../lib/posts.server'
+import { Card } from '../card'
+import HorizontalScrollList from '../common/HorizontalScrollList'
+import PostItem from './PostItem'
 
 export interface PostListProps {
-    posts: Post[],
+    posts: Post[]
 }
 
 const PostList = (props: PostListProps) => {
@@ -14,24 +14,30 @@ const PostList = (props: PostListProps) => {
     return (
         <div>
             <HorizontalScrollList>
-                {
-                    props.posts.map((item, i) => {
-                        return (
-                            <div key={i} className=' w-72 shrink-0 min-h-80'>
-                                <PostItem post={item} />
-                            </div>
-                        )
-                    })
-                }
-                <div className="w-72 shrink-0 cursor-pointer hover:underline" onClick={() => navigate('/posts')}>
-                    <Card>{{
-                        content: <p className="text-center font-bold text-xl h-full mt-40">See more posts</p>
-                    }}</Card>
+                {props.posts.map((item, i) => {
+                    return (
+                        <div key={i} className=" w-72 shrink-0 min-h-80">
+                            <PostItem post={item} />
+                        </div>
+                    )
+                })}
+                <div
+                    className="w-72 shrink-0 cursor-pointer hover:underline"
+                    onClick={() => navigate('/posts')}
+                >
+                    <Card>
+                        {{
+                            content: (
+                                <p className="text-center font-bold text-xl h-full mt-40">
+                                    See more posts
+                                </p>
+                            ),
+                        }}
+                    </Card>
                 </div>
-
             </HorizontalScrollList>
         </div>
     )
 }
 
-export default PostList;
+export default PostList

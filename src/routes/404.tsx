@@ -1,6 +1,6 @@
 import { PageWithLayout } from '../components/app/LayoutApp'
 import { defineLayout } from '../components/app/BaseLayout'
-  
+
 const Error404: PageWithLayout<{}> = () => {
     return (
         <div>
@@ -8,7 +8,7 @@ const Error404: PageWithLayout<{}> = () => {
         </div>
     )
 }
-  
+
 Error404.layout = defineLayout()
 
 export default Error404

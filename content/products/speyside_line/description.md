@@ -3,6 +3,7 @@ Travel back in time to revisit the sights and sounds of Scotland's whisky countr
 **Watch the trailer on [YouTube](https://www.youtube.com/watch?v=Gjj69VFBoAE).**
 
 ## Background
+
 The Speyside Line ( also known as the Strathspey Railway) was opened on 1 July 1863 between Dufftown and Nethy Bridge. It was extended to meet up with the Highland Railway at Boat of Garten on 1 August 1866, then known as the Inverness and Perth Junction Railway. The Speyside Line actually met the Highland line some 3 miles north of Boat of Garten, but the two lines ran parallel until reaching Boat, the physical junction being to the south of Boat of Garten station. The same year, 1866, saw the Speyside Line become part of the larger Great North of Scotland Railway (GNSR).
 
 The railway served the numerous distilleries that operated in the Spey Valley, many of these distilleries having their own small tank engines, or ‘pugs’ as they were known.
@@ -20,6 +21,6 @@ The line is single track with loops at most stations, the route also features ch
 
 ---
 
-*__Update February 2026:__ The passing of UKTS means many of the original download links in the route manual no longer work. Please expand the 'Requirements' section below which I have updated where possible.*
+_**Update February 2026:** The passing of UKTS means many of the original download links in the route manual no longer work. Please expand the 'Requirements' section below which I have updated where possible._
 
-*__Update January 2025:__ New download link added. Apologies to anyone trying to find this file recently, I am pleased to say the route is now available again.*
+_**Update January 2025:** New download link added. Apologies to anyone trying to find this file recently, I am pleased to say the route is now available again._

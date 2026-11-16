@@ -1,12 +1,14 @@
-import { ContentPaginationPage } from "#src/components/ContentPaginationPage.tsx";
-import { productRouting } from "#src/lib/products.server.ts";
-import { ContentLayout } from "../../components/app/BaseLayout";
-import { Route } from "./+types/list";
+import { ContentPaginationPage } from '#src/components/ContentPaginationPage.tsx'
+import { productRouting } from '#src/lib/products.server.ts'
+import { ContentLayout } from '../../components/app/BaseLayout'
+import { Route } from './+types/list'
 
 export default function ({ loaderData }: Route.ComponentProps) {
-    return <ContentLayout headerTitle="Products">
-        <ContentPaginationPage title="Products" content={loaderData} />
-    </ContentLayout>
+    return (
+        <ContentLayout headerTitle="Products">
+            <ContentPaginationPage title="Products" content={loaderData} />
+        </ContentLayout>
+    )
 }
 
 export async function loader(args: Route.LoaderArgs) {
