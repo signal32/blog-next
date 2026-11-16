@@ -45,7 +45,7 @@ const tsDependencies = [
 export default {
     name: 'Dava Line',
     slug: 'rd-dava',
-    public: true,
+    public: false,
     excerpt: 'test',
     media: {
         banner: 'https://s3.finch.hamishweir.uk/public/rails_north_east/dava/dev/dallas_dhu_01.jpg',
